@@ -1,39 +1,118 @@
 # Log4CJ2
 
 #### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+
+仓颉语言实现日志打印功能，类似 log4j 三方件。
 
 #### 软件架构
-软件架构说明
 
+源码目录
+
+```shell
+├── doc
+├── src
+│   ├── appender
+│   │   ├── console_logger_appender.cj
+│   │   ├── file_logger_appender.cj
+│   │   ├── logger_appender.cj
+│   │   ├── logger_appender_factory.cj
+│   │   └── logger_appender_reference.cj
+│   ├── config
+│   │   ├── appender_config.cj
+│   │   ├── appender_property.cj
+│   │   ├── appender_ref.cj
+│   │   ├── logger_config.cj
+│   │   ├── logger_configuration.cj
+│   │   └── root_logger_config.cj
+│   ├── logger
+│   │   ├── logger.cj
+│   │   ├── logger_manager.cj
+│   │   └── logger_metrics.cj
+│   └── utils
+│       ├── log_level.cj
+│       ├── log_record.cj
+│       ├── pattern_converter.cj
+│       ├── time_slice.cj
+│       └── util.cj
+├── test
+│   ├── HLT
+│   ├── LLT
+│   └── UT
+```
+
+- `doc`是库的设计文档、提案、库的使用文档、LLT 覆盖率报告
+- `src`是库源码目录
+- `test`是存放测试用例，包括HLT用例、LLT 用例和UT用例 
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+正在开发中，未达到release版本，待更新
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1. 打印日志
+
+   代码示例：
+
+```go
+import logger.*
+
+main(): Int64 {
+    // 创建一个 Logger
+    let logger = Logger_Manager.getLogger("com.hello")
+
+    // 打印日志
+    logger.info("hello")
+    logger.info("hello")
+    logger.error("hello")
+
+    // 创建另一个 Logger
+    let logger1 = Logger_Manager.getLogger("com.test1")
+    logger1.warn("test1 waring")
+    return 0
+}
+```
+
+   打印结果：
+
+```textile
+[2022/10/22 23:38:08 CST 460] [INFO][com.hello] () hello
+[2022/10/22 23:38:08 CST 460] [INFO][com.hello] () hello
+[2022/10/22 23:38:08 CST 460] [ERROR][com.hello] () hello
+[2022/10/22 23:38:08 CST 460] [WARN][com.test1] () test1 waring
+```
+
+   ()中为待实现的打印日志的具体文件执行代码行（仓颉暂未开放该api接口）
+
+2. 注册自定义 LoggerAppender 
+   
+   ```go
+   public class SampleLoggerAppender <: LoggerAppender {
+       // 格式化打印规则字符串
+       var pattern: String = ""
+   
+       public func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit {}
+   
+       public func start(): Unit {}
+   
+       public func logWrite(rec: LogRecord): Unit {}
+   
+       public func close(): Unit {}
+   }
+   Logger_Appender_Factory.registryType("sample", SampleLoggerAppender())
+   ```
+
+#### 待办事务
+
+1. 错误处理逻辑
+
+2. 异步打印实现
+
+3. 配置文件解析
 
 #### 参与贡献
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+1. Fork 本仓库
+2. 新建 Feat_xxx 分支
+3. 提交代码
+4. 新建 Pull Request
