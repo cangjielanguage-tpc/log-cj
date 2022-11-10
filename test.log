@@ -1,0 +1,34 @@
+[2022/11/10 09:05:49 CST 502] [INFO][com.hello] () hello
+[2022/11/10 09:05:49 CST 503] [INFO][com.hello] () hello
+[2022/11/10 09:05:49 CST 503] [ERROR][com.hello] () hello
+[2022/11/10 09:05:49 CST 503] [WARN][com.test1] () test1 waring
+[2022/11/10 09:05:50 CST 504] [WARN][com.test2] () test2 waring
+[2022/11/10 09:05:51 CST 510] [WARN][com.test2] () test2 waring
+[2022/11/10 09:05:52 CST 515] [WARN][com.test2] () test2 waring
+[2022/11/10 09:05:53 CST 521] [WARN][com.test2] () test2 waring
+[2022/11/10 09:05:54 CST 527] [WARN][com.test2] () test2 waring
+[2022/11/10 09:05:55 CST 533] [WARN][com.test2] () test2 waring
+[2022/11/10 09:05:56 CST 539] [WARN][com.test2] () test2 waring
+[2022/11/10 09:05:57 CST 545] [WARN][com.test2] () test2 waring
+[2022/11/10 09:05:58 CST 551] [WARN][com.test2] () test2 waring
+[2022/11/10 09:05:59 CST 556] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:00 CST 562] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:01 CST 568] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:02 CST 574] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:03 CST 579] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:04 CST 585] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:05 CST 591] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:06 CST 596] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:07 CST 602] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:08 CST 608] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:09 CST 614] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:10 CST 619] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:11 CST 625] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:12 CST 631] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:13 CST 637] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:14 CST 643] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:15 CST 649] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:16 CST 655] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:17 CST 661] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:18 CST 666] [WARN][com.test2] () test2 waring
+[2022/11/10 09:06:19 CST 672] [WARN][com.test2] () test2 waring
