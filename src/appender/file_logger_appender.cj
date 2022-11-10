@@ -104,24 +104,27 @@ public class FileLoggerAppender <: LoggerAppender {
      * 写日志实现
      * */
     public func logWrite(rec: LogRecord): Unit {
-        let now = Time.now()
-        if ((this.maxLines > 0 && this.maxLines_curLines >= this.maxLines) || (this.maxSize > 0 &&
-            this.maxSize_curSize >= this.maxSize) || (this.daily && now.day() != this.daily_opendate)) {
-            // if with Rotate to put bool to rot chan, it will be raised a bug when concurrent environment
-            intRotate()
+        let fut = spawn {
+            let now = Time.now()
+            if ((this.maxLines > 0 && this.maxLines_curLines >= this.maxLines) || (this.maxSize > 0 &&
+                this.maxSize_curSize >= this.maxSize) || (this.daily && now.day() != this.daily_opendate)) {
+                // if with Rotate to put bool to rot chan, it will be raised a bug when concurrent environment
+                intRotate()
+            }
+
+            // Perform the write
+            var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
+            this.file.write(mess)
+            let n = mess.size
+
+            // Update the counts
+            this.maxLines_curLines++
+            this.maxSize_curSize += n
+            mess = getDefaultPatternConvert().formatLogRecord(this.trailer, LogRecord(Time.now())).toUtf8Array()
+            this.file.write(mess)
+            this.file.flush()
         }
-
-        // Perform the write
-        var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
-        this.file.write(mess)
-        let n = mess.size
-
-        // Update the counts
-        this.maxLines_curLines++
-        this.maxSize_curSize += n
-        mess = getDefaultPatternConvert().formatLogRecord(this.trailer, LogRecord(Time.now())).toUtf8Array()
-        this.file.write(mess)
-        this.file.flush()
+        fut.getResult(100 * 1000 * 1000)
     }
 
     /**
