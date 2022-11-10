@@ -17,7 +17,7 @@ main(): Int64 {
     for (i in 0..30) {
         sleep(1000 * 1000 * 1000)
         let logger2 = Logger_Manager.getLogger("com.test2")
-        logger2.warn("test2 waring sleep")
+        logger2.warn("test2 waring")
     }
     return 0
 }
