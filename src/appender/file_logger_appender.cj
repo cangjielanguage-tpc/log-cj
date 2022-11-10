@@ -124,7 +124,7 @@ public class FileLoggerAppender <: LoggerAppender {
             this.file.write(mess)
             this.file.flush()
         }
-        fut.getResult(100 * 1000 * 1000)
+        fut.getResult(1000 * 1000 * 1000)
     }
 
     /**
