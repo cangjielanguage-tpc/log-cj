@@ -52,18 +52,13 @@ public class Logger {
      * 参数 appenderRef - LoggerAppenderReference 信息
     */   
     private func appendLog(level: LogLevel, rec: LogRecord, appenderRef: LoggerAppenderReference) {
-        Logger_Metrics.logCount++
         if (appenderRef.appender.size == 0) {
-            Logger_Metrics.invalidCount++
             return
         }
         if (level >= appenderRef.level) {
             for (appender in appenderRef.appender) {
                 appender.logWrite(rec)
             }
-            Logger_Metrics.appendCount++
-        } else {
-            Logger_Metrics.ignoreCount++
         }
     }
 
