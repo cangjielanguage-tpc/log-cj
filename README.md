@@ -26,8 +26,7 @@
 │   │   └── root_logger_config.cj
 │   ├── logger
 │   │   ├── logger.cj
-│   │   ├── logger_manager.cj
-│   │   └── logger_metrics.cj
+│   │   └── logger_manager.cj
 │   └── utils
 │       ├── log_level.cj
 │       ├── log_record.cj
@@ -106,13 +105,18 @@ main(): Int64 {
 
 1. 错误处理逻辑
 
-2. 异步打印实现
+2. 多线程优化
 
-3. 配置文件解析
+3. 日志打包后压缩文件
+
+4. 默认日志文件处理
+
+5. 代码打包
+
+6. UT补充
+
+7. 配置文件解析
 
 #### 参与贡献
-
-1. Fork 本仓库
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
+[@zhangxyjlu](https://gitee.com/zhangxyjlu)
+[@helongfei](https://gitee.com/helongfei_it)
