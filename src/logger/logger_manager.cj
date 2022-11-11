@@ -145,6 +145,9 @@ public class LoggerManager {
             ArrayList<AppenderProperty>()
         )
         appenderConfig.property.append(AppenderProperty("filename", "test.log"))
+        appenderConfig.property.append(AppenderProperty("rotate", "true"))
+        // 配置单个日志大小
+        appenderConfig.property.append(AppenderProperty("maxSize", "230"))
         xc.appender.append(appenderConfig)
 
         let rootAppenderRef = AppenderRef("file")

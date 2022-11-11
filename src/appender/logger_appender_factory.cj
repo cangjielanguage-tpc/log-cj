@@ -79,6 +79,7 @@ public class LoggerAppenderFactory {
         newObj.initAppender(pattern, properties)
         newObj.start()
         this.appender[appenderName] = newObj
+        this.typeLock.lock()
         return this
     }
 }
