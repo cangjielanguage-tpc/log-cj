@@ -13,6 +13,9 @@ public class AppenderRef {
     // appender-ref 值
     public var ref: String
 
+    public init() {
+        this.ref = ""
+    }
     public init(ref: String) {
         this.ref = ref
     }

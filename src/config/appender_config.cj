@@ -26,6 +26,14 @@ public class AppenderConfig {
     // 属性列表
     public var property: ArrayList<AppenderProperty>
 
+    public init() {
+        this.enabled = ""
+        this.name = ""
+        this.appenderType = ""
+        this.pattern = ""
+        this.property = ArrayList<AppenderProperty>()
+    }
+
     public init(
         enabled: String,
         name: String,

@@ -33,15 +33,17 @@
 │       ├── pattern_converter.cj
 │       ├── time_slice.cj
 │       └── util.cj
+├── log4cj.xml
 ├── test
 │   ├── HLT
 │   ├── LLT
 │   └── UT
 ```
 
-- `doc`是库的设计文档、提案、库的使用文档、LLT 覆盖率报告
-- `src`是库源码目录
-- `test`是存放测试用例，包括HLT用例、LLT 用例和UT用例 
+- `doc` 库的设计文档、提案、库的使用文档、LLT 覆盖率报告
+- `src` 库源码目录
+- `log4cj.xml` 日志配置文件
+- `test` 测试用例，包括HLT用例、LLT 用例和UT用例 
 
 #### 安装教程
 
@@ -105,7 +107,7 @@ main(): Int64 {
 
 1. 错误处理逻辑
 
-2. 多线程优化
+2. 多线程优化（异步写入spwan方式存在数据丢失）
 
 3. 日志打包后压缩文件
 
@@ -115,7 +117,10 @@ main(): Int64 {
 
 6. UT补充
 
-7. 配置文件解析
+7. 日志配置文件说明文档
+
+8. 优化日志配置文件logger解析
+
 
 #### 参与贡献
 [@zhangxyjlu](https://gitee.com/zhangxyjlu)

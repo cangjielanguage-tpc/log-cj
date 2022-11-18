@@ -18,6 +18,11 @@ public class RootLoggerConfig {
     // root 日志配置 AppenderRef
     public var appender: ArrayList<AppenderRef>
 
+    public init() {
+        this.level = ""
+        this.appender = ArrayList<AppenderRef>()
+    }
+
     public init(level: String, appender: ArrayList<AppenderRef>) {
         this.level = level
         this.appender = appender

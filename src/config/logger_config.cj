@@ -21,6 +21,12 @@ public class LoggerConfig {
     // AppenderRef 集合
     public var appender: ArrayList<AppenderRef>
 
+    public init() {
+        this.name = ""
+        this.level = ""
+        this.appender = ArrayList<AppenderRef>()
+    }
+
     public init(name: String, level: String, appender: ArrayList<AppenderRef>) {
         this.name = name
         this.level = level

@@ -107,21 +107,18 @@ public class FileLoggerAppender <: LoggerAppender {
      * 写日志实现
      * */
     public func logWrite(rec: LogRecord): Unit {
-        let fut = spawn {
-            let now = Time.now()
-            if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
-                rollingFile()
-            }
-
-            // Perform the write
-            var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
-            this.file.write(mess)
-            let n = mess.size
-
-            // Update the size
-            this.curSize += n
+        let now = Time.now()
+        if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
+            rollingFile()
         }
-        fut.getResult(100 * 1000 * 1000)
+
+        // Perform the write
+        var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
+        this.file.write(mess)
+        let n = mess.size
+
+        // Update the size
+        this.curSize += n
     }
 
     /**
