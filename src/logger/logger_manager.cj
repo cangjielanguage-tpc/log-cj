@@ -233,7 +233,7 @@ public class LoggerManager {
                 let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
                 for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
                     var property: AppenderProperty = AppenderProperty()
-                    if (childrenAttr.content.equals("maxsize")) {
+                    if ("maxsize".equals(childrenAttr.content.toAsciiLower())) {
                         property.name = "maxSize"
                     } else {
                         property.name = childrenAttr.content
