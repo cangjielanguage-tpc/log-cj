@@ -119,8 +119,6 @@ main(): Int64 {
 
 7. 日志配置文件说明文档
 
-8. 优化日志配置文件logger解析
-
 
 #### 参与贡献
 [@zhangxyjlu](https://gitee.com/zhangxyjlu)

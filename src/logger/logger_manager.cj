@@ -9,7 +9,7 @@ import config.*
 import utils.*
 
 public let Logger_Appender_Factory = LoggerAppenderFactory()
-public let Logger_Manager = LoggerManager("./log4cj2.xml")
+public let Logger_Manager = LoggerManager("./log4cj.xml")
 
 /**
  * Log 管理类
@@ -170,12 +170,7 @@ public class LoggerManager {
 </configuration>
 """
         var x: XmlParser = XmlParser()
-        var elements: Option<XmlElement> = Option<XmlElement>.None
-        try {
-            elements = x.parse(content)
-        } catch (e: XmlException) {
-            throw XmlException("parse xml occur exception ${e.message}!")
-        }
+        var elements: Option<XmlElement> = x.parse(content)
         var xmlElements: XmlElement = elements.getOrThrow()
         var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(xmlElements.childrenElements)
         var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(xmlElements.childrenElements)
@@ -214,12 +209,12 @@ public class LoggerManager {
     //获取file appender元素配置
     private func getAppenderConfiguration(allElements: ArrayList<XmlElement>): ArrayList<AppenderConfig> {
         var configList: ArrayList<AppenderConfig> = ArrayList<AppenderConfig>()
-        var propertyList: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
 
         for (element in allElements where element.name.equals("appender")) {
             let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
             let allAttrs: ArrayList<XmlAttr> = element.attributes
             var appender: AppenderConfig = AppenderConfig()
+            var propertyList: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
             for (attr in allAttrs) {
                 if (attr.name.equals("enabled")) {
                     appender.enabled = attr.content
@@ -235,34 +230,14 @@ public class LoggerManager {
                 if (childrenElement.name.equals("pattern")) {
                     appender.pattern = childrenElement.content
                 }
-                if (allAttrs.toString().contains("name=\"file\"") && childrenElement.name.equals("property") &&
-                    childrenElement.attributes.toString().contains("filename")) {
+                let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
+                for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
                     var property: AppenderProperty = AppenderProperty()
-                    property.name = "filename"
-                    property.value = childrenElement.content
-                    propertyList.append(property)
-                    appender.property = propertyList
-                }
-                if (allAttrs.toString().contains("name=\"file\"") && childrenElement.name.equals("property") &&
-                    childrenElement.attributes.toString().contains("maxsize")) {
-                    var property: AppenderProperty = AppenderProperty()
-                    property.name = "maxSize"
-                    property.value = childrenElement.content
-                    propertyList.append(property)
-                    appender.property = propertyList
-                }
-                if (allAttrs.toString().contains("name=\"file\"") && childrenElement.name.equals("property") &&
-                    childrenElement.attributes.toString().contains("rotate")) {
-                    var property: AppenderProperty = AppenderProperty()
-                    property.name = "rotate"
-                    property.value = childrenElement.content
-                    propertyList.append(property)
-                    appender.property = propertyList
-                }
-                if (allAttrs.toString().contains("name=\"file\"") && childrenElement.name.equals("property") &&
-                    childrenElement.attributes.toString().contains("daily")) {
-                    var property: AppenderProperty = AppenderProperty()
-                    property.name = "daily"
+                    if (childrenAttr.content.equals("maxsize")) {
+                        property.name = "maxSize"
+                    } else {
+                        property.name = childrenAttr.content
+                    }
                     property.value = childrenElement.content
                     propertyList.append(property)
                     appender.property = propertyList
@@ -276,11 +251,12 @@ public class LoggerManager {
     //获取logger元素配置
     private func getLoggerConfiguration(allElements: ArrayList<XmlElement>): ArrayList<LoggerConfig> {
         var loggerList: ArrayList<LoggerConfig> = ArrayList<LoggerConfig>()
-        var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
+
         for (element in allElements where element.name.equals("logger")) {
             let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
             let allAttrs: ArrayList<XmlAttr> = element.attributes
             var logger: LoggerConfig = LoggerConfig()
+            var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
             for (attr in allAttrs) {
                 if (attr.name.equals("name")) {
                     logger.name = attr.content
@@ -290,16 +266,15 @@ public class LoggerManager {
                 if (childrenElement.name.equals("level")) {
                     logger.level = childrenElement.content
                 }
-                if (allAttrs.toString().contains("name=\"Demo\"")) {
-                    let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                    for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
-                        var appenderRef: AppenderRef = AppenderRef()
-                        if (childrenAttr.name.equals("ref")) {
-                            appenderRef.ref = childrenAttr.content
-                        }
-                        refList.append(appenderRef)
-                        logger.appender = refList
+
+                let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
+                for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
+                    var appenderRef: AppenderRef = AppenderRef()
+                    if (childrenAttr.name.equals("ref")) {
+                        appenderRef.ref = childrenAttr.content
                     }
+                    refList.append(appenderRef)
+                    logger.appender = refList
                 }
             }
             loggerList.append(logger)
