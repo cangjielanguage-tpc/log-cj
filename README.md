@@ -33,7 +33,8 @@
 │       ├── pattern_converter.cj
 │       ├── time_slice.cj
 │       └── util.cj
-├── log4cj.xml
+├── resources
+│   ├── log4cj.xml
 ├── test
 │   ├── HLT
 │   ├── LLT
@@ -42,7 +43,7 @@
 
 - `doc` 库的设计文档、提案、库的使用文档、LLT 覆盖率报告
 - `src` 库源码目录
-- `log4cj.xml` 日志配置文件
+- `resources` 资源文件目录
 - `test` 测试用例，包括HLT用例、LLT 用例和UT用例 
 
 #### 安装教程

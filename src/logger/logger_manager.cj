@@ -9,7 +9,7 @@ import config.*
 import utils.*
 
 public let Logger_Appender_Factory = LoggerAppenderFactory()
-public let Logger_Manager = LoggerManager("./log4cj.xml")
+public let Logger_Manager = LoggerManager("./resources/log4cj.xml")
 
 /**
  * Log 管理类

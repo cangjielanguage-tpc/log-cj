@@ -1,5 +1,15 @@
 # 配置文件（log4cj.xml）说明
 
+#### 三方调用位置以及文件名说明
+
+位置: 默认resources目录下<br/>
+文件名：默认log4cj.xml<br/>
+**注意** <br/>
+如果想更改默认位置，请搜索logger_manager.cj文件，自行更改如下代码，重新编译测试
+```
+public let Logger_Manager = LoggerManager("./resources/log4cj.xml")
+```
+
 #### 文件结构如下
 
 ```
