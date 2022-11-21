@@ -117,9 +117,6 @@ main(): Int64 {
 
 6. UT补充
 
-7. 日志配置文件说明文档
-
-
 #### 参与贡献
 [@zhangxyjlu](https://gitee.com/zhangxyjlu)
 [@helongfei](https://gitee.com/helongfei_it)
