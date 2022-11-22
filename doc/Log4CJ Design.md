@@ -114,14 +114,7 @@
 | enabled  | 是否启用此 appender                                                                                                                                                                                                                                                                                                                                          | true                        |
 | name     | appender 名称                                                                                                                                                                                                                                                                                                                                             |                             |
 | type     | 日志输出目标类型 <br>console： 系统输出；<br>file：文件系统日志输出                                                                                                                                                                                                                                                                                                            |                             |
-| pattern  | 日志输出格式<br>%D (date,eg:2022/11/21)
-<br/>%T (ime,eg: 11:15:11 CST)
-<br/>%m (millisecond, eg:234)
-<br/>%L (level,FINEST, FINE, DEBUG, TRACE, INFO, WARNING, ERROR)
-<br/>%l (label, tag name)
-<br/>%S (source,eg:com.test.ClassA)
-<br/>%M (Message)
-<br/>输出样例：[2022/11/21 11:15:11 CST 281] [INFO] [com.hello] (examples.TestLoggerExample:77) test message | [%T %D %m] [%L][%l] (%S) %M |
+| pattern  | 日志输出格式<br/>%D (date,eg:2022/11/21)<br/>%T (time,eg: 11:15:11 CST)<br/>%m (millisecond, eg:234)<br/>%L (level：ALL,TRACE,DEBUG,INFO,WARN,ERROR,OFF)<br/>%l (label, tag name)<br/>%S (source,eg:com.test.ClassA)<br/>%M (Message)<br/>输出样例：[2022/11/21 11:15:11 CST 281] [INFO] [com.hello] (examples.TestLoggerExample:77) test message<br/>  | [%T %D %m] [%L][%l] (%S) %M |
 | property | 日志大小、清理时间等配置                                                                                                                                                                                                                                                                                                                                            |                             |
 
 #### property 配置参数
