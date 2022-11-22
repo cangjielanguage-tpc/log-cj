@@ -14,7 +14,7 @@
 ## 架构
 
 ### 代码层次架构
-
+```
 ├── src
 │   ├── appender
 │   │   ├── xxx_appender.cj
@@ -28,7 +28,7 @@
 │   └── utils
 │       ├── log_level.cj
 │       ……
-
+```
 - appender 目录
   
   包含 appender 接口，和具体实 appender 现类，如控制台实现类：`console_logger_appender.cj` ，文件实现类：`file_logger_appender.cj`
