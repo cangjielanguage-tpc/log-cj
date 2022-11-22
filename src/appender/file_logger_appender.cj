@@ -10,7 +10,7 @@ import utils.*
  * */
 public class FileLoggerAppender <: LoggerAppender {
     // 默认日志文件
-    let DEFAULT_OUTPUT_FILE_NAME: String = "root.log"
+    let DEFAULT_OUTPUT_FILE_NAME: String = "log4cj_default.log"
 
     // 日志打印格式
     var pattern: String = ""
@@ -45,7 +45,7 @@ public class FileLoggerAppender <: LoggerAppender {
      * 构造函数，打开或创建文件
      * */
     public init() {
-        // TODO 由于仓颉没有零值，此处需要考虑默认日志文件的问题
+        //由于仓颉没有零值，后续会在初始化appender的时候，删掉默认日志文件
         this.file = File(DEFAULT_OUTPUT_FILE_NAME, OpenOption.CreateOrAppend)
     }
 
@@ -60,6 +60,8 @@ public class FileLoggerAppender <: LoggerAppender {
      * 初始化 fileAppender
      * */
     public func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit {
+        //删除default.log
+        File.delete(this.file.info.path)
         var file = ""
         let dFormat = "[%T %D %m] [%L][%l] (%S) %M"
         var maxSize = 0

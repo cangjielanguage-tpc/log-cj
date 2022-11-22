@@ -9,7 +9,7 @@ import config.*
 import utils.*
 
 public let Logger_Appender_Factory = LoggerAppenderFactory()
-public let Logger_Manager = LoggerManager("./resources/log4cj.xml")
+public let Logger_Manager = LoggerManager("./src/resources/log4cj.xml")
 
 /**
  * Log 管理类
@@ -126,7 +126,6 @@ public class LoggerManager {
     private func loadXML(xmlPath: String) {
         var filePath: Path = Path(xmlPath)
         var isFileExist: Bool = File.exists(filePath)
-
         if (xmlPath.size == 0 || !isFileExist) {
             return loadDefaultConfiguration()
         }

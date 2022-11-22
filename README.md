@@ -112,11 +112,9 @@ main(): Int64 {
 
 3. 日志打包后压缩文件
 
-4. 默认日志文件处理
+4. 代码打包
 
-5. 代码打包
-
-6. UT补充
+5. UT补充
 
 #### 参与贡献
 [@zhangxyjlu](https://gitee.com/zhangxyjlu)

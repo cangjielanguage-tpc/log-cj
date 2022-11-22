@@ -7,7 +7,7 @@
 **注意** <br/>
 如果想更改默认位置，请搜索logger_manager.cj文件，自行更改如下代码，重新编译测试
 ```
-public let Logger_Manager = LoggerManager("./resources/log4cj.xml")
+public let Logger_Manager = LoggerManager("./src/resources/log4cj.xml")
 ```
 
 #### 文件结构如下
