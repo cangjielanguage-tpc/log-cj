@@ -87,8 +87,7 @@ public class FileLoggerAppender <: LoggerAppender {
         }
 
         if (file.size == 0) {
-            print("initAppender: fileName is empty, please check it")
-            return
+            file = "root.log"
         }
         this.fileName = file
         this.rotate = rotate
@@ -116,7 +115,12 @@ public class FileLoggerAppender <: LoggerAppender {
 
         // Perform the write
         var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
-        this.file.write(mess)
+        try {
+            this.file.write(mess)
+        } catch (e: FSException) {
+            println("write file occur exception: ${e.message}")
+            return
+        }
         let n = mess.size
 
         // Update the size
@@ -172,14 +176,17 @@ public class FileLoggerAppender <: LoggerAppender {
         } else {
             fname = this.fileName + "_" + Time.now().toString("YYYYMMddhhmmssS") + ".log"
         }
+        try {
+            // Rename the file to its newfound home
+            // 将当前文件命名为fname，出错返回错误信息
+            File.move(this.fileName, fname, true)
 
-        // Rename the file to its newfound home
-        // 将当前文件命名为fname，出错返回错误信息
-        File.move(this.fileName, fname, true)
-
-        // 打开新文件
-        this.file = File(this.fileName, OpenOption.CreateOrAppend)
-
+            // 打开新文件
+            this.file = File(this.fileName, OpenOption.CreateOrAppend)
+        } catch (e: IllegalArgumentException | FSException) {
+            println("rolling file occur exception: ${e.message}")
+            return
+        }
         // Set the daily open date to the current date
         this.opendate = Time.now().day()
 
