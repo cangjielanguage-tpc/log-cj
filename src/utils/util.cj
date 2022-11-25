@@ -41,3 +41,18 @@ public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int
         return defaultValue
     }
 }
+
+/**
+ * 数字字符串转Int64
+ *
+ * @param str 待转换字符串
+ * @param defaultValue 转换异常时返回默认值
+ * @return 返回Int64类型的数据
+ */
+public func getNumByString(str: String, defaultValue: Int64) {
+    try {
+        return Int64.parse(str)
+    } catch (e: ConvertException) {
+        return defaultValue
+    }
+}

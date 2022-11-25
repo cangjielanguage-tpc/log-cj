@@ -202,19 +202,22 @@ public class FileLoggerAppender <: LoggerAppender {
         lock.unlock()
     }
 
+    /**
+     * 删除存储超过 retentionDays 天数的日志文件。
+     */
     public func deleterollingFile() {
         try {
             let fileDir = this.file.info.parentDirectory.getOrThrow()
             for (file in Directory(fileDir.path).fileList()) {
-                if (file.path.toString().contains(".log") &&
-                    file.lastModificationTime.addDays(0, 0, this.retentionDays) < Time.now()) {
+                if (file.path.toString().contains(".log") && file.lastModificationTime.addDays(0, 0, this.retentionDays)<
+                    Time.now()) {
                     File.delete(file.path)
                 }
             }
         } catch (e: NoneValueException) {
             println("logfile Directory is none")
             return
-        }catch (e:FSException) {
+        } catch (e: FSException) {
             println("delete log file has occur an exception")
         }
     }
