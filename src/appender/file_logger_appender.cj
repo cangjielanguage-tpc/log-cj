@@ -39,6 +39,8 @@ public class FileLoggerAppender <: LoggerAppender {
     // 日志序号最大值
     var maxBackup: Int64 = 0
 
+    var retentionDays: Int64 = 7
+
     let lock = ReentrantMutex()
 
     /**
@@ -67,6 +69,7 @@ public class FileLoggerAppender <: LoggerAppender {
         var maxSize = 0
         var daily = false
         var rotate = false
+        var retentionDays = 7
 
         if (pattern.size == 0) {
             this.pattern = dFormat
@@ -82,6 +85,7 @@ public class FileLoggerAppender <: LoggerAppender {
                 case "maxsize" => maxSize = strToNumBySuffix(value, 1024, 20 * 1024 * 1024) // 默认20M
                 case "daily" => daily = value != "false"
                 case "rotate" => rotate = value != "false"
+                case "retentiondays" => retentionDays = getNumByString(value, 7)
                 case _ => print("LoadConfiguration: Warning: Unknown property ${pro.name}")
             }
         }
@@ -95,6 +99,7 @@ public class FileLoggerAppender <: LoggerAppender {
         this.maxBackup = 999
         this.maxSize = maxSize
         this.daily = daily
+        this.retentionDays = retentionDays
     }
 
     public func start(): Unit {
@@ -139,10 +144,11 @@ public class FileLoggerAppender <: LoggerAppender {
 
     // If this is called in a threaded context, it MUST be synchronized
     public func rollingFile() {
-        lock.lock()
         if (!this.rotate) {
             return
         }
+
+        lock.lock()
 
         // 关闭当前文件
         if (!this.file.isClosed()) {
@@ -156,11 +162,11 @@ public class FileLoggerAppender <: LoggerAppender {
         // 如果配置中的 daily 为 true（按天归档），打开日期不等于当天
         if (this.daily && Time.now().day() != this.opendate) {
             // 获取昨天时间，格式化到日
-            let yesterday = Time.now().addDays(0, 0, -1).toString("YYYY-MM-dd")
+            let yesterday = Time.now().addDays(0, 0, -1).toString("YYYYMMdd")
 
             // 累加 num，不超过 maxbackup 变量
             while (num <= this.maxBackup) {
-                fname = this.fileName + "." + yesterday + "." + num.format("03") + ".log"
+                fname = this.fileName + "_" + yesterday + "." + num.format("03") + ".log"
                 if (!File.exists(fname)) {
                     break
                 }
@@ -189,8 +195,27 @@ public class FileLoggerAppender <: LoggerAppender {
         }
         // Set the daily open date to the current date
         this.opendate = Time.now().day()
-
         this.curSize = 0
+
+        // Todo 是否启动线程运行
+        deleterollingFile()
         lock.unlock()
+    }
+
+    public func deleterollingFile() {
+        try {
+            let fileDir = this.file.info.parentDirectory.getOrThrow()
+            for (file in Directory(fileDir.path).fileList()) {
+                if (file.path.toString().contains(".log") &&
+                    file.lastModificationTime.addDays(0, 0, this.retentionDays) < Time.now()) {
+                    File.delete(file.path)
+                }
+            }
+        } catch (e: NoneValueException) {
+            println("logfile Directory is none")
+            return
+        }catch (e:FSException) {
+            println("delete log file has occur an exception")
+        }
     }
 }
