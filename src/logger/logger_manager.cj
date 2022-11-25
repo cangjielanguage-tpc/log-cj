@@ -38,7 +38,11 @@ public class LoggerManager {
      * 初始化默认设置
      * */
     private func initWithDefaultConfig(xmlPath: String) {
-        var lc = loadXML(xmlPath)
+        var lc: LoggerConfiguration = loadXML(xmlPath)
+        if (lc.appender.size == 0) {
+            println("can not find any appender!")
+            return
+        }
         initWithConfig(lc)
     }
 
@@ -132,15 +136,30 @@ public class LoggerManager {
 
         //获取appender,logger,root等元素
         var allElements: ArrayList<XmlElement> = getXmlBasicProperties(xmlPath)
+        if (allElements.size == 0) {
+            println("can not find any element in xml file!")
+            return LoggerConfiguration()
+        }
 
         //获取appender配置
         var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(allElements)
+        if (appenderList.size == 0) {
+            println("can not find any appender in xml file!")
+            return LoggerConfiguration()
+        }
 
         //获取logger配置
         var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(allElements)
+        if (loggerList.size == 0) {
+            println("can not find any logger in xml file!")
+        }
 
         //获取root配置
         var root: RootLoggerConfig = getRootConfiguration(allElements)
+        if (root.level.size == 0 || root.appender.size == 0) {
+            println("root configuration has mistakes!")
+            return LoggerConfiguration()
+        }
 
         return LoggerConfiguration(appenderList, root, loggerList)
     }
@@ -181,12 +200,12 @@ public class LoggerManager {
     //获取appender,logger,root元素
     private func getXmlBasicProperties(xmlPath: String): ArrayList<XmlElement> {
         var filePath: Path = Path(xmlPath)
-        var isFileExist: Bool = File.exists(filePath)
 
         //读取文件，读成String
         var allBytes: Array<Byte> = File.readFrom(filePath)
         if (allBytes.size == 0) {
-            throw FSException("xml file is empty!")
+            println("xml file is empty!")
+            return ArrayList<XmlElement>()
         }
 
         var content: String = String.fromUtf8(allBytes)
@@ -197,12 +216,22 @@ public class LoggerManager {
         try {
             elements = x.parse(content)
         } catch (e: XmlException) {
-            throw XmlException("parse xml occur exception ${e.message}!")
+            println("parse xml occur exception ${e.message}!")
+            return ArrayList<XmlElement>()
+        }
+        try {
+            elements.getOrThrow()
+        } catch (e: NoneValueException) {
+            println("get xml element occur exception ${e.message}!")
+            return ArrayList<XmlElement>()
         }
         var xmlElements: XmlElement = elements.getOrThrow()
-
-        //获取appender,logger,root元素
-        return xmlElements.childrenElements
+        var childrenElements: ArrayList<XmlElement> = xmlElements.childrenElements
+        if (childrenElements.size == 0) {
+            println("xml children element is empty!")
+            return ArrayList<XmlElement>()
+        }
+        return childrenElements
     }
 
     //获取file appender元素配置
@@ -279,7 +308,6 @@ public class LoggerManager {
             loggerList.append(logger)
         }
 
-        //refList去重
         return loggerList
     }
 
