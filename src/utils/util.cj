@@ -7,7 +7,7 @@ from std import convert.*
  * */
 public func LeftPad(str: String, limit: Int64, placeholder: String): String {
     var len = limit - str.size
-    if (len >= limit) {
+    if (len == limit) {
         return str
     }
 
