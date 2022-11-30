@@ -4,8 +4,8 @@ from std import collection.*
 from std import sync.*
 
 /**
-* LoggerAppender 工厂类，主要用于实现根据 名称或类型注册/获取 LoggerAppender 具体实现对象
-**/
+ * LoggerAppender 工厂类，主要用于实现根据 名称或类型注册/获取 LoggerAppender 具体实现对象
+ * */
 public class LoggerAppenderFactory {
     public var appender = HashMap<String, LoggerAppender>()
     public var appenderType = HashMap<String, LoggerAppender>()
@@ -53,7 +53,7 @@ public class LoggerAppenderFactory {
         }
         return ConsoleLoggerAppender()
     }
- 
+
     // 通过名称获取 LoggerAppender
     public func getAppenderRefByName(name: String): LoggerAppender {
         if (this.appender.contains(name.toAsciiLower())) {

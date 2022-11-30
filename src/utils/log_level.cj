@@ -1,6 +1,6 @@
 package utils
 
-public let DEFAULT_LOG_LEVEL = LogLevel.ALL
+public let DEFAULT_LOG_LEVEL = LogLevel.INFO
 
 /**
  * 日志打印级别
@@ -65,8 +65,8 @@ public enum LogLevel {
             case "WARN" => WARN
             case "ERROR" => ERROR
             case "OFF" => OFF
-            case _ => INFO
+            case _ => DEFAULT_LOG_LEVEL
         }
-        return DEFAULT_LOG_LEVEL
+        return level
     }
 }

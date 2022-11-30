@@ -44,7 +44,7 @@ public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int
 
 /**
  * 数字字符串转Int64
- *
+ * 
  * @param str 待转换字符串
  * @param defaultValue 转换异常时返回默认值
  * @return 返回Int64类型的数据
