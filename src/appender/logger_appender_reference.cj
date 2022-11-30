@@ -1,8 +1,8 @@
 package appender
 
 /**
-  LoggerAppender 引用模型类
-**/
+   LoggerAppender 引用模型类
+ * */
 public class LoggerAppenderReference {
     // 日志级别，默认 info
     public var level: LogLevel = DEFAULT_LOG_LEVEL

@@ -3,8 +3,8 @@ package appender
 import utils.*
 
 /**
-  LoggerAppender 的具体实现类，实现控制台打印日志
-**/
+   LoggerAppender 的具体实现类，实现控制台打印日志
+ * */
 public class ConsoleLoggerAppender <: LoggerAppender {
     // 格式化打印规则字符串
     var pattern: String = ""

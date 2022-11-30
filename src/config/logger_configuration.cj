@@ -1,7 +1,6 @@
 package config
 
 from std import collection.ArrayList
-
 import utils.*
 
 /**

@@ -6,6 +6,8 @@
 
 #### 软件架构
 
+参见[Log4CJ 设计文档](./doc/Log4CJ%20Design.md)
+
 源码目录
 
 ```shell
@@ -46,9 +48,9 @@
 - `resources` 资源文件目录
 - `test` 测试用例，包括HLT用例、LLT 用例和UT用例 
 
-#### 安装教程
+#### 使用编译
 
-正在开发中，未达到release版本，待更新
+参见[项目编译文件引用](./doc/quote_compiled_files.md)
 
 #### 使用说明
 
@@ -57,8 +59,6 @@
    代码示例：
 
 ```go
-import logger.*
-
 main(): Int64 {
     // 创建一个 Logger
     let logger = Logger_Manager.getLogger("com.hello")
@@ -106,9 +106,9 @@ main(): Int64 {
 
 #### 待办事务
 
-1. 错误处理逻辑
+1. 代码健壮性处理
 
-2. 多线程优化（异步写入spwan方式存在数据丢失）
+2. 多线程处理（异步写入spwan方式存在数据丢失）
 
 3. 日志打包后压缩文件
 
@@ -118,4 +118,5 @@ main(): Int64 {
 
 #### 参与贡献
 [@zhangxyjlu](https://gitee.com/zhangxyjlu)
+
 [@helongfei](https://gitee.com/helongfei_it)

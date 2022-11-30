@@ -106,15 +106,6 @@ public class LoggerManager {
         }
     }
 
-    /*
-     * 根据 xml 配置信息，初始化 LoggerManager
-     * 参数 xmlFile - xml配置文件名
-     */
-    public func initWithXML(xmlFile: String) {
-        let lc = loadXMLConfigurationProperties(xmlFile)
-        initWithConfig(lc)
-    }
-
     private func initLoggerManager(xmlPath: String) {
         // 注册系统自带的 LoggerAppender()
         Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
@@ -177,7 +168,7 @@ public class LoggerManager {
         <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
         <property name="filename">root.log</property>
         <property name="rotate">true</property>
-        <property name="maxsize">230</property>
+        <property name="maxsize">20M</property>
         <property name="daily">false</property>
     </appender>
     <root>
@@ -334,11 +325,5 @@ public class LoggerManager {
             }
         }
         return root
-    }
-
-    // TODO 临时测试用，待具体实现
-    private func loadXMLConfigurationProperties(filename: String) {
-        let xc = LoggerConfiguration()
-        return xc
     }
 }
