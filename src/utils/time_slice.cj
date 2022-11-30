@@ -56,4 +56,20 @@ public class TimeSlice {
             this.longDate = cached.longDate
         }
     }
+
+    public func getShortTime() {
+        return this.shortTime
+    }
+
+    public func getLongTime() {
+        return this.longTime
+    }
+
+    public func getShortDate() {
+        return this.shortDate
+    }
+
+    public func getLongDate() {
+        return this.longDate
+    }
 }

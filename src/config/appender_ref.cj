@@ -11,12 +11,15 @@ package config
  * */
 public class AppenderRef {
     // appender-ref 值
-    public var ref: String
+    private var ref: String = ""
 
-    public init() {
-        this.ref = ""
-    }
+    public init() {}
+
     public init(ref: String) {
         this.ref = ref
+    }
+
+    public func getRef() {
+        return this.ref
     }
 }

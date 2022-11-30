@@ -5,15 +5,31 @@ package appender
  * */
 public class LoggerAppenderReference {
     // 日志级别，默认 info
-    public var level: LogLevel = DEFAULT_LOG_LEVEL
+    private var level: LogLevel = DEFAULT_LOG_LEVEL
 
     // appender 列表
-    public var appender: ArrayList<LoggerAppender> = ArrayList<LoggerAppender>()
+    private var appenderList: ArrayList<LoggerAppender> = ArrayList<LoggerAppender>()
 
-    public init(level: LogLevel, appender: ArrayList<LoggerAppender>) {
+    public init(level: LogLevel, appenderList: ArrayList<LoggerAppender>) {
         this.level = level
-        this.appender = appender
+        this.appenderList = appenderList
     }
 
     public init() {}
+
+    public func getAppenderList() {
+        return this.appenderList
+    }
+
+    public func setAppenderList(appenderList: ArrayList<LoggerAppender>) {
+        this.appenderList = appenderList
+    }
+
+    public func getLevel() {
+        return this.level
+    }
+
+    public func setLevel(level: LogLevel) {
+        this.level = level
+    }
 }

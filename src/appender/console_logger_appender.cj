@@ -7,7 +7,7 @@ import utils.*
  * */
 public class ConsoleLoggerAppender <: LoggerAppender {
     // 格式化打印规则字符串
-    var pattern: String = ""
+    private var pattern: String = ""
 
     public func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit {
         if (pattern.size == 0) {

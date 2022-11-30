@@ -10,10 +10,10 @@ package config
  * */
 public class AppenderProperty {
     // 属性名称
-    public var name: String = ""
+    private var name: String = ""
 
     // 属性对应值
-    public var value: String = ""
+    private var value: String = ""
 
     public init(name: String, value: String) {
         this.name = name
@@ -21,4 +21,20 @@ public class AppenderProperty {
     }
 
     public init() {}
+
+    public func getName() {
+        return this.name
+    }
+
+    public func setName(name: String) {
+        this.name = name
+    }
+
+    public func getValue() {
+        return this.value
+    }
+
+    public func setValue(value: String) {
+        this.value = value
+    }
 }
