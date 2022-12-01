@@ -108,6 +108,9 @@ public class FileLoggerAppender <: LoggerAppender {
      * 写日志实现
      * */
     public func logWrite(rec: LogRecord): Unit {
+        if (this.file.isClosed()) {
+            start()
+        }
         let now = Time.now()
         if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
             rollingFile()

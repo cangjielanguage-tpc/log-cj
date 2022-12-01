@@ -13,6 +13,10 @@ public class Logger {
         this.name = name
     }
 
+    public func getName() {
+        return this.name
+    }
+
     /*
      * 写日志操作入口
      * 参数 level - 日志级别

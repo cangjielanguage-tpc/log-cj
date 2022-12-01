@@ -24,7 +24,7 @@ public let Logger_Manager = LoggerManager("./src/resources/log4cj.xml")
         <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
         <property name="filename">root.log</property>
         <property name="rotate">true</property>
-        <property name="maxsize">230</property>
+        <property name="maxsize">400</property>
         <property name="daily">false</property>
     </appender>
     <logger name="Demo">

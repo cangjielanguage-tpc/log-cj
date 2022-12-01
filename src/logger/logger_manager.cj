@@ -172,26 +172,26 @@ public class LoggerManager {
 
     public func loadDefaultConfiguration() {
         let content = """
-        <?xml version="1.0" encoding="UTF-8"?>
-        <configuration>
-            <appender enabled="true" name="console">
-                <type>console</type>
-                <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-            </appender>
-            <appender enabled="true" name="file">
-                <type>file</type>
-                <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-                <property name="filename">root.log</property>
-                <property name="rotate">true</property>
-                <property name="maxsize">20M</property>
-                <property name="daily">false</property>
-            </appender>
-            <root>
-                <level>info</level>
-                <appender-ref ref="console" />
-                <appender-ref ref="file" />
-            </root>
-        </configuration>
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender enabled="true" name="console">
+    <type>console</type>
+    <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
+  </appender>
+  <appender enabled="true" name="file">
+    <type>file</type>
+    <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
+    <property name="filename">root.log</property>
+    <property name="rotate">true</property>
+    <property name="maxsize">20M</property>
+    <property name="daily">false</property>
+  </appender>
+  <root>
+    <level>info</level>
+    <appender-ref ref="console"/>
+    <appender-ref ref="file"/>
+  </root>
+</configuration>
         """
         var x: XmlParser = XmlParser()
         var elements: Option<XmlElement> = x.parse(content)
