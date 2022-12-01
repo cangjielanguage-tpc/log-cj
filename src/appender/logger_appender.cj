@@ -4,18 +4,31 @@ from std import collection.ArrayList
 import config.*
 
 /**
-   LoggerAppender 接口
- * */
+ * LoggerAppender Interface
+ */
 public interface LoggerAppender {
-    // 初始化LoggerAppender
+    /**
+     * Initialization Appender
+     *
+     * @param pattern Date Format
+     * @param property Appender Attribute List
+     */
     func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit
 
-    // 启动函数
+    /**
+     * Start print
+     */
     func start(): Unit
 
-    // 写日志函数
+    /**
+     * Formatting Print Logs
+     *
+     * @param rec Log Recording
+     */
     func logWrite(rec: LogRecord): Unit
 
-    // 资源释放函数
+    /**
+     * End print
+     */
     func close(): Unit
 }
