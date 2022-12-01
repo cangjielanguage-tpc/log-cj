@@ -6,34 +6,34 @@ from std import time.*
 import utils.*
 
 /**
-   LoggerAppender 的具体实现类，文件日志打印方式
+   Implementation class of the LoggerAppender,which is used to print files ang logs
  * */
 public class FileLoggerAppender <: LoggerAppender {
-    // 默认日志文件
+    // Defalut log file
     private let DEFAULT_OUTPUT_FILE_NAME: String = "log4cj_default.log"
 
-    // 日志打印格式
+    //Log Print Format
     private var pattern: String = ""
 
-    // 日志文件名称
+    // Log file name
     private var fileName: String = ""
 
-    // 日志文件指针
+    // Log file pointer
     private var file: fs.File
 
-    // 单个日志最大限制，为 0 则不限制
+    // Maximum limit of a single log. The value 0 indicates no limit.
     private var maxSize: Int64 = 0
 
-    // 日志当前大小
+    // Current log size
     private var curSize: Int64 = 0
 
-    // 按天滚动日志标记
+    //Day-based log scrolling flag
     private var daily: Bool = false
 
-    // 日志文件创建时间，配合daily使用
+    // Time then a log file is created. This parameter is used together with Daily.
     private var opendate: Int64 = 0
 
-    // 是否打包日志标记
+    // Indicates whether to pack logs
     private var rotate: Bool = false
 
     private var retentionDays: Int64 = 7
@@ -41,10 +41,10 @@ public class FileLoggerAppender <: LoggerAppender {
     private let lock = ReentrantMutex()
 
     /**
-     * 构造函数，打开或创建文件
-     * */
+     * Constructor,opening or creating a file
+     */
     public init() {
-        //由于仓颉没有零值，后续会在初始化appender的时候，删掉默认日志文件
+        //Because cangjie does not have a zero value,you need to consider the default log file.
         this.file = File(DEFAULT_OUTPUT_FILE_NAME, OpenOption.CreateOrAppend)
     }
 
@@ -56,10 +56,13 @@ public class FileLoggerAppender <: LoggerAppender {
     }
 
     /**
-     * 初始化 fileAppender
-     * */
+     * Initialization fileAppender
+     *
+     * @param pattern Date Format
+     * @param property Appender Attribute List
+     */
     public func initAppender(pattern: String, properties: ArrayList<AppenderProperty>): Unit {
-        //删除default.log
+        //delete default.log
         File.delete(this.file.info.path)
         var file = ""
         let dFormat = "[%T %D %m] [%L][%l] (%S) %M"
@@ -74,7 +77,7 @@ public class FileLoggerAppender <: LoggerAppender {
             this.pattern = pattern
         }
 
-        // Parse properties
+        //Parse properties
         for (property in properties) {
             var value = property.getValue().trimLeft(" \r\n").trimRight(" \r\n")
             match (property.getName().toAsciiLower()) {
@@ -96,17 +99,20 @@ public class FileLoggerAppender <: LoggerAppender {
         this.daily = daily
         this.retentionDays = retentionDays
     }
-
+    /**
+     * Obtain the file information.If the file does not exist,create the file.If the file exists,process the file and obtain the size of the file that has benn written.
+     */
     public func start(): Unit {
-        // 获取文件信息，不存在则直接创建，存在进行处理,获取已写入的大小
         this.file = File(this.fileName, OpenOption.CreateOrAppend)
         this.curSize = this.file.info.length
         this.opendate = this.file.info.creationTime.day()
     }
 
     /**
-     * 写日志实现
-     * */
+     * Logs Writing
+     *
+     * @param rec Log Recording
+     */
     public func logWrite(rec: LogRecord): Unit {
         let now = Time.now()
         if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
@@ -128,8 +134,8 @@ public class FileLoggerAppender <: LoggerAppender {
     }
 
     /**
-     * 关闭文件操作
-     * */
+     * Close File
+     */
     public func close(): Unit {
         if (!this.file.isClosed()) {
             this.file.flush()
@@ -145,7 +151,7 @@ public class FileLoggerAppender <: LoggerAppender {
 
         lock.lock()
 
-        // 关闭当前文件
+        // Close current file
         if (!this.file.isClosed()) {
             this.file.flush()
             this.file.close()
@@ -153,20 +159,19 @@ public class FileLoggerAppender <: LoggerAppender {
 
         var fname = ""
 
-        // 如果配置中的 daily 为 true（按天归档），打开日期不等于当天
+        // If daily in the configuration is true (archived by day), the opening date is not the same as the current day
         if (this.daily && Time.now().day() != this.opendate) {
-            // 获取昨天时间，格式化到日
+            // Get yesterday's time, format to day
             let yesterday = Time.now().addDays(0, 0, -1).toString("YYYYMMdd")
             fname = this.fileName + "_" + yesterday + ".log"
         } else {
             fname = this.fileName + "_" + Time.now().toString("YYYYMMddhhmmssS") + ".log"
         }
         try {
-            // Rename the file to its newfound home
-            // 将当前文件命名为fname，出错返回错误信息
+            //An error message is returned when the current file is named fname.
             File.move(this.fileName, fname, true)
 
-            // 打开新文件
+            //Open a new file
             this.file = File(this.fileName, OpenOption.CreateOrAppend)
         } catch (e: IllegalArgumentException | FSException) {
             println("rolling file occur exception: ${e.message}")
@@ -176,13 +181,13 @@ public class FileLoggerAppender <: LoggerAppender {
         this.opendate = Time.now().day()
         this.curSize = 0
 
-        // Todo 是否启动线程运行
+        //Indicates whether to start the thread to run.
         deleterollingFile()
         lock.unlock()
     }
 
     /**
-     * 删除存储超过 retentionDays 天数的日志文件。
+     * Delete log files whose storage duration exceeds the retention period.
      */
     private func deleterollingFile() {
         try {

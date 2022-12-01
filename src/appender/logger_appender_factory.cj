@@ -4,7 +4,7 @@ from std import collection.*
 from std import sync.*
 
 /**
- * Obtains the loggerAppender implementation object by name or type registration
+ * LoggerAppender factory class, mainly used to register/obtain the specific implementation object of LoggerAppender according to name or type
  * */
 public class LoggerAppenderFactory {
     private var appender = HashMap<String, LoggerAppender>()
@@ -108,6 +108,7 @@ public class LoggerAppenderFactory {
         var appenderName = name.toAsciiLower()
         if (this.appenderType.size == 0) {
             println("AppenderType is empty, please RegistryType at first")
+            // todo Error handling should return null
         }
         var newObj = getAppenderByType(typename)
         newObj.initAppender(pattern, properties)

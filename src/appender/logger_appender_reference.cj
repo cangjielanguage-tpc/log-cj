@@ -4,8 +4,10 @@ package appender
  * LoggerAppender Reference Model Class
  * */
 public class LoggerAppenderReference {
+    //Log level default info
     private var level: LogLevel = DEFAULT_LOG_LEVEL
 
+    //appender List
     private var appenderList: ArrayList<LoggerAppender> = ArrayList<LoggerAppender>()
 
     /**
