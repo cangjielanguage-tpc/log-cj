@@ -3,12 +3,17 @@ package appender
 import utils.*
 
 /**
-   LoggerAppender 的具体实现类，实现控制台打印日志
+ * The specific implementation class of LoggerAppender, which enables the console to print logs.
  * */
 public class ConsoleLoggerAppender <: LoggerAppender {
-    // 格式化打印规则字符串
     private var pattern: String = ""
 
+    /**
+     * Initialization ConsoleLoggerAppender
+     *
+     * @param pattern Date Format
+     * @param property Appender Attribute List
+     */
     public func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit {
         if (pattern.size == 0) {
             this.pattern = "[%T %D %m] [%L][%l] (%S) %M"
@@ -17,11 +22,22 @@ public class ConsoleLoggerAppender <: LoggerAppender {
         }
     }
 
+    /**
+     * Start print
+     */
     public func start(): Unit {}
 
+    /**
+     * Formatting Print Logs
+     *
+     * @param rec Log Recording
+     */
     public func logWrite(rec: LogRecord): Unit {
         print(getDefaultPatternConvert().formatLogRecord(pattern, rec))
     }
 
+    /**
+     * End print
+     */
     public func close(): Unit {}
 }

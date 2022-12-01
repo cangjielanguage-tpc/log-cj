@@ -1,15 +1,19 @@
 package appender
 
 /**
-   LoggerAppender 引用模型类
+ * LoggerAppender Reference Model Class
  * */
 public class LoggerAppenderReference {
-    // 日志级别，默认 info
     private var level: LogLevel = DEFAULT_LOG_LEVEL
 
-    // appender 列表
     private var appenderList: ArrayList<LoggerAppender> = ArrayList<LoggerAppender>()
 
+    /**
+     * Initialization
+     *
+     * @param level Log Level
+     * @param appender Initialization Appender Attribute list
+     */
     public init(level: LogLevel, appenderList: ArrayList<LoggerAppender>) {
         this.level = level
         this.appenderList = appenderList
