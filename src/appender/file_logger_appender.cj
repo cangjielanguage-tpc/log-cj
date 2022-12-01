@@ -10,38 +10,35 @@ import utils.*
  * */
 public class FileLoggerAppender <: LoggerAppender {
     // 默认日志文件
-    let DEFAULT_OUTPUT_FILE_NAME: String = "log4cj_default.log"
+    private let DEFAULT_OUTPUT_FILE_NAME: String = "log4cj_default.log"
 
     // 日志打印格式
-    var pattern: String = ""
+    private var pattern: String = ""
 
     // 日志文件名称
-    var fileName: String = ""
+    private var fileName: String = ""
 
     // 日志文件指针
-    var file: fs.File
+    private var file: fs.File
 
     // 单个日志最大限制，为 0 则不限制
-    var maxSize: Int64 = 0
+    private var maxSize: Int64 = 0
 
     // 日志当前大小
-    var curSize: Int64 = 0
+    private var curSize: Int64 = 0
 
     // 按天滚动日志标记
-    var daily: Bool = false
+    private var daily: Bool = false
 
     // 日志文件创建时间，配合daily使用
-    var opendate: Int64 = 0
+    private var opendate: Int64 = 0
 
     // 是否打包日志标记
-    var rotate: Bool = false
+    private var rotate: Bool = false
 
-    // 日志序号最大值
-    var maxBackup: Int64 = 0
+    private var retentionDays: Int64 = 7
 
-    var retentionDays: Int64 = 7
-
-    let lock = ReentrantMutex()
+    private let lock = ReentrantMutex()
 
     /**
      * 构造函数，打开或创建文件
@@ -61,7 +58,7 @@ public class FileLoggerAppender <: LoggerAppender {
     /**
      * 初始化 fileAppender
      * */
-    public func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit {
+    public func initAppender(pattern: String, properties: ArrayList<AppenderProperty>): Unit {
         //删除default.log
         File.delete(this.file.info.path)
         var file = ""
@@ -78,15 +75,15 @@ public class FileLoggerAppender <: LoggerAppender {
         }
 
         // Parse properties
-        for (pro in property) {
-            var value = pro.value.trimLeft(" \r\n").trimRight(" \r\n").toAsciiLower()
-            match (pro.name.toAsciiLower()) {
+        for (property in properties) {
+            var value = property.getValue().trimLeft(" \r\n").trimRight(" \r\n")
+            match (property.getName().toAsciiLower()) {
                 case "filename" => file = value
                 case "maxsize" => maxSize = strToNumBySuffix(value, 1024, 20 * 1024 * 1024) // 默认20M
-                case "daily" => daily = value != "false"
-                case "rotate" => rotate = value != "false"
+                case "daily" => daily = value.toAsciiLower() != "false"
+                case "rotate" => rotate = value.toAsciiLower() != "false"
                 case "retentiondays" => retentionDays = getNumByString(value, 7)
-                case _ => print("LoadConfiguration: Warning: Unknown property ${pro.name}")
+                case _ => print("LoadConfiguration: Warning: Unknown property ${property.getName()}")
             }
         }
 
@@ -95,8 +92,6 @@ public class FileLoggerAppender <: LoggerAppender {
         }
         this.fileName = file
         this.rotate = rotate
-
-        this.maxBackup = 999
         this.maxSize = maxSize
         this.daily = daily
         this.retentionDays = retentionDays
@@ -143,7 +138,7 @@ public class FileLoggerAppender <: LoggerAppender {
     }
 
     // If this is called in a threaded context, it MUST be synchronized
-    public func rollingFile() {
+    private func rollingFile() {
         if (!this.rotate) {
             return
         }
@@ -156,29 +151,13 @@ public class FileLoggerAppender <: LoggerAppender {
             this.file.close()
         }
 
-        var num = 1
         var fname = ""
 
         // 如果配置中的 daily 为 true（按天归档），打开日期不等于当天
         if (this.daily && Time.now().day() != this.opendate) {
             // 获取昨天时间，格式化到日
             let yesterday = Time.now().addDays(0, 0, -1).toString("YYYYMMdd")
-
-            // 累加 num，不超过 maxbackup 变量
-            while (num <= this.maxBackup) {
-                fname = this.fileName + "_" + yesterday + "." + num.format("03") + ".log"
-                if (!File.exists(fname)) {
-                    break
-                }
-                num++
-            }
-
-            // TODO 循环完毕没找到合适的号码，返回错误
-            if (num > this.maxBackup) {
-                println("Rotate: Cannot find free log number to rename ${this.fileName}")
-                return
-            }
-            // 日志替换为当前日期
+            fname = this.fileName + "_" + yesterday + ".log"
         } else {
             fname = this.fileName + "_" + Time.now().toString("YYYYMMddhhmmssS") + ".log"
         }
@@ -205,7 +184,7 @@ public class FileLoggerAppender <: LoggerAppender {
     /**
      * 删除存储超过 retentionDays 天数的日志文件。
      */
-    public func deleterollingFile() {
+    private func deleterollingFile() {
         try {
             let fileDir = this.file.info.parentDirectory.getOrThrow()
             for (file in Directory(fileDir.path).fileList()) {

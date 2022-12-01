@@ -1,7 +1,7 @@
 package utils
 
 public interface PatternConverter {
-    func formatLogRecord(pattern: String, rec: LogRecord): String
+    func formatLogRecord(pattern: String, logRecord: LogRecord): String
 }
 
 let defaultPatternConverter = DefaultPatternConverter()
@@ -26,33 +26,33 @@ public class DefaultPatternConverter <: PatternConverter {
     // %M - Message
     // Ignores unknown formats
     // Recommended: "[%D %T] [%L] (%S) %M"
-    public func formatLogRecord(pattern: String, rec: LogRecord): String {
+    public func formatLogRecord(pattern: String, logRecord: LogRecord): String {
         var result = ""
         if (pattern.size == 0) {
             return result
         }
         let timeSlice = TimeSlice()
-        timeSlice.getTimeSlice(rec.created)
+        timeSlice.getTimeSlice(logRecord.getCreatedTime())
 
         // Split the string into pieces by % signs
         let pieces = pattern.split("%")
         for (piece in pieces) {
             if (piece != pieces[0] && piece.size > 0) {
                 match (piece[0]) {
-                    case 'T' => result += timeSlice.longTime
-                    case 'o' => result += (rec.created.unixNano() / Int64(1e6)).toString()
-                    case 'n' => result += LeftPad(rec.created.nanosecond().toString(), 9, "0")
-                    case 'm' => result += LeftPad((rec.created.nanosecond() / Int64(1e6)).toString(), 3, "0")
-                    case 't' => result += timeSlice.shortTime
-                    case 'D' => result += timeSlice.longDate
-                    case 'd' => result += timeSlice.shortDate
-                    case 'l' => result += rec.tagName
-                    case 'L' => result += rec.level.levelName()
-                    case 'S' => result += rec.source
+                    case 'T' => result += timeSlice.getLongTime()
+                    case 'o' => result += (logRecord.getCreatedTime().unixNano() / Int64(1e6)).toString()
+                    case 'n' => result += LeftPad(logRecord.getCreatedTime().nanosecond().toString(), 9, "0")
+                    case 'm' => result += LeftPad((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3, "0")
+                    case 't' => result += timeSlice.getShortTime()
+                    case 'D' => result += timeSlice.getLongDate()
+                    case 'd' => result += timeSlice.getShortDate()
+                    case 'l' => result += logRecord.getTagName()
+                    case 'L' => result += logRecord.getLevel().levelName()
+                    case 'S' => result += logRecord.getSource()
                     case 's' =>
-                        let slice = rec.source.split("/")
+                        let slice = logRecord.getSource().split("/")
                         result += slice[slice.size - 1]
-                    case 'M' => result += rec.message
+                    case 'M' => result += logRecord.getMessage()
                     case _ => result += ""
                 }
                 if (piece.size > 1) {

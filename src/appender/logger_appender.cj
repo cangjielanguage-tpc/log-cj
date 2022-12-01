@@ -2,7 +2,6 @@ package appender
 
 from std import collection.ArrayList
 import config.*
-import utils.*
 
 /**
    LoggerAppender 接口

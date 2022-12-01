@@ -7,9 +7,9 @@ from std import sync.*
  * LoggerAppender 工厂类，主要用于实现根据 名称或类型注册/获取 LoggerAppender 具体实现对象
  * */
 public class LoggerAppenderFactory {
-    public var appender = HashMap<String, LoggerAppender>()
-    public var appenderType = HashMap<String, LoggerAppender>()
-    public var typeLock: ReentrantMutex = ReentrantMutex()
+    private var appender = HashMap<String, LoggerAppender>()
+    private var appenderType = HashMap<String, LoggerAppender>()
+    private var typeLock: ReentrantMutex = ReentrantMutex()
 
     public init(
         appender: HashMap<String, LoggerAppender>,
@@ -47,7 +47,7 @@ public class LoggerAppenderFactory {
     }
 
     // 通过类型获取 LoggerAppender，默认返回控制台appender
-    public func getInterfaceByType(typename: String): LoggerAppender {
+    public func getAppenderByType(typename: String): LoggerAppender {
         if (this.appenderType.contains(typename.toAsciiLower())) {
             return this.appenderType[typename.toAsciiLower()]
         }
@@ -55,7 +55,7 @@ public class LoggerAppenderFactory {
     }
 
     // 通过名称获取 LoggerAppender
-    public func getAppenderRefByName(name: String): LoggerAppender {
+    public func getAppenderByName(name: String): LoggerAppender {
         if (this.appender.contains(name.toAsciiLower())) {
             return this.appender[name.toAsciiLower()]
         }
@@ -75,7 +75,7 @@ public class LoggerAppenderFactory {
             println("AppenderType is empty, please RegistryType at first")
             // todo 错误处理 应该返回空
         }
-        var newObj = getInterfaceByType(typename)
+        var newObj = getAppenderByType(typename)
         newObj.initAppender(pattern, properties)
         newObj.start()
         this.appender[appenderName] = newObj

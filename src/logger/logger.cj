@@ -7,13 +7,13 @@ from std import time.*
  * */
 public class Logger {
     // logger 名称
-    public var name: String
+    private var name: String
 
     public init(name: String) {
         this.name = name
     }
 
-    /* 
+    /*
      * 写日志操作入口
      * 参数 level - 日志级别
      * 参数 msg - 日志信息
@@ -27,42 +27,42 @@ public class Logger {
         doLog(level, rec)
     }
 
-    /* 
+    /*
      * 写日志操作
      * 参数 level - 日志级别
      * 参数 rec - LogRecord 信息
      */
     private func doLog(level: LogLevel, rec: LogRecord) {
-        appendLog(level, rec, Logger_Manager.rootLogger)
+        appendLog(level, rec, Logger_Manager.getRootLogger())
 
         // 若配置中除 root 外有其他日志，则进行打印
-        if (Logger_Manager.loggerMap.size > 0) {
-            for ((k, v) in Logger_Manager.loggerMap) {
-                if (k.contains(this.name)) {
-                    appendLog(level, rec, v)
+        if (Logger_Manager.getLoggerMap().size > 0) {
+            for ((loggerName, loggerAppenderReference) in Logger_Manager.getLoggerMap()) {
+                if (loggerName.contains(this.name)) {
+                    appendLog(level, rec, loggerAppenderReference)
                 }
             }
         }
     }
 
-    /* 
+    /*
      * 追加日志
      * 参数 level - 日志级别
      * 参数 rec - LogRecord 信息
      * 参数 appenderRef - LoggerAppenderReference 信息
      */
     private func appendLog(level: LogLevel, rec: LogRecord, appenderRef: LoggerAppenderReference) {
-        if (appenderRef.appender.size == 0) {
+        if (appenderRef.getAppenderList().size == 0) {
             return
         }
-        if (level >= appenderRef.level) {
-            for (appender in appenderRef.appender) {
+        if (level >= appenderRef.getLevel()) {
+            for (appender in appenderRef.getAppenderList()) {
                 appender.logWrite(rec)
             }
         }
     }
 
-    /* 
+    /*
      * 打印 critical 日志
      * 参数 msg - 日志信息
      */
@@ -70,7 +70,7 @@ public class Logger {
         log(OFF, msg)
     }
 
-    /* 
+    /*
      * 打印 error 日志
      * 参数 msg - 日志信息
      */
@@ -78,7 +78,7 @@ public class Logger {
         log(ERROR, msg)
     }
 
-    /* 
+    /*
      * 打印 warn 日志
      * 参数 msg - 日志信息
      */
@@ -86,7 +86,7 @@ public class Logger {
         log(WARN, msg)
     }
 
-    /* 
+    /*
      * 打印 info 日志
      * 参数 msg - 日志信息
      */
@@ -94,7 +94,7 @@ public class Logger {
         log(INFO, msg)
     }
 
-    /* 
+    /*
      * 打印 debug 日志
      * 参数 msg - 日志信息
      */
@@ -102,7 +102,7 @@ public class Logger {
         log(DEBUG, msg)
     }
 
-    /* 
+    /*
      * 打印 trace 日志
      * 参数 msg - 日志信息
      */
@@ -110,7 +110,7 @@ public class Logger {
         log(TRACE, msg)
     }
 
-    /* 
+    /*
      * 打印 fine 日志
      * 参数 msg - 日志信息
      */

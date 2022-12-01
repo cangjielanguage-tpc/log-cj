@@ -15,14 +15,26 @@ public let Logger_Manager = LoggerManager("./src/resources/log4cj.xml")
  * Log 管理类
  * */
 public class LoggerManager {
-    public var laf: LoggerAppenderFactory = LoggerAppenderFactory()
-    public var rootLogger: LoggerAppenderReference = LoggerAppenderReference()
-    public var loggerMap: HashMap<String, LoggerAppenderReference> = HashMap<String, LoggerAppenderReference>()
+    private var loggerAppenderFactory: LoggerAppenderFactory = LoggerAppenderFactory()
+    private var rootLogger: LoggerAppenderReference = LoggerAppenderReference()
+    private var loggerMap: HashMap<String, LoggerAppenderReference> = HashMap<String, LoggerAppenderReference>()
 
     public init() {}
 
     public init(xmlPath: String) {
         initLoggerManager(xmlPath)
+    }
+
+    public func getLoggerAppenderFactory() {
+        return this.loggerAppenderFactory
+    }
+
+    public func getRootLogger() {
+        return this.rootLogger
+    }
+
+    public func getLoggerMap() {
+        return this.loggerMap
     }
 
     /*
@@ -38,12 +50,12 @@ public class LoggerManager {
      * 初始化默认设置
      * */
     private func initWithDefaultConfig(xmlPath: String) {
-        var lc: LoggerConfiguration = loadXML(xmlPath)
-        if (lc.appender.size == 0) {
+        var loggerConfiguration: LoggerConfiguration = loadXML(xmlPath)
+        if (loggerConfiguration.getAppenders().size == 0) {
             println("can not find any appender!")
             return
         }
-        initWithConfig(lc)
+        initWithConfig(loggerConfiguration)
     }
 
     /*
@@ -51,56 +63,59 @@ public class LoggerManager {
      * 参数 configuration - 通过配置信息解析成的 LoggerConfiguration 对象
      */
     private func initWithConfig(configuration: LoggerConfiguration) {
-        this.laf = Logger_Appender_Factory.new()
+        this.loggerAppenderFactory = Logger_Appender_Factory.new()
         this.loggerMap = HashMap<String, LoggerAppenderReference>()
         this.rootLogger = LoggerAppenderReference(DEFAULT_LOG_LEVEL, ArrayList<LoggerAppender>())
 
         let enabledMap = HashMap<String, Bool>()
 
-        if (configuration.appender.size > 0) {
-            for (appender in configuration.appender) {
-                enabledMap[appender.name.toAsciiLower()] = appender.enabled.toAsciiLower().trimAscii() != "false"
-                if (enabledMap[appender.name.toAsciiLower()]) {
-                    this.laf.registerLoggerAppender(
-                        appender.name,
-                        appender.appenderType,
-                        appender.pattern,
-                        appender.property
+        if (configuration.getAppenders().size > 0) {
+            for (appender in configuration.getAppenders()) {
+                enabledMap[appender.getName().toAsciiLower()] = appender.getEnabled().toAsciiLower().trimAscii() !=
+                    "false"
+                if (enabledMap[appender.getName().toAsciiLower()]) {
+                    this.loggerAppenderFactory.registerLoggerAppender(
+                        appender.getName(),
+                        appender.getAppenderType(),
+                        appender.getPattern(),
+                        appender.getProperties()
                     )
                 }
             }
         }
 
         // init root
-        let rc = configuration.root
+        let rootConfig = configuration.getRoot()
 
-        this.rootLogger.level = LogLevel.getLevelByString(rc.level)
-        this.rootLogger.appender = ArrayList<LoggerAppender>()
+        this.rootLogger.setLevel(LogLevel.getLevelByString(rootConfig.getLevel()))
 
-        if (rc.appender.size > 0) {
-            for (appenderRef in rc.appender) {
-                if (enabledMap.contains(appenderRef.ref.toAsciiLower()) && enabledMap[appenderRef.ref.toAsciiLower()]) {
-                    let ap = this.laf.getAppenderRefByName(appenderRef.ref)
-                    this.rootLogger.appender.append(ap)
+        if (rootConfig.getAppenderRefList().size > 0) {
+            for (appenderRef in rootConfig.getAppenderRefList()) {
+                if (enabledMap.contains(appenderRef.getRef().toAsciiLower()) && enabledMap[appenderRef.getRef().
+                    toAsciiLower()]) {
+                    let ap = this.loggerAppenderFactory.getAppenderByName(appenderRef.getRef().toAsciiLower())
+                    this.rootLogger.getAppenderList().append(ap)
                 }
             }
         }
 
         // init logger
-        if (configuration.logger.size > 0) {
-            for (logger in configuration.logger) {
+        if (configuration.getLogger().size > 0) {
+            for (logger in configuration.getLogger()) {
                 let oneLogger = LoggerAppenderReference(
-                    LogLevel.getLevelByString(logger.level),
+                    LogLevel.getLevelByString(logger.getLevel()),
                     ArrayList<LoggerAppender>()
                 )
-                for (appenderRef in logger.appender) {
-                    if (enabledMap.contains(appenderRef.ref.toAsciiLower()) && enabledMap[appenderRef.ref.toAsciiLower()]) {
-                        let ap = this.laf.getAppenderRefByName(appenderRef.ref)
-                        oneLogger.appender.append(ap)
+                for (appenderRef in logger.getAppenderRefList()) {
+                    if (enabledMap.contains(appenderRef.getRef().toAsciiLower()) && enabledMap[appenderRef.getRef().
+                        toAsciiLower()]) {
+                        let oneAppender = this.loggerAppenderFactory.getAppenderByName(
+                            appenderRef.getRef().toAsciiLower())
+                        oneLogger.getAppenderList().append(oneAppender)
                     }
                 }
-                if (oneLogger.appender.size > 0) {
-                    this.loggerMap[logger.name] = oneLogger
+                if (oneLogger.getAppenderList().size > 0) {
+                    this.loggerMap[logger.getName()] = oneLogger
                 }
             }
         }
@@ -147,7 +162,7 @@ public class LoggerManager {
 
         //获取root配置
         var root: RootLoggerConfig = getRootConfiguration(allElements)
-        if (root.level.size == 0 || root.appender.size == 0) {
+        if (root.getLevel().size == 0 || root.getAppenderRefList().size == 0) {
             println("root configuration has mistakes!")
             return LoggerConfiguration()
         }
@@ -157,27 +172,27 @@ public class LoggerManager {
 
     public func loadDefaultConfiguration() {
         let content = """
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <appender enabled="true" name="console">
-        <type>console</type>
-        <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-    </appender>
-    <appender enabled="true" name="file">
-        <type>file</type>
-        <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-        <property name="filename">root.log</property>
-        <property name="rotate">true</property>
-        <property name="maxsize">20M</property>
-        <property name="daily">false</property>
-    </appender>
-    <root>
-        <level>info</level>
-        <appender-ref ref="console" />
-        <appender-ref ref="file" />
-    </root>
-</configuration>
-"""
+        <?xml version="1.0" encoding="UTF-8"?>
+        <configuration>
+            <appender enabled="true" name="console">
+                <type>console</type>
+                <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
+            </appender>
+            <appender enabled="true" name="file">
+                <type>file</type>
+                <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
+                <property name="filename">root.log</property>
+                <property name="rotate">true</property>
+                <property name="maxsize">20M</property>
+                <property name="daily">false</property>
+            </appender>
+            <root>
+                <level>info</level>
+                <appender-ref ref="console" />
+                <appender-ref ref="file" />
+            </root>
+        </configuration>
+        """
         var x: XmlParser = XmlParser()
         var elements: Option<XmlElement> = x.parse(content)
         var xmlElements: XmlElement = elements.getOrThrow()
@@ -229,37 +244,32 @@ public class LoggerManager {
     private func getAppenderConfiguration(allElements: ArrayList<XmlElement>): ArrayList<AppenderConfig> {
         var configList: ArrayList<AppenderConfig> = ArrayList<AppenderConfig>()
 
-        for (element in allElements where element.name.equals("appender")) {
+        for (element in allElements where element.name.toAsciiLower().equals("appender")) {
             let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
             let allAttrs: ArrayList<XmlAttr> = element.attributes
             var appender: AppenderConfig = AppenderConfig()
             var propertyList: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
             for (attr in allAttrs) {
-                if (attr.name.equals("enabled")) {
-                    appender.enabled = attr.content
+                if (attr.name.toAsciiLower().equals("enabled")) {
+                    appender.setEnabled(attr.content)
                 }
-                if (attr.name.equals("name")) {
-                    appender.name = attr.content
+                if (attr.name.toAsciiLower().equals("name")) {
+                    appender.setName(attr.content)
                 }
             }
             for (childrenElement in allChildrenElements) {
-                if (childrenElement.name.equals("type")) {
-                    appender.appenderType = childrenElement.content
+                if (childrenElement.name.toAsciiLower().equals("type")) {
+                    appender.setAppenderType(childrenElement.content)
                 }
-                if (childrenElement.name.equals("pattern")) {
-                    appender.pattern = childrenElement.content
-                }
-                let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
-                    var property: AppenderProperty = AppenderProperty()
-                    if ("maxsize".equals(childrenAttr.content.toAsciiLower())) {
-                        property.name = "maxSize"
-                    } else {
-                        property.name = childrenAttr.content
+                if (childrenElement.name.toAsciiLower().equals("pattern")) {
+                    appender.setPattern(childrenElement.content)
+                } else {
+                    let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
+                    for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
+                        var property: AppenderProperty = AppenderProperty(childrenAttr.content, childrenElement.content)
+                        propertyList.append(property)
                     }
-                    property.value = childrenElement.content
-                    propertyList.append(property)
-                    appender.property = propertyList
+                    appender.setProperties(propertyList)
                 }
             }
             configList.append(appender)
@@ -277,23 +287,22 @@ public class LoggerManager {
             var logger: LoggerConfig = LoggerConfig()
             var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
             for (attr in allAttrs) {
-                if (attr.name.equals("name")) {
-                    logger.name = attr.content
+                if (attr.name.toAsciiLower().equals("name")) {
+                    logger.setName(attr.content)
                 }
             }
             for (childrenElement in allChildrenElements) {
-                if (childrenElement.name.equals("level")) {
-                    logger.level = childrenElement.content
-                }
-
-                let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
-                    var appenderRef: AppenderRef = AppenderRef()
-                    if (childrenAttr.name.equals("ref")) {
-                        appenderRef.ref = childrenAttr.content
+                if (childrenElement.name.toAsciiLower().equals("level")) {
+                    logger.setLevel(childrenElement.content)
+                } else {
+                    let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
+                    for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
+                        var appenderRef: AppenderRef = AppenderRef()
+                        if (childrenAttr.name.toAsciiLower().equals("ref")) {
+                            refList.append(AppenderRef(childrenAttr.content))
+                        }
                     }
-                    refList.append(appenderRef)
-                    logger.appender = refList
+                    logger.setAppenderRefList(refList)
                 }
             }
             loggerList.append(logger)
@@ -309,18 +318,17 @@ public class LoggerManager {
         for (element in allElements where element.name.equals("root")) {
             let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
             for (childrenElement in allChildrenElements) {
-                if (childrenElement.name.equals("level")) {
-                    root.level = childrenElement.content
-                }
-
-                let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
-                    var appenderRef: AppenderRef = AppenderRef()
-                    if (childrenAttr.name.equals("ref")) {
-                        appenderRef.ref = childrenAttr.content
+                if (childrenElement.name.toAsciiLower().equals("level")) {
+                    root.setLevel(childrenElement.content)
+                } else {
+                    let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
+                    for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
+                        var appenderRef: AppenderRef = AppenderRef()
+                        if (childrenAttr.name.equals("ref")) {
+                            refList.append(AppenderRef(childrenAttr.content))
+                        }
                     }
-                    refList.append(appenderRef)
-                    root.appender = refList
+                    root.setAppenderRefList(refList)
                 }
             }
         }

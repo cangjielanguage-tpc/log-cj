@@ -13,18 +13,34 @@ from std import collection.ArrayList
  * */
 public class RootLoggerConfig {
     // 日志级别
-    public var level: String
+    private var level: String
 
     // root 日志配置 AppenderRef
-    public var appender: ArrayList<AppenderRef>
+    private var appenderRefList: ArrayList<AppenderRef>
 
     public init() {
         this.level = ""
-        this.appender = ArrayList<AppenderRef>()
+        this.appenderRefList = ArrayList<AppenderRef>()
     }
 
-    public init(level: String, appender: ArrayList<AppenderRef>) {
+    public init(level: String, appenderRefList: ArrayList<AppenderRef>) {
         this.level = level
-        this.appender = appender
+        this.appenderRefList = appenderRefList
+    }
+
+    public func getLevel() {
+        return this.level
+    }
+
+    public func setLevel(level: String) {
+        this.level = level
+    }
+
+    public func getAppenderRefList() {
+        return this.appenderRefList
+    }
+
+    public func setAppenderRefList(appenderRefList: ArrayList<AppenderRef>) {
+        this.appenderRefList = appenderRefList
     }
 }

@@ -18,7 +18,7 @@
         -->
         <property name="rotate">true</property>
         <!--maxsize单位字节-->
-        <property name="maxsize">230</property>
+        <property name="maxsize">400</property>
         <property name="daily">false</property>
     </appender>
     <!-- <logger name="Demo">
