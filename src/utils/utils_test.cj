@@ -98,9 +98,3 @@ public class UtilTests {
         @Assert(LogLevel.getLevelByString("test").levelName(),"INFO")
     }
 }
-
-// main() {
-//     let test = UtilTests()
-//     test.execute()
-//     test.printResult()
-// }
