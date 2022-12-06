@@ -3,19 +3,19 @@ package config
 from std import collection.ArrayList
 
 /**
-   配置文件对象 model ，用于解析 root 配置。
-     <root>
-       <level>info</level>
-       <appender-ref ref="console" />
-       <appender-ref ref="logstash" />
-       <appender-ref ref="file" />
-     </root>
+ * Configuration file object model,Used to parse the root configuration.
+    <root>
+        <level>info</level>
+        <appender-ref ref="console" />
+        <appender-ref ref="logstash" />
+        <appender-ref ref="file" />
+    </root>
  * */
 public class RootLoggerConfig {
-    // 日志级别
+    // log level
     private var level: String
 
-    // root 日志配置 AppenderRef
+    // root log  configuration AppenderRef
     private var appenderRefList: ArrayList<AppenderRef>
 
     public init() {
@@ -23,6 +23,12 @@ public class RootLoggerConfig {
         this.appenderRefList = ArrayList<AppenderRef>()
     }
 
+    /**
+     * Initialization appenderRefList 
+     *
+     * @param level level
+     * @param appenderRefList appenderRef list
+     */
     public init(level: String, appenderRefList: ArrayList<AppenderRef>) {
         this.level = level
         this.appenderRefList = appenderRefList

@@ -3,29 +3,32 @@ package config
 from std import collection.ArrayList
 
 /**
-   配置文件对象 model ，用于解析 Appender 配置项。
-     <appender enabled="true" name="file">
-       <type>file</type>
-       <pattern>[%D %T %m] [%L][%l] (%S) %M</pattern>
-       <property name="filename">test.log</property>
-     </appender>
+ * Configuration file object model,which is used to parse the appender configuration item.
+    <appender enabled="true" name="file">
+        <type>file</type>
+        <pattern>[%D %T %m] [%L][%l] (%S) %M</pattern>
+        <property name="filename">test.log</property>
+    </appender>
  * */
 public class AppenderConfig {
-    // appender 使能状态
+    // appender Enabled Status
     private var enabled: String
 
-    // appender 名称
+    // appender Name
     private var name: String
 
-    // appender 类型：file/console
+    // appender Type:file/console
     private var appenderType: String
 
-    // 输出格式 主要用于规范输出时间显示样式
+    // Output Format:Mainly used to standardize the display style of output time
     private var pattern: String
 
-    // 属性列表
+    // Attribute List
     private var properties: ArrayList<AppenderProperty>
 
+    /**
+     * Initialize
+     */
     public init() {
         this.enabled = ""
         this.name = ""
@@ -34,6 +37,15 @@ public class AppenderConfig {
         this.properties = ArrayList<AppenderProperty>()
     }
 
+    /**
+     * Initialization AppenderConfig
+     *
+     * @param enabled Enabled
+     * @param name Name
+     * @param appenderType appender type
+     * @param pattern pattern
+     * @param properties properties
+     */
     public init(
         enabled: String,
         name: String,

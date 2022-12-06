@@ -4,18 +4,25 @@ from std import collection.ArrayList
 import utils.*
 
 /**
-   日志配置，包含 appender rootlogger logger 配置
+ * Log Congiguration,Containing appender rootlogger logger Congiguration.
  * */
 public class LoggerConfiguration {
-    // 配置中解析的 appender 集合
+    // Resolved in the configuration appender gathers
     private var appenders = ArrayList<AppenderConfig>()
 
-    // 配置中解析的 rootLogger， 默认 INFO 级别日志
+    // Resolved in the configuration rootLogger,default INFO lever log.
     private var root: RootLoggerConfig = RootLoggerConfig(DEFAULT_LOG_LEVEL.levelName(), ArrayList<AppenderRef>())
 
-    // 配置中解析的自定义 logger
+    // Configuration Resolved Customization logger
     private var logger = ArrayList<LoggerConfig>()
 
+    /**
+     * Initialization AppenderConfig,RootLoggerConfig,LoggerConfig
+     *
+     * @param appenders configuration file object list
+     * @param root root configuration
+     * @param logger log model list
+     */
     public init(appenders: ArrayList<AppenderConfig>, root: RootLoggerConfig, logger: ArrayList<LoggerConfig>) {
         this.appenders = appenders
         this.root = root

@@ -1,24 +1,24 @@
 package config
 
 /**
-   这个就是自定义的一个logger mmodel
-   additivity 这个默认是true，即继承父类 root logger
-   也就是说，你的这个日志也会在root的logger里面输出的，配置false，就是不继承，各走各的。
-   appender-ref 也就是说这个logger的输出目的地是哪里，ref就是关联到上面声明的一个file，一个console
-   <logger name="Sample">
-     <level>info</level>
-     <appender-ref ref="file" />
-     <appender-ref ref="console" />
-   </logger>
+ * This is a custom logger model
+     additivity defaulty is true,Inherit parent class root logger
+     This log is generated in the logger of the root user,Configuration false,Do not inherit,Go your own way.
+     appender-ref what is the output destination of this logger,ref is associated with the above declaration,one file,one console
+     <logger name="Sample">
+       <level>info</level>
+       <appender-ref ref="file" />
+       <appender-ref ref="console" />
+     </logger>
  * */
 public class LoggerConfig {
-    // logger 名称
+    // logger name
     private var name: String
 
-    // 日志级别
+    // log level
     private var level: String
 
-    // AppenderRef 集合
+    // AppenderRef list
     private var appenderRefList: ArrayList<AppenderRef>
 
     public init() {
@@ -27,6 +27,13 @@ public class LoggerConfig {
         this.appenderRefList = ArrayList<AppenderRef>()
     }
 
+    /**
+     * Initialization AppenderRefList
+     *
+     * @param name name
+     * @param level level
+     * @param appenderRefList appenderRef list
+     */
     public init(name: String, level: String, appenderRefList: ArrayList<AppenderRef>) {
         this.name = name
         this.level = level
