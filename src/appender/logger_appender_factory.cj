@@ -108,7 +108,8 @@ public class LoggerAppenderFactory {
         var appenderName = name.toAsciiLower()
         if (this.appenderType.size == 0) {
             println("AppenderType is empty, please RegistryType at first")
-            // todo Error handling should return null
+            //Error handling should return null
+            return LoggerAppenderFactory()
         }
         var newObj = getAppenderByType(typename)
         newObj.initAppender(pattern, properties)

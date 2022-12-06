@@ -18,35 +18,35 @@
 │   │   ├── file_logger_appender.cj
 │   │   ├── logger_appender.cj
 │   │   ├── logger_appender_factory.cj
-│   │   └── logger_appender_reference.cj
+│   │   ├── logger_appender_reference.cj
+│   │   └── appender_test.cj
 │   ├── config
 │   │   ├── appender_config.cj
 │   │   ├── appender_property.cj
 │   │   ├── appender_ref.cj
 │   │   ├── logger_config.cj
 │   │   ├── logger_configuration.cj
-│   │   └── root_logger_config.cj
+│   │   ├── root_logger_config.cj
+│   │   └── config_test.cj
 │   ├── logger
 │   │   ├── logger.cj
-│   │   └── logger_manager.cj
+│   │   ├── logger_manager.cj
+│   │   └── logger_test.cj
 │   └── utils
 │       ├── log_level.cj
 │       ├── log_record.cj
 │       ├── pattern_converter.cj
 │       ├── time_slice.cj
-│       └── util.cj
+│       ├── util.cj
+│       └── utils_test.cj
 ├── resources
 │   ├── log4cj.xml
-├── test
-│   ├── HLT
-│   ├── LLT
-│   └── UT
 ```
 
 - `doc` 库的设计文档、提案、库的使用文档、LLT 覆盖率报告
-- `src` 库源码目录
+- `src` 库源码和测试用例目录
 - `resources` 资源文件目录
-- `test` 测试用例，包括HLT用例、LLT 用例和UT用例 
+- `xxx_test.cj` 测试用例所在文件
 
 #### 使用编译
 
@@ -114,7 +114,7 @@ main(): Int64 {
 
 4. 代码打包
 
-5. UT补充
+5. UT补充(目前74%)
 
 #### 参与贡献
 [@zhangxyjlu](https://gitee.com/zhangxyjlu)
