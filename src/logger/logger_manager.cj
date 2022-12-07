@@ -12,7 +12,7 @@ public let Logger_Appender_Factory = LoggerAppenderFactory()
 public let Logger_Manager = LoggerManager("./src/resources/log4cj.xml")
 
 /**
- * Log 管理类
+ * Log Management Class
  * */
 public class LoggerManager {
     private var loggerAppenderFactory: LoggerAppenderFactory = LoggerAppenderFactory()
@@ -37,9 +37,12 @@ public class LoggerManager {
         return this.loggerMap
     }
 
-    /*
-     * 获取 logger 对象
-     * 参数 name - logger 名称
+    /**
+     * Get logger Object
+     *
+     * @param name logger Name
+     *
+     * return Logger object
      */
     public func getLogger(name: String): Logger {
         var logger = Logger(name)
@@ -47,8 +50,8 @@ public class LoggerManager {
     }
 
     /**
-     * 初始化默认设置
-     * */
+     * Initialize Default Settings
+     */
     private func initWithDefaultConfig(xmlPath: String) {
         var loggerConfiguration: LoggerConfiguration = loadXML(xmlPath)
         if (loggerConfiguration.getAppenders().size == 0) {
@@ -58,9 +61,10 @@ public class LoggerManager {
         initWithConfig(loggerConfiguration)
     }
 
-    /*
-     * 根据 LoggerConfiguration 对象信息，初始化 LoggerManager
-     * 参数 configuration - 通过配置信息解析成的 LoggerConfiguration 对象
+    /**
+     * Based on the LoggerConfiguration object information,Initialize LoggerManager.
+     *
+     * @param configuration LoggerConfiguration object parsed from configuartion information
      */
     private func initWithConfig(configuration: LoggerConfiguration) {
         this.loggerAppenderFactory = Logger_Appender_Factory.new()
@@ -122,17 +126,17 @@ public class LoggerManager {
     }
 
     private func initLoggerManager(xmlPath: String) {
-        // 注册系统自带的 LoggerAppender()
+        // Register the LoggerAppender provided by the system
         Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
         Logger_Appender_Factory.registryType("file", FileLoggerAppender())
 
-        // 初始化日志配置文件
+        // Initializing the Log Configuration File
         initWithDefaultConfig(xmlPath)
     }
 
     /**
-       该函数将xml文件解析成LoggerConfiguration对象
-     * */
+     * This function is used to parse the XML file into the LoggerConfiguration object.
+     */
     private func loadXML(xmlPath: String) {
         var filePath: Path = Path(xmlPath)
         var isFileExist: Bool = File.exists(filePath)
@@ -140,27 +144,27 @@ public class LoggerManager {
             return loadDefaultConfiguration()
         }
 
-        //获取appender,logger,root等元素
+        // Get elements such as appender,logger,root and so on
         var allElements: ArrayList<XmlElement> = getXmlBasicProperties(xmlPath)
         if (allElements.size == 0) {
             println("can not find any element in xml file!")
             return LoggerConfiguration()
         }
 
-        //获取appender配置
+        // Get appender Configuration
         var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(allElements)
         if (appenderList.size == 0) {
             println("can not find any appender in xml file!")
             return LoggerConfiguration()
         }
 
-        //获取logger配置
+        // Get logger Configuration
         var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(allElements)
         if (loggerList.size == 0) {
             println("can not find any logger in xml file!")
         }
 
-        //获取root配置
+        // Get root Configuration
         var root: RootLoggerConfig = getRootConfiguration(allElements)
         if (root.getLevel().size == 0 || root.getAppenderRefList().size == 0) {
             println("root configuration has mistakes!")
@@ -203,11 +207,11 @@ public class LoggerManager {
         return LoggerConfiguration(appenderList, root, loggerList)
     }
 
-    //获取appender,logger,root元素
+    // Get appender,logger,root Elements
     private func getXmlBasicProperties(xmlPath: String): ArrayList<XmlElement> {
         var filePath: Path = Path(xmlPath)
 
-        //读取文件，读成String
+        // read a file as a string
         var allBytes: Array<Byte> = File.readFrom(filePath)
         if (allBytes.size == 0) {
             println("xml file is empty!")
@@ -216,7 +220,7 @@ public class LoggerManager {
 
         var content: String = String.fromUtf8(allBytes)
 
-        //解析文件内容，必须保证文件格式正确，否则编译失败
+        // Parse the file content.Ensure that the file format is correct.Otherwise,the compilation fails.
         var x: XmlParser = XmlParser()
         var elements: Option<XmlElement> = Option<XmlElement>.None
         try {
@@ -240,7 +244,13 @@ public class LoggerManager {
         return childrenElements
     }
 
-    //获取file appender元素配置
+    /**
+     * Get file appender configuaration
+     *
+     * @param allElements Element List
+     *
+     * return AppenderConfig list
+     */
     private func getAppenderConfiguration(allElements: ArrayList<XmlElement>): ArrayList<AppenderConfig> {
         var configList: ArrayList<AppenderConfig> = ArrayList<AppenderConfig>()
 
@@ -277,7 +287,13 @@ public class LoggerManager {
         return configList
     }
 
-    //获取logger元素配置
+    /**
+     * Get logger configuration
+     *
+     * @param allElements Element List
+     *
+     * return AppenderLogger list
+     */
     private func getLoggerConfiguration(allElements: ArrayList<XmlElement>): ArrayList<LoggerConfig> {
         var loggerList: ArrayList<LoggerConfig> = ArrayList<LoggerConfig>()
 
@@ -311,7 +327,13 @@ public class LoggerManager {
         return loggerList
     }
 
-    //获取root元素配置
+     /**
+     * Get root Configuration
+     *
+     * @param allElements Element List
+     *
+     * return RootLoggerConfig object
+     */
     private func getRootConfiguration(allElements: ArrayList<XmlElement>): RootLoggerConfig {
         var root: RootLoggerConfig = RootLoggerConfig()
         var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()

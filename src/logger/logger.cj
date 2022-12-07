@@ -3,10 +3,10 @@ package logger
 from std import time.*
 
 /**
- * Log 类
- * */
+ * Log Class
+ */
 public class Logger {
-    // logger 名称
+    // logger name
     private var name: String
 
     public init(name: String) {
@@ -17,29 +17,31 @@ public class Logger {
         return this.name
     }
 
-    /*
-     * 写日志操作入口
-     * 参数 level - 日志级别
-     * 参数 msg - 日志信息
+    /**
+     * Entry for writing logs
+     *
+     * @param level log level
+     * @param msg log information
      */
     private func log(level: LogLevel, msg: String) {
-        // 暂时没有获取文件名和行号的方法，待sdk提供
+        // Currently,the method of obtaining the file name and line number is not available.Wait for the SDK to provide the method.
         let src = ""
         var rec = LogRecord(this.name, level, Time.now(), src, msg)
 
-        // 考虑是否需要启动线程处理
+        // Consider whether thread processing needs to be started.
         doLog(level, rec)
     }
 
-    /*
-     * 写日志操作
-     * 参数 level - 日志级别
-     * 参数 rec - LogRecord 信息
+    /**
+     * Writing Logs
+     *
+     * @param level log level
+     * @param rec LogRecord information
      */
     private func doLog(level: LogLevel, rec: LogRecord) {
         appendLog(level, rec, Logger_Manager.getRootLogger())
 
-        // 若配置中除 root 外有其他日志，则进行打印
+        // If there are logs other than root in the configuration,To Print.
         if (Logger_Manager.getLoggerMap().size > 0) {
             for ((loggerName, loggerAppenderReference) in Logger_Manager.getLoggerMap()) {
                 if (loggerName.contains(this.name)) {
@@ -49,11 +51,12 @@ public class Logger {
         }
     }
 
-    /*
-     * 追加日志
-     * 参数 level - 日志级别
-     * 参数 rec - LogRecord 信息
-     * 参数 appenderRef - LoggerAppenderReference 信息
+    /**
+     * Append Log
+     *
+     * @param level log level
+     * @param rec LogRecord Information
+     * @param appenderRef LoggerAppenderReference Information
      */
     private func appendLog(level: LogLevel, rec: LogRecord, appenderRef: LoggerAppenderReference) {
         if (appenderRef.getAppenderList().size == 0) {
@@ -66,57 +69,64 @@ public class Logger {
         }
     }
 
-    /*
-     * 打印 critical 日志
-     * 参数 msg - 日志信息
+    /**
+     * Print critical log
+     *
+     * @param msg Log Information
      */
     public func off(msg: String) {
         log(OFF, msg)
     }
 
-    /*
-     * 打印 error 日志
-     * 参数 msg - 日志信息
+    /**
+     * Print error log
+     *
+     * @param msg Log Information
      */
     public func error(msg: String) {
         log(ERROR, msg)
     }
 
-    /*
-     * 打印 warn 日志
-     * 参数 msg - 日志信息
+    /**
+     * Print warn log
+     *
+     * @param msg Log Inoformation
      */
     public func warn(msg: String) {
         log(WARN, msg)
     }
 
-    /*
-     * 打印 info 日志
-     * 参数 msg - 日志信息
+    /**
+     * Print info log
+     *
+     * @param msg Log Inoformation
      */
     public func info(msg: String) {
         log(INFO, msg)
     }
 
-    /*
-     * 打印 debug 日志
-     * 参数 msg - 日志信息
+    /**
+     * Print debug log
+     *
+     * @param msg Log Inoformation
      */
     public func debug(msg: String) {
         log(DEBUG, msg)
     }
 
-    /*
-     * 打印 trace 日志
-     * 参数 msg - 日志信息
+    /**
+     * Print trace log
+     *
+     * @param msg Log Information
      */
     public func trace(msg: String) {
         log(TRACE, msg)
     }
 
-    /*
-     * 打印 fine 日志
-     * 参数 msg - 日志信息
+    /**
+     * Print fine log
+     *
+     * @param msg Log Information
      */
     public func all(msg: String) {
         log(ALL, msg)
