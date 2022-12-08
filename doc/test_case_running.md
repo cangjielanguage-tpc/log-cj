@@ -40,7 +40,7 @@ TP: log4cj/utils, time elapsed: 600390 ns, Result:
     TCS: UtilTests, time elapsed: 598656 ns, RESULT:
     [ PASSED ] CASE: testGetNumByString (28725 ns)
     [ PASSED ] CASE: testStrToNumBySuffix (24392 ns)
-    [ PASSED ] CASE: testLeftPad (8127 ns)
+    [ PASSED ] CASE: testFlushLeft (8127 ns)
     [ PASSED ] CASE: testTimeSlice (479503 ns)
     [ PASSED ] CASE: testFormatLogRecord (17113 ns)
     [ PASSED ] CASE: testLogRecord (3379 ns)
@@ -80,7 +80,7 @@ TP: log4cj/utils, time elapsed: 615681 ns, Result:
     TCS: UtilTests, time elapsed: 613808 ns, RESULT:
     [ PASSED ] CASE: testGetNumByString (44021 ns)
     [ PASSED ] CASE: testStrToNumBySuffix (24149 ns)
-    [ PASSED ] CASE: testLeftPad (8579 ns)
+    [ PASSED ] CASE: testFlushLeft (8579 ns)
     [ PASSED ] CASE: testTimeSlice (477543 ns)
     [ PASSED ] CASE: testFormatLogRecord (17370 ns)
     [ PASSED ] CASE: testLogRecord (3241 ns)
@@ -280,7 +280,7 @@ TP: utils, time elapsed: 618358 ns, Result:
     TCS: UtilTests, time elapsed: 616563 ns, RESULT:
     [ PASSED ] CASE: testGetNumByString (24528 ns)
     [ PASSED ] CASE: testStrToNumBySuffix (27097 ns)
-    [ PASSED ] CASE: testLeftPad (10152 ns)
+    [ PASSED ] CASE: testFlushLeft (10152 ns)
     [ PASSED ] CASE: testTimeSlice (497387 ns)
     [ PASSED ] CASE: testFormatLogRecord (16797 ns)
     [ PASSED ] CASE: testLogRecord (3225 ns)

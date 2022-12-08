@@ -33,12 +33,12 @@ public class UtilTests {
     }
 
     @TestCase
-    func testLeftPad(): Unit {
-        @Assert(LeftPad("abcdefg", 8, "0"),"0abcdefg")
-        @Assert(LeftPad("", 8, "0"),"")
-        @Assert(LeftPad("abcdefg",-1,"0"),"abcdefg")
-        @Assert(LeftPad("abcdefg",2,"0"),"abcdefg")
-        @Assert(LeftPad("abcdefgk",8,"0"),"abcdefgk")
+    func testFlushLeft(): Unit {
+        @Assert(flushLeft("abcdefg", 8, "0"),"0abcdefg")
+        @Assert(flushLeft("", 8, "0"),"")
+        @Assert(flushLeft("abcdefg",-1,"0"),"abcdefg")
+        @Assert(flushLeft("abcdefg",2,"0"),"abcdefg")
+        @Assert(flushLeft("abcdefgk",8,"0"),"abcdefgk")
     }
 
     @TestCase

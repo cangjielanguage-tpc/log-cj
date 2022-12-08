@@ -5,7 +5,7 @@ from std import convert.*
 /**
  * 实现字符串右对齐，余位补充指定的字符
  * */
-public func LeftPad(str: String, limit: Int64, placeholder: String): String {
+public func flushLeft(str: String, limit: Int64, placeholder: String): String {
     var len = limit - str.size
     if (len == limit) {
         return str
