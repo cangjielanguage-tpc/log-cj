@@ -41,8 +41,8 @@ public class DefaultPatternConverter <: PatternConverter {
                 match (piece[0]) {
                     case 'T' => result += timeSlice.getLongTime()
                     case 'o' => result += (logRecord.getCreatedTime().unixNano() / Int64(1e6)).toString()
-                    case 'n' => result += LeftPad(logRecord.getCreatedTime().nanosecond().toString(), 9, "0")
-                    case 'm' => result += LeftPad((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3, "0")
+                    case 'n' => result += flushLeft(logRecord.getCreatedTime().nanosecond().toString(), 9, "0")
+                    case 'm' => result += flushLeft((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3, "0")
                     case 't' => result += timeSlice.getShortTime()
                     case 'D' => result += timeSlice.getLongDate()
                     case 'd' => result += timeSlice.getShortDate()

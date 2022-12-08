@@ -23,7 +23,7 @@ public class AppenderTests {
         timeSlice.getTimeSlice(logRecord.getCreatedTime())
         var lt = timeSlice.getLongTime()
         var ld = timeSlice.getLongDate()
-        var m = LeftPad((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3, "0")
+        var m = flushLeft((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3, "0")
         var level = logRecord.getLevel().levelName()
         var tagName = logRecord.getTagName()
         var message = logRecord.getMessage()
