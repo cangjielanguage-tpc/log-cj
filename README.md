@@ -52,6 +52,10 @@
 
 参见[项目编译文件引用](./doc/quote_compiled_files.md)
 
+#### 如何运行测试用例
+
+参见[测试用例运行说明](./doc/test_case_running.md)
+
 #### 使用说明
 
 1. 打印日志
