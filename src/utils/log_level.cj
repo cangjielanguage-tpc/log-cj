@@ -15,7 +15,7 @@ public enum LogLevel {
     | OFF // disabling logs
 
     /**
-     * Obtains the log level
+     * Get the log level
      */
     public func level(): Int64 {
         let num = match (this) {
@@ -31,7 +31,7 @@ public enum LogLevel {
     }
 
     /**
-     * Obtains the log level name
+     * Get the log level name
      */
     public func levelName(): String {
         let name = match (this) {
@@ -47,7 +47,7 @@ public enum LogLevel {
     }
 
     /**
-     * heavy load >= Operators
+     * load again >= Operators
      */
     public operator func >=(target: LogLevel): Bool {
         return this.level() >= target.level()
@@ -58,7 +58,7 @@ public enum LogLevel {
      *
      * @param lable lable
      *
-     * return level
+     * return LogLevel object
      */
     public static func getLevelByString(lable: String): LogLevel {
         let level = match (lable.toAsciiUpper()) {

@@ -6,7 +6,7 @@ from std import time.*
 import utils.*
 
 /**
-   Implementation class of the LoggerAppender,which is used to print files ang logs
+   The specific implementation class of LoggerAppender, which enables the console to print logs.
  */
 public class FileLoggerAppender <: LoggerAppender {
     // Defalut log file

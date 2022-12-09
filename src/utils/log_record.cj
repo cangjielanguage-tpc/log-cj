@@ -6,7 +6,7 @@ from std import time.*
  * Log Recording Class,Record each log.
  */
 public class LogRecord {
-    // TAG name,Record that class/file printed
+    // TAG name,which class or file printed
     private var tagName: String = ""
 
     // Log level,Default INFO

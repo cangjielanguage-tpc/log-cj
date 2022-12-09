@@ -28,7 +28,7 @@ public class DefaultPatternConverter <: PatternConverter {
     // Recommended: "[%D %T] [%L] (%S) %M"
 
     /**
-     * FormatLogRecord
+     * Formatting log records
      *
      * @param pattern pattern
      * @param logRecord log Record

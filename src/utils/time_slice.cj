@@ -20,7 +20,7 @@ func setCachedTimeSlice(timeSlice: TimeSlice) {
 }
 
 /**
- * Timestamp class,which is used to print timestamps of different specifications together with pattern.
+ * Timestamp class,used to print timestamps of different specifications based on the pattern.
  */
 public class TimeSlice {
     public var lastUpdateSeconds: Int64 = 0
