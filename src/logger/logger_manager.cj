@@ -13,7 +13,7 @@ public let Logger_Manager = LoggerManager("./src/resources/log4cj.xml")
 
 /**
  * Log Management Class
- * */
+ */
 public class LoggerManager {
     private var loggerAppenderFactory: LoggerAppenderFactory = LoggerAppenderFactory()
     private var rootLogger: LoggerAppenderReference = LoggerAppenderReference()
@@ -327,7 +327,7 @@ public class LoggerManager {
         return loggerList
     }
 
-     /**
+    /**
      * Get root Configuration
      *
      * @param allElements Element List

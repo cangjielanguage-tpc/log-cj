@@ -9,7 +9,7 @@ from std import collection.ArrayList
         <pattern>[%D %T %m] [%L][%l] (%S) %M</pattern>
         <property name="filename">test.log</property>
     </appender>
- * */
+ */
 public class AppenderConfig {
     // appender Enabled Status
     private var enabled: String

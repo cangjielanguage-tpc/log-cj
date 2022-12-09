@@ -4,7 +4,7 @@ import utils.*
 
 /**
  * The specific implementation class of LoggerAppender, which enables the console to print logs.
- * */
+ */
 public class ConsoleLoggerAppender <: LoggerAppender {
     private var pattern: String = ""
 

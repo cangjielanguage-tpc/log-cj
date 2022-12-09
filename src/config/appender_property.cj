@@ -7,7 +7,7 @@ package config
         <pattern>[%D %T %m] [%L][%l] (%S) %M</pattern>
         <property name="filename">test.log</property>
     </appender>
- * */
+ */
 public class AppenderProperty {
     // Attribute Name
     private var name: String = ""
@@ -16,7 +16,7 @@ public class AppenderProperty {
     private var value: String = ""
 
     /**
-     * Initialization 
+     * Initialization
      *
      * @param name Name
      * @param value value

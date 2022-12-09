@@ -8,7 +8,7 @@ package config
         <appender-ref ref="logstash" />
         <appender-ref ref="file" />
     </root>
- * */
+ */
 public class AppenderRef {
     // appender-ref value
     private var ref: String = ""

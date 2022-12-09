@@ -26,6 +26,15 @@ public class DefaultPatternConverter <: PatternConverter {
     // %M - Message
     // Ignores unknown formats
     // Recommended: "[%D %T] [%L] (%S) %M"
+
+    /**
+     * FormatLogRecord
+     *
+     * @param pattern pattern
+     * @param logRecord log Record
+     *
+     * return format result
+     */
     public func formatLogRecord(pattern: String, logRecord: LogRecord): String {
         var result = ""
         if (pattern.size == 0) {
