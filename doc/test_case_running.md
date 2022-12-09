@@ -302,4 +302,4 @@ error: package 'appender' is a dependency of package 'logger', and the parent pa
 ## 建议
 1.测试用例所在仓颉文件，按照项目已有package分类归置<br/>
 2.运行测试用例采用cpm test方式<br/>
-3.生成测试报告采用界面操作生成（vscode仓颉插件）方式<br/>
+3.生成测试报告采用命令行生成（vscode仓颉插件覆盖不全）方式<br/>
