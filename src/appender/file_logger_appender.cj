@@ -6,8 +6,8 @@ from std import time.*
 import utils.*
 
 /**
-   Implementation class of the LoggerAppender,which is used to print files ang logs
- * */
+   The specific implementation class of LoggerAppender, which enables the console to print logs.
+ */
 public class FileLoggerAppender <: LoggerAppender {
     // Defalut log file
     private let DEFAULT_OUTPUT_FILE_NAME: String = "log4cj_default.log"
@@ -99,6 +99,7 @@ public class FileLoggerAppender <: LoggerAppender {
         this.daily = daily
         this.retentionDays = retentionDays
     }
+
     /**
      * Obtain the file information.If the file does not exist,create the file.If the file exists,process the file and obtain the size of the file that has benn written.
      */

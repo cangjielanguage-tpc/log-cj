@@ -3,8 +3,14 @@ package utils
 from std import convert.*
 
 /**
- * 实现字符串右对齐，余位补充指定的字符
- * */
+ * Align the character string to the right and supplement the specified character in the remaining bits.
+ *
+ * @param str Character string to be converted
+ * @param limit limit num
+ * @param placeholder placeholder
+ *
+ * @return Return the processed result.
+ */
 public func flushLeft(str: String, limit: Int64, placeholder: String): String {
     var len = limit - str.size
     if (len == limit) {
@@ -19,7 +25,15 @@ public func flushLeft(str: String, limit: Int64, placeholder: String): String {
     return result
 }
 
-// Parse a number with K/M/G suffixes based on thousands (1000) or 2^10 (1024) 待改进算法
+/**
+ * Parse a number with K/M/G suffixes based on thousands (1000) or 2^10 (1024) Algorithm to be improved
+ *
+ * @param str Character string to be converted
+ * @param mult mult
+ * @param defaultValue default value
+ *
+ * @return Data after the algorithm improved.
+ */
 public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int64 {
     var num = 1
     let len = str.size
@@ -43,11 +57,12 @@ public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int
 }
 
 /**
- * 数字字符串转Int64
- * 
- * @param str 待转换字符串
- * @param defaultValue 转换异常时返回默认值
- * @return 返回Int64类型的数据
+ * Converting numeric strings to int64
+ *
+ * @param str Character string to be converted
+ * @param defaultValue The default value is returned when the conversion is abnormal.
+ *
+ * @return Data of the Int64 type is returned.
  */
 public func getNumByString(str: String, defaultValue: Int64) {
     try {

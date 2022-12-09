@@ -10,7 +10,7 @@ from std import collection.ArrayList
         <appender-ref ref="logstash" />
         <appender-ref ref="file" />
     </root>
- * */
+ */
 public class RootLoggerConfig {
     // log level
     private var level: String

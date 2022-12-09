@@ -3,24 +3,33 @@ package utils
 from std import time.*
 
 /**
- * 日志记录类，主要记录每一条日志信息
- * */
+ * Log Recording Class,Record each log.
+ */
 public class LogRecord {
-    // TAG 名称，记录哪个类/文件打印的
+    // TAG name,which class or file printed
     private var tagName: String = ""
 
-    // 日志级别，默认 INFO
+    // Log level,Default INFO
     private var level: LogLevel = DEFAULT_LOG_LEVEL
 
-    // 该条日志记录创建时间
+    // Time when the log record is created.
     private var createdTime: Time
 
-    // 日志源，用于打印日志打印位置信息，如所在代码行
+    // Log source,which is used to print log location information,for example,the line where the code is located.
     private var source: String = ""
 
-    // 日志信息，具体打印信息
+    // Log information,which is printed.
     private var message: String = ""
 
+    /**
+     * Initialize
+     *
+     * @param tagName tag name
+     * @param level log Level
+     * @param createdTime create Time
+     * @param source source
+     * @param message message
+     */
     public init(tagName: String, level: LogLevel, createdTime: Time, source: String, message: String) {
         this.tagName = tagName
         this.level = level

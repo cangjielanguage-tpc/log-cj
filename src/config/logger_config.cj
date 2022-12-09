@@ -10,7 +10,7 @@ package config
        <appender-ref ref="file" />
        <appender-ref ref="console" />
      </logger>
- * */
+ */
 public class LoggerConfig {
     // logger name
     private var name: String

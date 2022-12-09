@@ -4,8 +4,8 @@ from std import collection.ArrayList
 import utils.*
 
 /**
- * Log Congiguration,Containing appender rootlogger logger Congiguration.
- * */
+ * Log Congiguration,Containing:appender,rootlogger,logger Congiguration.
+ */
 public class LoggerConfiguration {
     // Resolved in the configuration appender gathers
     private var appenders = ArrayList<AppenderConfig>()

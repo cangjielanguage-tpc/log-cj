@@ -7,8 +7,8 @@ from std import format.*
 var timeSliceCache = TimeSlice()
 
 /**
- * 设置 timeSliceCache 的值
- * */
+ * Sets the value of timeSliceCache
+ */
 func setCachedTimeSlice(timeSlice: TimeSlice) {
     timeSliceCache.lock.lock()
     timeSliceCache.lastUpdateSeconds = timeSlice.lastUpdateSeconds
@@ -20,8 +20,8 @@ func setCachedTimeSlice(timeSlice: TimeSlice) {
 }
 
 /**
- * 时间戳类，用于配合 pattern 打印不同规格的时间戳
- * */
+ * Timestamp class,used to print timestamps of different specifications based on the pattern.
+ */
 public class TimeSlice {
     public var lastUpdateSeconds: Int64 = 0
     public var shortTime: String = ""
@@ -30,6 +30,11 @@ public class TimeSlice {
     public var longDate: String = ""
     public var lock: ReentrantMutex = ReentrantMutex()
 
+    /**
+     * GetTimeSlice
+     *
+     * @param time time
+     */
     public func getTimeSlice(time: Time) {
         var secs = time.unixNano() / Int64(1e9)
         var cached = timeSliceCache
