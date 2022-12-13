@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines ConsoleLoggerAppender class.
+ */
+
 package appender
 
 import utils.*
@@ -9,10 +18,10 @@ public class ConsoleLoggerAppender <: LoggerAppender {
     private var pattern: String = ""
 
     /**
-     * Initialization ConsoleLoggerAppender
+     * Initialize console logger appender.
      *
-     * @param pattern Date Format
-     * @param property Appender Attribute List
+     * @param pattern log format.
+     * @param property console appender properties.
      */
     public func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit {
         if (pattern.size == 0) {
@@ -23,21 +32,21 @@ public class ConsoleLoggerAppender <: LoggerAppender {
     }
 
     /**
-     * Start print
+     * Start print.
      */
     public func start(): Unit {}
 
     /**
-     * Formatting Print Logs
+     * Formatting and printting logs.
      *
-     * @param rec Log Recording
+     * @param rec log recording.
      */
     public func logWrite(rec: LogRecord): Unit {
         print(getDefaultPatternConvert().formatLogRecord(pattern, rec))
     }
 
     /**
-     * End print
+     * End print.
      */
     public func close(): Unit {}
 }

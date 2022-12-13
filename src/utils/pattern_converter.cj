@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines PatternConverter interface and DefaultPatternConverter class.
+ */
+
 package utils
 
 public interface PatternConverter {
@@ -10,6 +19,9 @@ public func getDefaultPatternConvert(): PatternConverter {
     return defaultPatternConverter
 }
 
+/**
+ * Model class for formatting log recording.
+ */
 public class DefaultPatternConverter <: PatternConverter {
     // FormatLogRecord
     // Known format codes:
@@ -18,9 +30,9 @@ public class DefaultPatternConverter <: PatternConverter {
     // %D - Date (2006/01/02)
     // %d - Date (01/02/06)
     // %o - UnixMilli (1649224315937)
-    // %m - Millisecond (607)  //
+    // %m - Millisecond (607)
     // %n - Nanosecond (794411287)
-    // %L - Level (FNST, FINE, DEBG, TRAC, WARN, EROR, CRIT)
+    // %L - Level (ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF)
     // %l - Label (TagName)
     // %S - Source
     // %M - Message
@@ -28,12 +40,11 @@ public class DefaultPatternConverter <: PatternConverter {
     // Recommended: "[%D %T] [%L] (%S) %M"
 
     /**
-     * Formatting log records
+     * Formatting log recording.
      *
-     * @param pattern pattern
-     * @param logRecord log Record
-     *
-     * return format result
+     * @param pattern output pattern.
+     * @param logRecord log record.
+     * @return format result.
      */
     public func formatLogRecord(pattern: String, logRecord: LogRecord): String {
         var result = ""
@@ -43,7 +54,7 @@ public class DefaultPatternConverter <: PatternConverter {
         let timeSlice = TimeSlice()
         timeSlice.getTimeSlice(logRecord.getCreatedTime())
 
-        // Split the string into pieces by % signs
+        // Split the string into pieces by % signs.
         let pieces = pattern.split("%")
         for (piece in pieces) {
             if (piece != pieces[0] && piece.size > 0) {

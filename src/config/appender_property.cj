@@ -1,31 +1,44 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines AppenderProperty class.
+ */
+
 package config
 
 /**
- * Configuration file object model,which is used to parse the appender attribute value.The following is an example of the property field.
-    <appender enabled="true" name="file">
-        <type>file</type>
-        <pattern>[%D %T %m] [%L][%l] (%S) %M</pattern>
-        <property name="filename">test.log</property>
-    </appender>
+ * Appender property model class of log file.
+ * The configuration is similar to the following:
+ * <appender enabled="true" name="file">
+ * ...
+ * <property name="filename">test.log</property>
+ * ...
+ * </appender>
  */
 public class AppenderProperty {
-    // Attribute Name
+    // Property name.
     private var name: String = ""
 
-    // Attribute Value
+    // Property value.
     private var value: String = ""
 
     /**
-     * Initialization
+     * Constructor, initialize variables.
      *
-     * @param name Name
-     * @param value value
+     * @param name property name.
+     * @param value property value.
      */
     public init(name: String, value: String) {
         this.name = name
         this.value = value
     }
 
+    /**
+     * No-parameter constructor.
+     */
     public init() {}
 
     public func getName() {

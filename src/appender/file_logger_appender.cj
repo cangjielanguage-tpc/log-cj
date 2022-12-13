@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines FileLoggerAppender class.
+ */
+
 package appender
 
 from std import fs.*
@@ -6,34 +15,34 @@ from std import time.*
 import utils.*
 
 /**
-   The specific implementation class of LoggerAppender, which enables the console to print logs.
+   The specific implementation class of LoggerAppender, which enables the file can be logged.
  */
 public class FileLoggerAppender <: LoggerAppender {
-    // Defalut log file
+    // Defalut log file.
     private let DEFAULT_OUTPUT_FILE_NAME: String = "log4cj_default.log"
 
-    //Log Print Format
+    //Log Print Format.
     private var pattern: String = ""
 
-    // Log file name
+    // Log file name.
     private var fileName: String = ""
 
-    // Log file pointer
+    // Log file pointer.
     private var file: fs.File
 
     // Maximum limit of a single log. The value 0 indicates no limit.
     private var maxSize: Int64 = 0
 
-    // Current log size
+    // Current log size.
     private var curSize: Int64 = 0
 
-    //Day-based log scrolling flag
+    //Day-based log scrolling flag.
     private var daily: Bool = false
 
     // Time then a log file is created. This parameter is used together with Daily.
     private var opendate: Int64 = 0
 
-    // Indicates whether to pack logs
+    // Indicates whether to pack logs.
     private var rotate: Bool = false
 
     private var retentionDays: Int64 = 7
@@ -41,13 +50,15 @@ public class FileLoggerAppender <: LoggerAppender {
     private let lock = ReentrantMutex()
 
     /**
-     * Constructor,opening or creating a file
+     * Constructor, initialize variable file.
      */
     public init() {
-        //Because cangjie does not have a zero value,you need to consider the default log file.
         this.file = File(DEFAULT_OUTPUT_FILE_NAME, OpenOption.CreateOrAppend)
     }
 
+    /**
+     * Destructor, close file.
+     */
     ~init() {
         if (!file.isClosed()) {
             file.flush()
@@ -56,13 +67,13 @@ public class FileLoggerAppender <: LoggerAppender {
     }
 
     /**
-     * Initialization fileAppender
+     * Initialize file logger appender.
      *
-     * @param pattern Date Format
-     * @param property Appender Attribute List
+     * @param pattern log format.
+     * @param property file appender properties.
      */
     public func initAppender(pattern: String, properties: ArrayList<AppenderProperty>): Unit {
-        //delete default.log
+        //delete default.log.
         File.delete(this.file.info.path)
         var file = ""
         let dFormat = "[%T %D %m] [%L][%l] (%S) %M"
@@ -77,7 +88,7 @@ public class FileLoggerAppender <: LoggerAppender {
             this.pattern = pattern
         }
 
-        //Parse properties
+        //Parse properties.
         for (property in properties) {
             var value = property.getValue().trimLeft(" \r\n").trimRight(" \r\n")
             match (property.getName().toAsciiLower()) {
@@ -101,7 +112,7 @@ public class FileLoggerAppender <: LoggerAppender {
     }
 
     /**
-     * Obtain the file information.If the file does not exist,create the file.If the file exists,process the file and obtain the size of the file that has benn written.
+     * Process default file, and assigns values to file-related variables.
      */
     public func start(): Unit {
         this.file = File(this.fileName, OpenOption.CreateOrAppend)
@@ -110,9 +121,9 @@ public class FileLoggerAppender <: LoggerAppender {
     }
 
     /**
-     * Logs Writing
+     * Write log to file.
      *
-     * @param rec Log Recording
+     * @param rec log recording.
      */
     public func logWrite(rec: LogRecord): Unit {
         if (this.file.isClosed()) {
@@ -123,7 +134,7 @@ public class FileLoggerAppender <: LoggerAppender {
             rollingFile()
         }
 
-        // Perform the write
+        // Formatting logging.
         var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
         try {
             this.file.write(mess)
@@ -133,12 +144,12 @@ public class FileLoggerAppender <: LoggerAppender {
         }
         let n = mess.size
 
-        // Update the size
+        // Update the size.
         this.curSize += n
     }
 
     /**
-     * Close File
+     * Close file.
      */
     public func close(): Unit {
         if (!this.file.isClosed()) {
@@ -147,7 +158,7 @@ public class FileLoggerAppender <: LoggerAppender {
         }
     }
 
-    // If this is called in a threaded context, it MUST be synchronized
+    // If this is called in a threaded context, it must be synchronized.
     private func rollingFile() {
         if (!this.rotate) {
             return
@@ -155,7 +166,7 @@ public class FileLoggerAppender <: LoggerAppender {
 
         lock.lock()
 
-        // Close current file
+        // Close current file.
         if (!this.file.isClosed()) {
             this.file.flush()
             this.file.close()
@@ -163,9 +174,9 @@ public class FileLoggerAppender <: LoggerAppender {
 
         var fname = ""
 
-        // If daily in the configuration is true (archived by day), the opening date is not the same as the current day
+        // If daily in the configuration is true (archived by day), the opening date is not the same as the current day.
         if (this.daily && Time.now().day() != this.opendate) {
-            // Get yesterday's time, format to day
+            // Get yesterday's time, format to day.
             let yesterday = Time.now().addDays(0, 0, -1).toString("YYYYMMdd")
             fname = this.fileName + "_" + yesterday + ".log"
         } else {
@@ -175,13 +186,13 @@ public class FileLoggerAppender <: LoggerAppender {
             //An error message is returned when the current file is named fname.
             File.move(this.fileName, fname, true)
 
-            //Open a new file
+            //Open a new file.
             this.file = File(this.fileName, OpenOption.CreateOrAppend)
         } catch (e: IllegalArgumentException | FSException) {
             println("rolling file occur exception: ${e.message}")
             return
         }
-        // Set the daily open date to the current date
+        // Set the daily open date to the current date.
         this.opendate = Time.now().day()
         this.curSize = 0
 

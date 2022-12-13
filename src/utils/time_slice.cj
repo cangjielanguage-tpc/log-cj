@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines TimeSlice class and setCachedTimeSlice function.
+ */
+
 package utils
 
 from std import time.*
@@ -7,7 +16,9 @@ from std import format.*
 var timeSliceCache = TimeSlice()
 
 /**
- * Sets the value of timeSliceCache
+ * Sets the value of timeSliceCache.
+ *
+ * @param timeSlice time slice.
  */
 func setCachedTimeSlice(timeSlice: TimeSlice) {
     timeSliceCache.lock.lock()
@@ -20,7 +31,7 @@ func setCachedTimeSlice(timeSlice: TimeSlice) {
 }
 
 /**
- * Timestamp class,used to print timestamps of different specifications based on the pattern.
+ * Timestamp class, used to print timestamps of different specifications based on the pattern.
  */
 public class TimeSlice {
     public var lastUpdateSeconds: Int64 = 0
@@ -31,9 +42,9 @@ public class TimeSlice {
     public var lock: ReentrantMutex = ReentrantMutex()
 
     /**
-     * GetTimeSlice
+     * Get time slice.
      *
-     * @param time time
+     * @param time time.
      */
     public func getTimeSlice(time: Time) {
         var secs = time.unixNano() / Int64(1e9)

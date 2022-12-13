@@ -1,33 +1,43 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines AppenderConfig class.
+ */
+
 package config
 
 from std import collection.ArrayList
 
 /**
- * Configuration file object model,which is used to parse the appender configuration item.
-    <appender enabled="true" name="file">
-        <type>file</type>
-        <pattern>[%D %T %m] [%L][%l] (%S) %M</pattern>
-        <property name="filename">test.log</property>
-    </appender>
+ * Appender model class of log file.
+ * The configuration is similar to the following:
+ * <appender enabled="true" name="file">
+ * <type>file</type>
+ * <pattern>[%D %T %m] [%L][%l] (%S) %M</pattern>
+ * <property name="filename">test.log</property>
+ * </appender>
  */
 public class AppenderConfig {
-    // appender Enabled Status
+    // Appender enabled status.
     private var enabled: String
 
-    // appender Name
+    // Appender name.
     private var name: String
 
-    // appender Type:file/console
+    // Appender Type: file or console.
     private var appenderType: String
 
-    // Output Format:Mainly used to standardize the display style of output time
+    // Output format: mainly used to standardize the display style of output time.
     private var pattern: String
 
-    // Attribute List
+    // Appender attribute list.
     private var properties: ArrayList<AppenderProperty>
 
     /**
-     * Initialize
+     * Constructor, initialize variables.
      */
     public init() {
         this.enabled = ""
@@ -38,13 +48,13 @@ public class AppenderConfig {
     }
 
     /**
-     * Initialization AppenderConfig
+     * Constructor, initialize variables.
      *
-     * @param enabled Enabled
-     * @param name Name
-     * @param appenderType appender type
-     * @param pattern pattern
-     * @param properties properties
+     * @param enabled appender enabled status.
+     * @param name appender name.
+     * @param appenderType appender type.
+     * @param pattern log record output format.
+     * @param properties appender properties.
      */
     public init(
         enabled: String,
