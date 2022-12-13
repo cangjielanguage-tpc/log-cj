@@ -1,26 +1,36 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines LoggerConfig class.
+ */
+
 package config
 
 /**
- * This is a custom logger model
-     additivity defaulty is true,Inherit parent class root logger
-     This log is generated in the logger of the root user,Configuration false,Do not inherit,Go your own way.
-     appender-ref what is the output destination of this logger,ref is associated with the above declaration,one file,one console
-     <logger name="Sample">
-       <level>info</level>
-       <appender-ref ref="file" />
-       <appender-ref ref="console" />
-     </logger>
+ * Logger configuration model class of log file,
+ * By default, inherit root configuration, the configuration is similar to the following:
+ * <logger name="Sample">
+ * <level>info</level>
+ * <appender-ref ref="console" />
+ * <appender-ref ref="file" />
+ * </logger>
  */
 public class LoggerConfig {
-    // logger name
+    // Logger name.
     private var name: String
 
-    // log level
+    // Logger level.
     private var level: String
 
-    // AppenderRef list
+    // Appender-ref list.
     private var appenderRefList: ArrayList<AppenderRef>
 
+    /**
+     * Constructor, initialize variables.
+     */
     public init() {
         this.name = ""
         this.level = ""
@@ -28,11 +38,11 @@ public class LoggerConfig {
     }
 
     /**
-     * Initialization AppenderRefList
+     * Constructor, initialize variables.
      *
-     * @param name name
-     * @param level level
-     * @param appenderRefList appenderRef list
+     * @param name logger name.
+     * @param level logger level.
+     * @param appenderRefList appender-ref list.
      */
     public init(name: String, level: String, appenderRefList: ArrayList<AppenderRef>) {
         this.name = name

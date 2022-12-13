@@ -1,27 +1,38 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines LoggerConfig class.
+ */
+
 package config
 
 from std import collection.ArrayList
 import utils.*
 
 /**
- * Log Congiguration,Containing:appender,rootlogger,logger Congiguration.
+ * Model class corresponding to the log configuration file.
+ * The main configurations are as follows:
+ * Appender configuration, root configuration, logger Congiguration.
  */
 public class LoggerConfiguration {
-    // Resolved in the configuration appender gathers
+    // Appender configuration list.
     private var appenders = ArrayList<AppenderConfig>()
 
-    // Resolved in the configuration rootLogger,default INFO lever log.
+    // Root configuration, default log level: INFO.
     private var root: RootLoggerConfig = RootLoggerConfig(DEFAULT_LOG_LEVEL.levelName(), ArrayList<AppenderRef>())
 
-    // Configuration Resolved Customization logger
+    // Logger configuration list.
     private var logger = ArrayList<LoggerConfig>()
 
     /**
-     * Initialization AppenderConfig,RootLoggerConfig,LoggerConfig
+     * Constructor, initialize variables.
      *
-     * @param appenders configuration file object list
-     * @param root root configuration
-     * @param logger log model list
+     * @param appenders appender configuration list.
+     * @param root root configuration.
+     * @param logger logger configuration list.
      */
     public init(appenders: ArrayList<AppenderConfig>, root: RootLoggerConfig, logger: ArrayList<LoggerConfig>) {
         this.appenders = appenders
@@ -29,6 +40,9 @@ public class LoggerConfiguration {
         this.logger = logger
     }
 
+    /**
+     * No-parameter constructor.
+     */
     public init() {}
 
     public func getAppenders() {

@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines the functions used for outputting logs.
+ */
+
 package utils
 
 from std import convert.*
@@ -5,11 +14,10 @@ from std import convert.*
 /**
  * Align the character string to the right and supplement the specified character in the remaining bits.
  *
- * @param str Character string to be converted
- * @param limit limit num
- * @param placeholder placeholder
- *
- * @return Return the processed result.
+ * @param str character string to be converted.
+ * @param limit limit num.
+ * @param placeholder placeholder.
+ * @return return the processed result.
  */
 public func flushLeft(str: String, limit: Int64, placeholder: String): String {
     var len = limit - str.size
@@ -26,12 +34,11 @@ public func flushLeft(str: String, limit: Int64, placeholder: String): String {
 }
 
 /**
- * Parse a number with K/M/G suffixes based on thousands (1000) or 2^10 (1024) Algorithm to be improved
+ * Parse a number with K/M/G suffixes based on thousands (1000) or 2^10 (1024) Algorithm to be improved.
  *
- * @param str Character string to be converted
- * @param mult mult
- * @param defaultValue default value
- *
+ * @param str character string to be converted.
+ * @param mult mult.
+ * @param defaultValue default value.
  * @return Data after the algorithm improved.
  */
 public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int64 {
@@ -57,12 +64,11 @@ public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int
 }
 
 /**
- * Converting numeric strings to int64
+ * Converting numeric strings to int64.
  *
- * @param str Character string to be converted
- * @param defaultValue The default value is returned when the conversion is abnormal.
- *
- * @return Data of the Int64 type is returned.
+ * @param str character string to be converted.
+ * @param defaultValue the default value is returned when the conversion is abnormal.
+ * @return deta of the Int64 type is returned.
  */
 public func getNumByString(str: String, defaultValue: Int64) {
     try {

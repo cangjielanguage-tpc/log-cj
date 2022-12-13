@@ -1,34 +1,43 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines LoggerAppender interface.
+ */
+
 package appender
 
 from std import collection.ArrayList
 import config.*
 
 /**
- * LoggerAppender Interface
+ * The main interfaces of the log component.
  */
 public interface LoggerAppender {
     /**
-     * Initialization Appender
+     * Initialize logger appender.
      *
-     * @param pattern Date Format
-     * @param property Appender Attribute List
+     * @param pattern log format.
+     * @param property appender properties.
      */
     func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit
 
     /**
-     * Start print
+     * Start print.
      */
     func start(): Unit
 
     /**
-     * Formatting Print Logs
+     * Writing logs.
      *
-     * @param rec Log Recording
+     * @param rec log recording.
      */
     func logWrite(rec: LogRecord): Unit
 
     /**
-     * End print
+     * End print.
      */
     func close(): Unit
 }

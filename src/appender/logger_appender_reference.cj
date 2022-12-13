@@ -1,26 +1,38 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines LoggerAppenderReference class.
+ */
+
 package appender
 
 /**
- * LoggerAppender Reference Model Class
+ * LoggerAppender reference model class.
  */
 public class LoggerAppenderReference {
-    //Log level default info
+    //Log level default info.
     private var level: LogLevel = DEFAULT_LOG_LEVEL
 
-    //appender List
+    //Appender list.
     private var appenderList: ArrayList<LoggerAppender> = ArrayList<LoggerAppender>()
 
     /**
-     * Initialization
+     * Constructor, initialize variables.
      *
-     * @param level Log Level
-     * @param appender Initialization Appender Attribute list
+     * @param level log level.
+     * @param appender appender list.
      */
     public init(level: LogLevel, appenderList: ArrayList<LoggerAppender>) {
         this.level = level
         this.appenderList = appenderList
     }
 
+    /**
+     * No-parameter constructor.
+     */
     public init() {}
 
     public func getAppenderList() {

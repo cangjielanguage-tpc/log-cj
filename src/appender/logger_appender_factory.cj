@@ -1,10 +1,19 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines LoggerAppenderFactory class.
+ */
+
 package appender
 
 from std import collection.*
 from std import sync.*
 
 /**
- * LoggerAppender factory class, mainly used to register/obtain the specific implementation object of LoggerAppender according to name or type
+ * LoggerAppender factory class, mainly used to register or get the specific implementation object of LoggerAppender according to name or type.
  */
 public class LoggerAppenderFactory {
     private var appender = HashMap<String, LoggerAppender>()
@@ -12,7 +21,7 @@ public class LoggerAppenderFactory {
     private var typeLock: ReentrantMutex = ReentrantMutex()
 
     /**
-     * Initialization LoggerAppender
+     * Constructor, initialize variables.
      */
     public init(
         appender: HashMap<String, LoggerAppender>,
@@ -24,12 +33,15 @@ public class LoggerAppenderFactory {
         this.typeLock = typeLock
     }
 
+    /**
+     * No-parameter constructor.
+     */
     public init() {}
 
     /**
-     * Cleanup appender,Reassign Value
+     * Clear logger appender.
      *
-     * return this method
+     * @return new object of this class.
      */
     public func new(): LoggerAppenderFactory {
         this.typeLock.lock()
@@ -44,42 +56,39 @@ public class LoggerAppenderFactory {
     }
 
     /**
-     * Register LoggerAppender
+     * Register logger appender.
      *
-     * @param typename type name
-     * @param typeClz type
-     *
-     * return this method
+     * @param typeName logger appender type name.
+     * @param typeClz logger appender type class.
+     * @return new object of this class.
      */
-    public func registryType(typename: String, typeClz: LoggerAppender): LoggerAppenderFactory {
+    public func registryType(typeName: String, typeClz: LoggerAppender): LoggerAppenderFactory {
         this.typeLock.lock()
         if (typeClz is LoggerAppender) {
-            this.appenderType[typename.toAsciiLower()] = typeClz
+            this.appenderType[typeName.toAsciiLower()] = typeClz
         }
         this.typeLock.unlock()
         return this
     }
 
     /**
-     * Get LoggerAppender by type
+     * Get logger appender by type name.
      *
-     * @param typename type name
-     *
-     * Get LoggerAppender according to the type. The default is ConsoleLoggerAppender
+     * @param typeName appender logger type name.
+     * @return implementation class of LoggerAppender. if typeName doesn't meet the condtion, return console appender logger.
      */
-    public func getAppenderByType(typename: String): LoggerAppender {
-        if (this.appenderType.contains(typename.toAsciiLower())) {
-            return this.appenderType[typename.toAsciiLower()]
+    public func getAppenderByType(typeName: String): LoggerAppender {
+        if (this.appenderType.contains(typeName.toAsciiLower())) {
+            return this.appenderType[typeName.toAsciiLower()]
         }
         return ConsoleLoggerAppender()
     }
 
     /**
-     * Get LoggerAppender by name
+     * Get logger appender by name.
      *
-     * @param name  name
-     *
-     * return print logs
+     * @param name  appender name.
+     * @return implementation class of LoggerAppender. if typeName doesn't meet the condtion, return console appender logger.
      */
     public func getAppenderByName(name: String): LoggerAppender {
         if (this.appender.contains(name.toAsciiLower())) {
@@ -89,14 +98,13 @@ public class LoggerAppenderFactory {
     }
 
     /**
-     * Register LoggerAppender
+     * Register logger appender.
      *
-     * @param name  name
-     * @param typename  type name
-     * @param pattern  pattern
-     * @param properties Appender Attribute List
-     *
-     * return this method
+     * @param name  appender name.
+     * @param typename  appender type name
+     * @param pattern  log pattern.
+     * @param properties appender preperties.
+     * @return new object of this class.
      */
     public func registerLoggerAppender(
         name: String,

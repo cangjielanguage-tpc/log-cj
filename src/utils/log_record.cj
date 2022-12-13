@@ -1,34 +1,43 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines LogRecord class.
+ */
+
 package utils
 
 from std import time.*
 
 /**
- * Log Recording Class,Record each log.
+ * Log recording model class.
  */
 public class LogRecord {
-    // TAG name,which class or file printed
+    // Tag name, which class or file printed
     private var tagName: String = ""
 
-    // Log level,Default INFO
+    // Log level, default value: INFO.
     private var level: LogLevel = DEFAULT_LOG_LEVEL
 
     // Time when the log record is created.
     private var createdTime: Time
 
-    // Log source,which is used to print log location information,for example,the line where the code is located.
+    // Log source, which is used to print log location information,for example, the line where the code is located.
     private var source: String = ""
 
-    // Log information,which is printed.
+    // Log information, which is printed.
     private var message: String = ""
 
     /**
-     * Initialize
+     * Constructor, initialize variables.
      *
-     * @param tagName tag name
-     * @param level log Level
-     * @param createdTime create Time
-     * @param source source
-     * @param message message
+     * @param tagName tag name.
+     * @param level log level.
+     * @param createdTime create time.
+     * @param source source.
+     * @param message message.
      */
     public init(tagName: String, level: LogLevel, createdTime: Time, source: String, message: String) {
         this.tagName = tagName
@@ -38,6 +47,11 @@ public class LogRecord {
         this.message = message
     }
 
+    /**
+     * Constructor, initialize variables.
+     *
+     * @param createdTime create time.
+     */
     public init(createdTime: Time) {
         this.createdTime = createdTime
     }

@@ -1,9 +1,18 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines LoggerManager class.
+ */
+
 package logger
 
-from std import collection.*
-from std import sync.*
-from std import fs.*
 from encoding import xml.*
+from std import collection.*
+from std import fs.*
+from std import sync.*
 import appender.*
 import config.*
 import utils.*
@@ -12,15 +21,28 @@ public let Logger_Appender_Factory = LoggerAppenderFactory()
 public let Logger_Manager = LoggerManager("./src/resources/log4cj.xml")
 
 /**
- * Log Management Class
+ * Log management class, load and parse log file to get a specific configuration item.
  */
 public class LoggerManager {
+    // Logger appender factory, mainly register logger appender.
     private var loggerAppenderFactory: LoggerAppenderFactory = LoggerAppenderFactory()
+
+    // Root configuation variable.
     private var rootLogger: LoggerAppenderReference = LoggerAppenderReference()
+
+    // Logger configuration map, mainly stores configurtion items related to logger configuration.
     private var loggerMap: HashMap<String, LoggerAppenderReference> = HashMap<String, LoggerAppenderReference>()
 
+    /**
+     * No-parameter constructor.
+     */
     public init() {}
 
+    /**
+     * Constructor, load and parse xml file.
+     *
+     * @param xmlPath log file path.
+     */
     public init(xmlPath: String) {
         initLoggerManager(xmlPath)
     }
@@ -38,11 +60,10 @@ public class LoggerManager {
     }
 
     /**
-     * Get logger Object
+     * Get the specific logger based on the logger name.
      *
-     * @param name logger Name
-     *
-     * return Logger object
+     * @param name logger name.
+     * @return logger object.
      */
     public func getLogger(name: String): Logger {
         var logger = Logger(name)
@@ -50,7 +71,9 @@ public class LoggerManager {
     }
 
     /**
-     * Initialize Default Settings
+     * Initialize default configurations of log file.
+     *
+     * @param xmlPath log file path.
      */
     private func initWithDefaultConfig(xmlPath: String) {
         var loggerConfiguration: LoggerConfiguration = loadXML(xmlPath)
@@ -62,9 +85,9 @@ public class LoggerManager {
     }
 
     /**
-     * Based on the LoggerConfiguration object information,Initialize LoggerManager.
+     * Initialize the log configurtion obtained by loading the xml file.
      *
-     * @param configuration LoggerConfiguration object parsed from configuartion information
+     * @param configuration log configuration obtained by loading the xml file.
      */
     private func initWithConfig(configuration: LoggerConfiguration) {
         this.loggerAppenderFactory = Logger_Appender_Factory.new()
@@ -73,6 +96,7 @@ public class LoggerManager {
 
         let enabledMap = HashMap<String, Bool>()
 
+        // Register appenders.
         if (configuration.getAppenders().size > 0) {
             for (appender in configuration.getAppenders()) {
                 enabledMap[appender.getName().toAsciiLower()] = appender.getEnabled().toAsciiLower().trimAscii() !=
@@ -88,7 +112,7 @@ public class LoggerManager {
             }
         }
 
-        // init root
+        // Initialize root configuration.
         let rootConfig = configuration.getRoot()
 
         this.rootLogger.setLevel(LogLevel.getLevelByString(rootConfig.getLevel()))
@@ -103,7 +127,7 @@ public class LoggerManager {
             }
         }
 
-        // init logger
+        // Initialize logger configuration.
         if (configuration.getLogger().size > 0) {
             for (logger in configuration.getLogger()) {
                 let oneLogger = LoggerAppenderReference(
@@ -126,16 +150,19 @@ public class LoggerManager {
     }
 
     private func initLoggerManager(xmlPath: String) {
-        // Register the LoggerAppender provided by the system
+        // Register the LoggerAppender provided by the system.
         Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
         Logger_Appender_Factory.registryType("file", FileLoggerAppender())
 
-        // Initializing the Log Configuration File
+        // Initialize the log configuration file.
         initWithDefaultConfig(xmlPath)
     }
 
     /**
      * This function is used to parse the XML file into the LoggerConfiguration object.
+     *
+     * @param xmlPath log file path.
+     * @return logger configuration object.
      */
     private func loadXML(xmlPath: String) {
         var filePath: Path = Path(xmlPath)
@@ -144,27 +171,27 @@ public class LoggerManager {
             return loadDefaultConfiguration()
         }
 
-        // Get elements such as appender,logger,root and so on
+        // Get elements such as appender, logger, root and so on.
         var allElements: ArrayList<XmlElement> = getXmlBasicProperties(xmlPath)
         if (allElements.size == 0) {
             println("can not find any element in xml file!")
             return LoggerConfiguration()
         }
 
-        // Get appender Configuration
+        // Get appender configuration.
         var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(allElements)
         if (appenderList.size == 0) {
             println("can not find any appender in xml file!")
             return LoggerConfiguration()
         }
 
-        // Get logger Configuration
+        // Get logger configuration.
         var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(allElements)
         if (loggerList.size == 0) {
             println("can not find any logger in xml file!")
         }
 
-        // Get root Configuration
+        // Get root configuration.
         var root: RootLoggerConfig = getRootConfiguration(allElements)
         if (root.getLevel().size == 0 || root.getAppenderRefList().size == 0) {
             println("root configuration has mistakes!")
@@ -174,6 +201,11 @@ public class LoggerManager {
         return LoggerConfiguration(appenderList, root, loggerList)
     }
 
+    /**
+     * Parse the built-in log configuration.
+     *
+     * @return logger configuration object.
+     */
     public func loadDefaultConfiguration() {
         let content = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -207,11 +239,16 @@ public class LoggerManager {
         return LoggerConfiguration(appenderList, root, loggerList)
     }
 
-    // Get appender,logger,root Elements
+    /**
+     * Get configuration items by parsing xml file.
+     *
+     * @param xmlPath log file path.
+     * @return configuration element list.
+     */
     private func getXmlBasicProperties(xmlPath: String): ArrayList<XmlElement> {
         var filePath: Path = Path(xmlPath)
 
-        // read a file as a string
+        // Read a file as a string.
         var allBytes: Array<Byte> = File.readFrom(filePath)
         if (allBytes.size == 0) {
             println("xml file is empty!")
@@ -220,7 +257,7 @@ public class LoggerManager {
 
         var content: String = String.fromUtf8(allBytes)
 
-        // Parse the file content.Ensure that the file format is correct.Otherwise,the compilation fails.
+        // Parse the file content, Ensure that the file format is correct. Otherwise, the compilation fails.
         var x: XmlParser = XmlParser()
         var elements: Option<XmlElement> = Option<XmlElement>.None
         try {
@@ -245,11 +282,10 @@ public class LoggerManager {
     }
 
     /**
-     * Get file appender configuaration
+     * Get appender configuarations.
      *
-     * @param allElements Element List
-     *
-     * return AppenderConfig list
+     * @param allElements basic configuration elements by parsing xml file.
+     * @return appender configuration list.
      */
     private func getAppenderConfiguration(allElements: ArrayList<XmlElement>): ArrayList<AppenderConfig> {
         var configList: ArrayList<AppenderConfig> = ArrayList<AppenderConfig>()
@@ -288,11 +324,10 @@ public class LoggerManager {
     }
 
     /**
-     * Get logger configuration
+     * Get logger configuarations.
      *
-     * @param allElements Element List
-     *
-     * return AppenderLogger list
+     * @param allElements basic configuration elements by parsing xml file.
+     * @return logger configuration list.
      */
     private func getLoggerConfiguration(allElements: ArrayList<XmlElement>): ArrayList<LoggerConfig> {
         var loggerList: ArrayList<LoggerConfig> = ArrayList<LoggerConfig>()
@@ -328,11 +363,10 @@ public class LoggerManager {
     }
 
     /**
-     * Get root Configuration
+     * Get root configuarations.
      *
-     * @param allElements Element List
-     *
-     * return RootLoggerConfig object
+     * @param allElements basic configuration elements by parsing xml file.
+     * @return root configuration list.
      */
     private func getRootConfiguration(allElements: ArrayList<XmlElement>): RootLoggerConfig {
         var root: RootLoggerConfig = RootLoggerConfig()

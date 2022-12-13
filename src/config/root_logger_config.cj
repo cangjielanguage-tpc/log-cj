@@ -1,33 +1,45 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2022. All rights reserved.
+ */
+
+/**
+ * @file
+ * This file defines RootLoggerConfig class.
+ */
+
 package config
 
 from std import collection.ArrayList
 
 /**
- * Configuration file object model,Used to parse the root configuration.
-    <root>
-        <level>info</level>
-        <appender-ref ref="console" />
-        <appender-ref ref="logstash" />
-        <appender-ref ref="file" />
-    </root>
+ * Root configuration model class of log file,
+ * The configuration is similar to the following:
+ * <root>
+ * <level>info</level>
+ * <appender-ref ref="console" />
+ * <appender-ref ref="file" />
+ * </root>
  */
 public class RootLoggerConfig {
-    // log level
+    // Root level.
     private var level: String
 
-    // root log  configuration AppenderRef
+    // Root appender-ref list. 
     private var appenderRefList: ArrayList<AppenderRef>
 
+    /**
+     * Constructor, initialize variables.
+     */
     public init() {
         this.level = ""
         this.appenderRefList = ArrayList<AppenderRef>()
     }
 
     /**
-     * Initialization appenderRefList 
+     * Constructor, initialize variables.
      *
-     * @param level level
-     * @param appenderRefList appenderRef list
+     * @param level root level.
+     * @param appenderRefList root appender-ref list.
      */
     public init(level: String, appenderRefList: ArrayList<AppenderRef>) {
         this.level = level
