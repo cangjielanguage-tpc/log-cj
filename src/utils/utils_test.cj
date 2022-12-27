@@ -50,14 +50,20 @@ public class UtilTests {
         let timeSilce = TimeSlice()
         timeSilce.getTimeSlice(Time.now())
         @Assert(timeSliceCache.shortTime.size>0,true)
+        @Assert(timeSilce.getShortDate().size>0,true)
+        @Assert(timeSilce.getShortTime().size>0,true)
     }
 
     @TestCase
     func testFormatLogRecord(): Unit {
         let defaultPatternConverter = DefaultPatternConverter()
         var logRecord = LogRecord(Time.now())
+        var logRecord2 = LogRecord("com.test", LogLevel.ALL, Time.now(), "source/hello", "message")
         @Assert(defaultPatternConverter.formatLogRecord("",logRecord).size==0,true)
+        @Assert(getDefaultPatternConvert().formatLogRecord("",logRecord).size==0,true)
         @Assert(defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M",logRecord).size!=0,true)
+        @Assert(defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%s) %M",logRecord2).size!=0,true)
+        @Assert(defaultPatternConverter.formatLogRecord("[%A]",logRecord).size!=0,true)
     }
 
     @TestCase

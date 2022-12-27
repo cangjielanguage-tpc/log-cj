@@ -118,7 +118,7 @@ main(): Int64 {
 
 4. 代码打包
 
-5. UT补充(目前85.5%)
+5. UT补充(目前87.5%)
 
 #### 参与贡献
 [@zhangxyjlu](https://gitee.com/zhangxyjlu)
