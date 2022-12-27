@@ -85,6 +85,18 @@ public class LoggerTests {
         @Assert(getQueryResult("test","all1msg2"),false)
     }
 
+    @TestCase
+    func testGetAppenderFactory(): Unit {
+        let loggerManager = LoggerManager()
+        @Assert(loggerManager.getLoggerAppenderFactory().getAppenderByType("aa") is ConsoleLoggerAppender,true)
+    }
+
+    @TestCase
+    func testInitLogggerManagerWithEmptyPath(): Unit {
+        let Logger_Manager = LoggerManager("")
+        @Assert(Logger_Manager.getRootLogger().getAppenderList().size,2)
+    }
+
     func getQueryResult(name: String, msg: String): Bool {
         var curDir: Directory = Directory(".")
         var fileList: ArrayList<FileInfo> = curDir.fileList()
