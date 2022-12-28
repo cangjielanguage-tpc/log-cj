@@ -1,0 +1,11 @@
+[
+    {
+        "Name": " log4go ",
+        "License": " Apache License ",
+        "License File": " LICENSE ",
+        "Version Number": " v2.0 ",
+        "Owner": "gohutool"
+        "Upstream URL": "https://github.com/gohutool/log4go",
+        "Description": "a logkit like as log4j with go language."
+    }
+]
