@@ -1,8 +1,19 @@
-# Log4CJ2
+<div align="center">
+<h1>Log4CJ2</h1>
+</div>
+
+<p align="center">
+<img alt="" src="https://img.shields.io/badge/release-v0.0.1-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjc-v0.34.3-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjcov-87.5%25-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
+</p>
+
 
 #### 介绍
 
-仓颉语言实现日志打印功能，类似 log4j 三方件。
+仓颉语言实现日志打印功能，类似 log4j 三方件。代码参考: https://github.com/gohutool/log4go
 
 #### 软件架构
 
