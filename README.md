@@ -12,7 +12,9 @@
 
 #### 介绍
 
-仓颉语言实现日志打印功能，类似 log4j 三方件。代码参考: https://github.com/gohutool/log4go
+仓颉语言实现日志打印功能，类似 log4j 三方件。
+
+代码参考: https://github.com/gohutool/log4go
 
 #### 路线
 
@@ -108,7 +110,7 @@ main(): Int64 {
 
 1. 代码健壮性处理
 
-2. 多线程处理（异步写入spwan方式存在数据丢失）
+2. 多线程处理
 
 3. 日志打包后压缩文件
 
