@@ -10,10 +10,13 @@
 <img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
 </p>
 
-
 #### 介绍
 
 仓颉语言实现日志打印功能，类似 log4j 三方件。代码参考: https://github.com/gohutool/log4go
+
+#### 路线
+
+![](./doc/images/milestone.PNG)
 
 #### 软件架构
 
@@ -70,7 +73,7 @@
 #### 使用说明
 
 1. 打印日志
-
+   
    代码示例：
 
 ```go
@@ -101,24 +104,6 @@ main(): Int64 {
 
    ()中为待实现的打印日志的具体文件执行代码行（仓颉暂未开放该api接口）
 
-2. 注册自定义 LoggerAppender 
-   
-   ```go
-   public class SampleLoggerAppender <: LoggerAppender {
-       // 格式化打印规则字符串
-       var pattern: String = ""
-   
-       public func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit {}
-   
-       public func start(): Unit {}
-   
-       public func logWrite(rec: LogRecord): Unit {}
-   
-       public func close(): Unit {}
-   }
-   Logger_Appender_Factory.registryType("sample", SampleLoggerAppender())
-   ```
-
 #### 待办事务
 
 1. 代码健壮性处理
@@ -127,11 +112,14 @@ main(): Int64 {
 
 3. 日志打包后压缩文件
 
-4. 代码打包
+4. 安全加固（文件权限，命令注入等）
 
-5. UT补充(目前87.5%)
+5. 代码打包
+
+6. UT补充(目前87.5%)
 
 #### 参与贡献
+
 [@zhangxyjlu](https://gitee.com/zhangxyjlu)
 
 [@helongfei](https://gitee.com/helongfei_it)
