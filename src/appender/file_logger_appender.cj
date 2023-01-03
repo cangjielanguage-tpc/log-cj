@@ -126,26 +126,29 @@ public class FileLoggerAppender <: LoggerAppender {
      * @param rec log recording.
      */
     public func logWrite(rec: LogRecord): Unit {
-        if (this.file.isClosed()) {
-            start()
-        }
-        let now = Time.now()
-        if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
-            rollingFile()
-        }
+        let fut = spawn {
+            if (this.file.isClosed()) {
+                start()
+            }
+            let now = Time.now()
+            if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
+                rollingFile()
+            }
 
-        // Formatting logging.
-        var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
-        try {
-            this.file.write(mess)
-        } catch (e: FSException) {
-            println("write file occur exception: ${e.message}")
-            return
-        }
-        let n = mess.size
+            // Formatting logging.
+            var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
+            try {
+                this.file.write(mess)
+            } catch (e: FSException) {
+                println("write file occur exception: ${e.message}")
+                return
+            }
+            let n = mess.size
 
-        // Update the size.
-        this.curSize += n
+            // Update the size.
+            this.curSize += n
+        }
+        fut.getResult(100 * 1000 * 1000)
     }
 
     /**
@@ -177,10 +180,10 @@ public class FileLoggerAppender <: LoggerAppender {
         // If daily in the configuration is true (archived by day), the opening date is not the same as the current day.
         if (this.daily && Time.now().day() != this.opendate) {
             // Get yesterday's time, format to day.
-            let yesterday = Time.now().addDays(0, 0, -1).toString("YYYYMMdd")
+            let yesterday = Time.now().addDays(0, 0, -1).toString("YYYYMMddhhmmss-SS")
             fname = this.fileName + "_" + yesterday + ".log"
         } else {
-            fname = this.fileName + "_" + Time.now().toString("YYYYMMddhhmmssS") + ".log"
+            fname = this.fileName + "_" + Time.now().toString("YYYYMMddhhmmss-SS") + ".log"
         }
         try {
             //An error message is returned when the current file is named fname.
