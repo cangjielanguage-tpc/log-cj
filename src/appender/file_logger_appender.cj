@@ -194,6 +194,8 @@ public class FileLoggerAppender <: LoggerAppender {
         } catch (e: IllegalArgumentException | FSException) {
             println("rolling file occur exception: ${e.message}")
             return
+        } finally{
+            lock.unlock()
         }
         // Set the daily open date to the current date.
         this.opendate = Time.now().day()
@@ -221,6 +223,8 @@ public class FileLoggerAppender <: LoggerAppender {
             return
         } catch (e: FSException) {
             println("delete log file has occur an exception")
+        } finally{
+            lock.unlock()
         }
     }
 }
