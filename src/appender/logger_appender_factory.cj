@@ -116,6 +116,7 @@ public class LoggerAppenderFactory {
         var appenderName = name.toAsciiLower()
         if (this.appenderType.size == 0) {
             println("AppenderType is empty, please RegistryType at first")
+            this.typeLock.unlock()
 
             //Error handling should return null
             return LoggerAppenderFactory()
@@ -124,7 +125,7 @@ public class LoggerAppenderFactory {
         newObj.initAppender(pattern, properties)
         newObj.start()
         this.appender[appenderName] = newObj
-        this.typeLock.lock()
+        this.typeLock.unlock()
         return this
     }
 }
