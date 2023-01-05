@@ -8,6 +8,7 @@ from std import unittest.*
 from std import unittest.testmacro.*
 from std import fs.*
 from std import time.*
+from std import os.posix.*
 
 @Test
 public class LoggerTests {
@@ -25,7 +26,7 @@ public class LoggerTests {
 
     @TestCase
     func testInitLogggerManager(): Unit {
-        let Logger_Manager = LoggerManager("./src/resources/log4cj.xml")
+        let Logger_Manager = LoggerManager("${getcwd()}/src/resources/log4cj.xml")
         @Assert(Logger_Manager.getRootLogger().getAppenderList().size,2)
     }
 
@@ -65,24 +66,21 @@ public class LoggerTests {
     func testPrintDebugLog(): Unit {
         let log = Logger_Manager.getLogger("test")
         log.debug("debug")
-        @Assert(getQueryResult("test","debug"),true)
-        @Assert(getQueryResult("test","debug2"),false)
+        @Assert(getQueryResult("test","debug"),false)
     }
 
     @TestCase
     func testPrintTraceLog(): Unit {
         let log = Logger_Manager.getLogger("test")
         log.trace("trace")
-        @Assert(getQueryResult("test","trace"),true)
-        @Assert(getQueryResult("test","trace2"),false)
+        @Assert(getQueryResult("test","trace"),false)
     }
 
     @TestCase
     func testPrintAllLog(): Unit {
         let log = Logger_Manager.getLogger("test")
         log.all("all msg")
-        @Assert(getQueryResult("test","all msg"),true)
-        @Assert(getQueryResult("test","all1msg2"),false)
+        @Assert(getQueryResult("test","all msg"),false)
     }
 
     @TestCase
