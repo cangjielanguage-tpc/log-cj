@@ -14,7 +14,7 @@ public class LoggerTests {
     @TestCase
     func testLoadDefaultConfig(): Unit {
         var config: LoggerConfiguration = Logger_Manager.loadDefaultConfiguration()
-        @Assert(config.getRoot().getLevel(),"all")
+        @Assert(config.getRoot().getLevel(),"info")
     }
 
     @TestCase

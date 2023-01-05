@@ -224,7 +224,7 @@ public class LoggerManager {
     <property name="daily">false</property>
   </appender>
   <root>
-    <level>all</level>
+    <level>info</level>
     <appender-ref ref="console"/>
     <appender-ref ref="file"/>
   </root>
