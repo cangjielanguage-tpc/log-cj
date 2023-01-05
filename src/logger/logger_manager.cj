@@ -12,13 +12,14 @@ package logger
 from encoding import xml.*
 from std import collection.*
 from std import fs.*
+from std import os.posix.*
 from std import sync.*
 import appender.*
 import config.*
 import utils.*
 
 public let Logger_Appender_Factory = LoggerAppenderFactory()
-public let Logger_Manager = LoggerManager("./src/resources/log4cj.xml")
+public let Logger_Manager = LoggerManager("${getcwd()}/src/resources/log4cj.xml")
 
 /**
  * Log management class, load and parse log file to get a specific configuration item.
