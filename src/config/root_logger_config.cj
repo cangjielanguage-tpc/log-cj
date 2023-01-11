@@ -46,19 +46,19 @@ public class RootLoggerConfig {
         this.appenderRefList = appenderRefList
     }
 
-    public func getLevel() {
+    public func getLevel(): String {
         return this.level
     }
 
-    public func setLevel(level: String) {
+    public func setLevel(level: String): Unit {
         this.level = level
     }
 
-    public func getAppenderRefList() {
+    public func getAppenderRefList(): ArrayList<AppenderRef> {
         return this.appenderRefList
     }
 
-    public func setAppenderRefList(appenderRefList: ArrayList<AppenderRef>) {
+    public func setAppenderRefList(appenderRefList: ArrayList<AppenderRef>): Unit {
         this.appenderRefList = appenderRefList
     }
 }

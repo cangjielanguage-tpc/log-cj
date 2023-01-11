@@ -162,7 +162,7 @@ public class FileLoggerAppender <: LoggerAppender {
     }
 
     // If this is called in a threaded context, it must be synchronized.
-    private func rollingFile() {
+    private func rollingFile(): Unit {
         if (!this.rotate) {
             return
         }
@@ -208,7 +208,7 @@ public class FileLoggerAppender <: LoggerAppender {
     /**
      * Delete log files whose storage duration exceeds the retention period.
      */
-    private func deleterollingFile() {
+    private func deleterollingFile(): Unit {
         try {
             let fileDir = this.file.info.parentDirectory.getOrThrow()
             for (file in Directory(fileDir.path).fileList()) {

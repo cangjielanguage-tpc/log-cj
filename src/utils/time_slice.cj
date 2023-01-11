@@ -20,7 +20,7 @@ var timeSliceCache = TimeSlice()
  *
  * @param timeSlice time slice.
  */
-func setCachedTimeSlice(timeSlice: TimeSlice) {
+func setCachedTimeSlice(timeSlice: TimeSlice): Unit {
     timeSliceCache.lock.lock()
     timeSliceCache.lastUpdateSeconds = timeSlice.lastUpdateSeconds
     timeSliceCache.shortTime = timeSlice.shortTime
@@ -46,7 +46,7 @@ public class TimeSlice {
      *
      * @param time time.
      */
-    public func getTimeSlice(time: Time) {
+    public func getTimeSlice(time: Time): Unit {
         var secs = time.unixNano() / Int64(1e9)
         var cached = timeSliceCache
         if (cached.lastUpdateSeconds != secs) {
@@ -73,19 +73,19 @@ public class TimeSlice {
         }
     }
 
-    public func getShortTime() {
+    public func getShortTime(): String {
         return this.shortTime
     }
 
-    public func getLongTime() {
+    public func getLongTime(): String {
         return this.longTime
     }
 
-    public func getShortDate() {
+    public func getShortDate(): String {
         return this.shortDate
     }
 
-    public func getLongDate() {
+    public func getLongDate(): String {
         return this.longDate
     }
 }

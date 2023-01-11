@@ -41,19 +41,19 @@ public class AppenderProperty {
      */
     public init() {}
 
-    public func getName() {
+    public func getName(): String {
         return this.name
     }
 
-    public func setName(name: String) {
+    public func setName(name: String): Unit {
         this.name = name
     }
 
-    public func getValue() {
+    public func getValue(): String {
         return this.value
     }
 
-    public func setValue(value: String) {
+    public func setValue(value: String): Unit {
         this.value = value
     }
 }
