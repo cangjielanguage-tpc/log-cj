@@ -111,7 +111,7 @@ public class LoggerAppenderFactory {
         typename: String,
         pattern: String,
         properties: ArrayList<AppenderProperty>
-    ) {
+    ): LoggerAppenderFactory {
         this.typeLock.lock()
         var appenderName = name.toAsciiLower()
         if (this.appenderType.size == 0) {

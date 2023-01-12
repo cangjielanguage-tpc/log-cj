@@ -35,19 +35,19 @@ public class LoggerAppenderReference {
      */
     public init() {}
 
-    public func getAppenderList() {
+    public func getAppenderList(): ArrayList<LoggerAppender> {
         return this.appenderList
     }
 
-    public func setAppenderList(appenderList: ArrayList<LoggerAppender>) {
+    public func setAppenderList(appenderList: ArrayList<LoggerAppender>): Unit {
         this.appenderList = appenderList
     }
 
-    public func getLevel() {
+    public func getLevel(): LogLevel {
         return this.level
     }
 
-    public func setLevel(level: LogLevel) {
+    public func setLevel(level: LogLevel): Unit {
         this.level = level
     }
 }

@@ -70,43 +70,43 @@ public class AppenderConfig {
         this.properties = properties
     }
 
-    public func getEnabled() {
+    public func getEnabled(): String {
         return this.enabled
     }
 
-    public func setEnabled(enabled: String) {
+    public func setEnabled(enabled: String): Unit {
         this.enabled = enabled
     }
 
-    public func getName() {
+    public func getName(): String {
         return this.name
     }
 
-    public func setName(name: String) {
+    public func setName(name: String): Unit {
         this.name = name
     }
 
-    public func getAppenderType() {
+    public func getAppenderType(): String {
         return this.appenderType
     }
 
-    public func setAppenderType(appenderType: String) {
+    public func setAppenderType(appenderType: String): Unit {
         this.appenderType = appenderType
     }
 
-    public func getPattern() {
+    public func getPattern(): String {
         return this.pattern
     }
 
-    public func setPattern(pattern: String) {
+    public func setPattern(pattern: String): Unit {
         this.pattern = pattern
     }
 
-    public func getProperties() {
+    public func getProperties(): ArrayList<AppenderProperty> {
         return this.properties
     }
 
-    public func setProperties(properties: ArrayList<AppenderProperty>) {
+    public func setProperties(properties: ArrayList<AppenderProperty>): Unit {
         this.properties = properties
     }
 }

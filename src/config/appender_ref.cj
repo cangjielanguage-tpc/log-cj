@@ -37,7 +37,7 @@ public class AppenderRef {
     /**
      * No-parameter constructor.
      */
-    public func getRef() {
+    public func getRef(): String {
         return this.ref
     }
 }

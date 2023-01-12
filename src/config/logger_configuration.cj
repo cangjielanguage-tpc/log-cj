@@ -45,15 +45,15 @@ public class LoggerConfiguration {
      */
     public init() {}
 
-    public func getAppenders() {
+    public func getAppenders(): ArrayList<AppenderConfig> {
         return this.appenders
     }
 
-    public func getRoot() {
+    public func getRoot(): RootLoggerConfig {
         return this.root
     }
 
-    public func getLogger() {
+    public func getLogger(): ArrayList<LoggerConfig> {
         return this.logger
     }
 }

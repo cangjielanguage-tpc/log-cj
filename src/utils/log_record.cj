@@ -56,23 +56,23 @@ public class LogRecord {
         this.createdTime = createdTime
     }
 
-    public func getTagName() {
+    public func getTagName(): String {
         return this.tagName
     }
 
-    public func getLevel() {
+    public func getLevel(): LogLevel {
         return this.level
     }
 
-    public func getSource() {
+    public func getSource(): String {
         return this.source
     }
 
-    public func getMessage() {
+    public func getMessage(): String {
         return this.message
     }
 
-    public func getCreatedTime() {
+    public func getCreatedTime(): Time {
         return this.createdTime
     }
 }

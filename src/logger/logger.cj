@@ -22,7 +22,7 @@ public class Logger {
         this.name = name
     }
 
-    public func getName() {
+    public func getName(): String {
         return this.name
     }
 
@@ -32,7 +32,7 @@ public class Logger {
      * @param level log level.
      * @param msg log information.
      */
-    private func log(level: LogLevel, msg: String) {
+    private func log(level: LogLevel, msg: String): Unit {
         // Currently, the method of obtaining the file name and line number is not available. Wait for the SDK to provide the method.
         let src = ""
         var rec = LogRecord(this.name, level, Time.now(), src, msg)
@@ -47,7 +47,7 @@ public class Logger {
      * @param level log level.
      * @param rec log record.
      */
-    private func doLog(level: LogLevel, rec: LogRecord) {
+    private func doLog(level: LogLevel, rec: LogRecord): Unit {
         appendLog(level, rec, Logger_Manager.getRootLogger())
 
         // If there are logs other than root in the configuration, to Print.
@@ -67,7 +67,7 @@ public class Logger {
      * @param rec log record.
      * @param appenderRef log appender-ref.
      */
-    private func appendLog(level: LogLevel, rec: LogRecord, appenderRef: LoggerAppenderReference) {
+    private func appendLog(level: LogLevel, rec: LogRecord, appenderRef: LoggerAppenderReference): Unit {
         if (appenderRef.getAppenderList().size == 0) {
             return
         }
@@ -83,7 +83,7 @@ public class Logger {
      *
      * @param msg log information.
      */
-    public func off(msg: String) {
+    public func off(msg: String): Unit {
         log(OFF, msg)
     }
 
@@ -92,7 +92,7 @@ public class Logger {
      *
      * @param msg log information.
      */
-    public func error(msg: String) {
+    public func error(msg: String): Unit {
         log(ERROR, msg)
     }
 
@@ -101,7 +101,7 @@ public class Logger {
      *
      * @param msg log information.
      */
-    public func warn(msg: String) {
+    public func warn(msg: String): Unit {
         log(WARN, msg)
     }
 
@@ -110,7 +110,7 @@ public class Logger {
      *
      * @param msg log inoformation.
      */
-    public func info(msg: String) {
+    public func info(msg: String): Unit {
         log(INFO, msg)
     }
 
@@ -119,7 +119,7 @@ public class Logger {
      *
      * @param msg log inoformation.
      */
-    public func debug(msg: String) {
+    public func debug(msg: String): Unit {
         log(DEBUG, msg)
     }
 
@@ -128,7 +128,7 @@ public class Logger {
      *
      * @param msg log information.
      */
-    public func trace(msg: String) {
+    public func trace(msg: String): Unit {
         log(TRACE, msg)
     }
 
@@ -137,7 +137,7 @@ public class Logger {
      *
      * @param msg log information.
      */
-    public func all(msg: String) {
+    public func all(msg: String): Unit {
         log(ALL, msg)
     }
 }

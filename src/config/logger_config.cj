@@ -50,27 +50,27 @@ public class LoggerConfig {
         this.appenderRefList = appenderRefList
     }
 
-    public func getName() {
+    public func getName(): String {
         return this.name
     }
 
-    public func setName(name: String) {
+    public func setName(name: String): Unit {
         this.name = name
     }
 
-    public func getLevel() {
+    public func getLevel(): String {
         return this.level
     }
 
-    public func setLevel(level: String) {
+    public func setLevel(level: String): Unit {
         this.level = level
     }
 
-    public func getAppenderRefList() {
+    public func getAppenderRefList(): ArrayList<AppenderRef> {
         return this.appenderRefList
     }
 
-    public func setAppenderRefList(appenderRefList: ArrayList<AppenderRef>) {
+    public func setAppenderRefList(appenderRefList: ArrayList<AppenderRef>): Unit {
         this.appenderRefList = appenderRefList
     }
 }

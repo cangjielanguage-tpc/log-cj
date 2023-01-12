@@ -48,15 +48,15 @@ public class LoggerManager {
         initLoggerManager(xmlPath)
     }
 
-    public func getLoggerAppenderFactory() {
+    public func getLoggerAppenderFactory(): LoggerAppenderFactory {
         return this.loggerAppenderFactory
     }
 
-    public func getRootLogger() {
+    public func getRootLogger(): LoggerAppenderReference {
         return this.rootLogger
     }
 
-    public func getLoggerMap() {
+    public func getLoggerMap(): HashMap<String, LoggerAppenderReference> {
         return this.loggerMap
     }
 
@@ -76,7 +76,7 @@ public class LoggerManager {
      *
      * @param xmlPath log file path.
      */
-    private func initWithDefaultConfig(xmlPath: String) {
+    private func initWithDefaultConfig(xmlPath: String): Unit {
         var loggerConfiguration: LoggerConfiguration = loadXML(xmlPath)
         if (loggerConfiguration.getAppenders().size == 0) {
             println("can not find any appender!")
@@ -90,7 +90,7 @@ public class LoggerManager {
      *
      * @param configuration log configuration obtained by loading the xml file.
      */
-    private func initWithConfig(configuration: LoggerConfiguration) {
+    private func initWithConfig(configuration: LoggerConfiguration): Unit {
         this.loggerAppenderFactory = Logger_Appender_Factory.new()
         this.loggerMap = HashMap<String, LoggerAppenderReference>()
         this.rootLogger = LoggerAppenderReference(DEFAULT_LOG_LEVEL, ArrayList<LoggerAppender>())
@@ -150,7 +150,7 @@ public class LoggerManager {
         }
     }
 
-    private func initLoggerManager(xmlPath: String) {
+    private func initLoggerManager(xmlPath: String): Unit {
         // Register the LoggerAppender provided by the system.
         Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
         Logger_Appender_Factory.registryType("file", FileLoggerAppender())
@@ -165,7 +165,7 @@ public class LoggerManager {
      * @param xmlPath log file path.
      * @return logger configuration object.
      */
-    private func loadXML(xmlPath: String) {
+    private func loadXML(xmlPath: String): LoggerConfiguration {
         var filePath: Path = Path(xmlPath)
         var isFileExist: Bool = File.exists(filePath)
         if (xmlPath.size == 0 || !isFileExist) {
@@ -207,7 +207,7 @@ public class LoggerManager {
      *
      * @return logger configuration object.
      */
-    public func loadDefaultConfiguration() {
+    public func loadDefaultConfiguration(): LoggerConfiguration {
         let content = """
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>

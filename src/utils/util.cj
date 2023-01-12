@@ -70,7 +70,7 @@ public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int
  * @param defaultValue the default value is returned when the conversion is abnormal.
  * @return deta of the Int64 type is returned.
  */
-public func getNumByString(str: String, defaultValue: Int64) {
+public func getNumByString(str: String, defaultValue: Int64): Int64 {
     try {
         return Int64.parse(str)
     } catch (e: ConvertException) {
