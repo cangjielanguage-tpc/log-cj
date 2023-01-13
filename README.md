@@ -64,6 +64,9 @@
 - `resources` 资源文件目录
 - `xxx_test.cj` 测试用例所在文件
 
+#### 接口说明
+参见[主要类和函数说明](./doc/api.md)
+
 #### 使用编译
 
 参见[项目编译文件引用](./doc/quote_compiled_files.md)
