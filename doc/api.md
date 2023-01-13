@@ -402,27 +402,3 @@ can not find any logger in xml file!
 [2023/01/13 10:11:27 CST 930] [ERROR] [com.test1] () 6
 [2023/01/13 10:11:27 CST 930] [OFF] [com.test1] () 7
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
