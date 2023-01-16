@@ -6,7 +6,7 @@
 <img alt="" src="https://img.shields.io/badge/release-v0.0.1-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/cjc-v0.34.3-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjcov-87.5%25-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjcov-93.2%25-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
 </p>
 
@@ -34,35 +34,35 @@
 │   │   ├── file_logger_appender.cj
 │   │   ├── logger_appender.cj
 │   │   ├── logger_appender_factory.cj
-│   │   ├── logger_appender_reference.cj
-│   │   └── appender_test.cj
+│   │   └──logger_appender_reference.cj
 │   ├── config
 │   │   ├── appender_config.cj
 │   │   ├── appender_property.cj
 │   │   ├── appender_ref.cj
 │   │   ├── logger_config.cj
 │   │   ├── logger_configuration.cj
-│   │   ├── root_logger_config.cj
-│   │   └── config_test.cj
+│   │   └── root_logger_config.cj
 │   ├── logger
 │   │   ├── logger.cj
-│   │   ├── logger_manager.cj
-│   │   └── logger_test.cj
+│   │   └── logger_manager.cj
 │   └── utils
 │       ├── log_level.cj
 │       ├── log_record.cj
 │       ├── pattern_converter.cj
 │       ├── time_slice.cj
-│       ├── util.cj
-│       └── utils_test.cj
+│       └── util.cj
 ├── resources
 │   ├── log4cj.xml
+├── test
+│   ├── LLT
+│   ├── UT
+│   ├── HLT
 ```
 
 - `doc` 库的设计文档、提案、库的使用文档、LLT 覆盖率报告
-- `src` 库源码和测试用例目录
+- `src` 库源码目录
 - `resources` 资源文件目录
-- `xxx_test.cj` 测试用例所在文件
+- `test` 测试用例目录
 
 #### 接口说明
 参见[主要类和函数说明](./doc/api.md)
@@ -73,7 +73,7 @@
 
 #### 如何运行测试用例
 
-参见[测试用例运行说明](./doc/test_case_running.md)
+参见[测试用例运行说明](./doc/LLT_running.md)
 
 #### 使用说明
 
@@ -113,7 +113,7 @@ main(): Int64 {
 
 1. 代码健壮性处理
 
-2. 多线程处理
+2. 多线程处理(目前采用spawn..getResult..方式)
 
 3. 日志打包后压缩文件
 
@@ -121,7 +121,7 @@ main(): Int64 {
 
 5. 代码打包
 
-6. UT补充(目前87.5%)
+6. UT补充(目前LLT93.2%)
 
 #### 参与贡献
 
