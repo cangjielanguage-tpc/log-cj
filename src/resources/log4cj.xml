@@ -12,7 +12,7 @@
           %T - Time (15:04:05 MST)
           %t - Time (15:04)
           %D - Date (2006/01/02)
-          %L - Level (FNST, FINE, DEBG, TRAC, WARN, EROR, CRIT)
+          %L - Level (ALL,TRACE,DEBUG,INFO,WARN,ERROR,OFF)
           %S - Source
           %M - Message
         -->
@@ -21,11 +21,11 @@
         <property name="maxsize">400</property>
         <property name="daily">false</property>
     </appender>
-    <!-- <logger name="Demo">
+    <logger name="Demo">
         <level>info</level>
         <appender-ref ref="console" />
         <appender-ref ref="file" />
-    </logger> -->
+    </logger>
     <root>
         <level>info</level>
         <appender-ref ref="console" />

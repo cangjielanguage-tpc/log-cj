@@ -13,14 +13,14 @@ from std import time.*
 from std import sync.*
 from std import format.*
 
-var timeSliceCache = TimeSlice()
+public var timeSliceCache = TimeSlice()
 
 /**
  * Sets the value of timeSliceCache.
  *
  * @param timeSlice time slice.
  */
-func setCachedTimeSlice(timeSlice: TimeSlice): Unit {
+public func setCachedTimeSlice(timeSlice: TimeSlice): Unit {
     timeSliceCache.lock.lock()
     timeSliceCache.lastUpdateSeconds = timeSlice.lastUpdateSeconds
     timeSliceCache.shortTime = timeSlice.shortTime
