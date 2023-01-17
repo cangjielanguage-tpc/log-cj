@@ -3,7 +3,7 @@
 
 ## LLT文件所在位置
 
-test目的子目录LLT下后缀为_test的仓颉文件
+test/LLT下xxx_test的仓颉文件
 ```shell
 ├── doc
 ├── src
