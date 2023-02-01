@@ -9,8 +9,6 @@
 
 package appender
 
-import utils.*
-
 /**
  * The specific implementation class of LoggerAppender, which enables the console to print logs.
  */

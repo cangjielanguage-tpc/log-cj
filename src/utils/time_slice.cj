@@ -9,7 +9,6 @@
 
 package utils
 
-from std import time.*
 from std import sync.*
 from std import format.*
 
@@ -47,7 +46,7 @@ public class TimeSlice {
      * @param time time.
      */
     public func getTimeSlice(time: Time): Unit {
-        var secs = time.unixNano() / Int64(1e9)
+        var secs = time.unixTimeStamp().nanoseconds() / Int64(1e15)
         var cached = timeSliceCache
         if (cached.lastUpdateSeconds != secs) {
             let year = time.year()
