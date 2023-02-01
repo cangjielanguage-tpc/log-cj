@@ -38,7 +38,7 @@ public class DefaultPatternConverter <: PatternConverter {
     // %M - Message
     // Ignores unknown formats
     // Recommended: "[%D %T] [%L] (%S) %M"
-
+    
     /**
      * Formatting log recording.
      *
@@ -60,9 +60,10 @@ public class DefaultPatternConverter <: PatternConverter {
             if (piece != pieces[0] && piece.size > 0) {
                 match (piece[0]) {
                     case 'T' => result += timeSlice.getLongTime()
-                    case 'o' => result += (logRecord.getCreatedTime().unixNano() / Int64(1e6)).toString()
+                    case 'o' => result += (logRecord.getCreatedTime().unixTimeStamp().nanoseconds() / Int64(1e12)).toString()
                     case 'n' => result += flushLeft(logRecord.getCreatedTime().nanosecond().toString(), 9, "0")
-                    case 'm' => result += flushLeft((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3, "0")
+                    case 'm' => result += flushLeft((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(),
+                            3, "0")
                     case 't' => result += timeSlice.getShortTime()
                     case 'D' => result += timeSlice.getLongDate()
                     case 'd' => result += timeSlice.getShortDate()

@@ -9,8 +9,6 @@
 
 package config
 
-from std import collection.ArrayList
-
 /**
  * Appender model class of log file.
  * The configuration is similar to the following:
