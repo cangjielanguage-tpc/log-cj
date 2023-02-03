@@ -52,10 +52,18 @@ public class Logger {
 
         // If there are logs other than root in the configuration, to Print.
         if (Logger_Manager.getLoggerMap().size > 0) {
-            for ((loggerName, loggerAppenderReference) in Logger_Manager.getLoggerMap()) {
-                if (loggerName.contains(this.name)) {
-                    appendLog(level, rec, loggerAppenderReference)
+            var i: Int64 = 0
+            while (i < Logger_Manager.getLoggerMap().size) {
+                var mapString: String = Logger_Manager.getLoggerMap().keys().toArray().toString()
+                if (mapString.contains(this.name)) {
+                    var j: Int64 = 0
+                    var values: Array<LoggerAppenderReference> = Logger_Manager.getLoggerMap().values().toArray()
+                    while (j < values.size) {
+                        appendLog(level, rec, values.get(j).getOrThrow())
+                        j++
+                    }
                 }
+                i++
             }
         }
     }
@@ -72,8 +80,11 @@ public class Logger {
             return
         }
         if (level >= appenderRef.getLevel()) {
-            for (appender in appenderRef.getAppenderList()) {
+            var i: Int64 = 0
+            while (i < appenderRef.getAppenderList().size) {
+                var appender: LoggerAppender = appenderRef.getAppenderList().get(i).getOrThrow()
                 appender.logWrite(rec)
+                i++
             }
         }
     }

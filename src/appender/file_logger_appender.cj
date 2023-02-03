@@ -89,18 +89,21 @@ public class FileLoggerAppender <: LoggerAppender {
         }
 
         //Parse properties.
-        for (property in properties) {
-            var value = property.getValue().trimLeft(" \r\n").trimRight(" \r\n")
-            match (property.getName().toAsciiLower()) {
+        var i: Int64 = 0
+        while (i < properties.size) {
+            var value = properties.get(i).getOrThrow().getValue().trimLeft(" \r\n").trimRight(" \r\n")
+            match (properties.get(i).getOrThrow().getName().toAsciiLower()) {
                 case "filename" => file = value
                 case "maxsize" => maxSize = strToNumBySuffix(value, 1024, 20 * 1024 * 1024) // 默认20M
                 case "daily" => daily = value.toAsciiLower() != "false"
                 case "rotate" => rotate = value.toAsciiLower() != "false"
                 case "retentiondays" => retentionDays = getNumByString(value, 7)
-                case _ => print("LoadConfiguration: Warning: Unknown property ${property.getName()}")
+                case _ => print(
+                        "LoadConfiguration: Warning: Unknown property ${properties.get(i).getOrThrow().getName()}")
             }
+            i++
         }
-
+        
         if (file.size == 0) {
             file = "root.log"
         }

@@ -99,17 +99,20 @@ public class LoggerManager {
 
         // Register appenders.
         if (configuration.getAppenders().size > 0) {
-            for (appender in configuration.getAppenders()) {
-                enabledMap[appender.getName().toAsciiLower()] = appender.getEnabled().toAsciiLower().trimAscii() !=
-                    "false"
-                if (enabledMap[appender.getName().toAsciiLower()]) {
+            var i: Int64 = 0
+            var appenders: ArrayList<AppenderConfig> = configuration.getAppenders()
+            while (i < appenders.size) {
+                enabledMap[appenders.get(i).getOrThrow().getName().toAsciiLower()] = appenders.get(i).getOrThrow().
+                getEnabled().toAsciiLower().trimAscii() != "false"
+                if (enabledMap[appenders.get(i).getOrThrow().getName().toAsciiLower()]) {
                     this.loggerAppenderFactory.registerLoggerAppender(
-                        appender.getName(),
-                        appender.getAppenderType(),
-                        appender.getPattern(),
-                        appender.getProperties()
+                        appenders.get(i).getOrThrow().getName(),
+                        appenders.get(i).getOrThrow().getAppenderType(),
+                        appenders.get(i).getOrThrow().getPattern(),
+                        appenders.get(i).getOrThrow().getProperties()
                     )
                 }
+                i++
             }
         }
 
@@ -119,33 +122,44 @@ public class LoggerManager {
         this.rootLogger.setLevel(LogLevel.getLevelByString(rootConfig.getLevel()))
 
         if (rootConfig.getAppenderRefList().size > 0) {
-            for (appenderRef in rootConfig.getAppenderRefList()) {
+            var j: Int64 = 0
+            var appenderRefList: ArrayList<AppenderRef> = rootConfig.getAppenderRefList()
+            while (j < appenderRefList.size) {
+                var appenderRef: AppenderRef = appenderRefList.get(j).getOrThrow()
                 if (enabledMap.contains(appenderRef.getRef().toAsciiLower()) && enabledMap[appenderRef.getRef().
                     toAsciiLower()]) {
                     let ap = this.loggerAppenderFactory.getAppenderByName(appenderRef.getRef().toAsciiLower())
                     this.rootLogger.getAppenderList().append(ap)
                 }
+                j++
             }
         }
 
         // Initialize logger configuration.
         if (configuration.getLogger().size > 0) {
-            for (logger in configuration.getLogger()) {
+            var k: Int64 = 0
+            var loggers: ArrayList<LoggerConfig> = configuration.getLogger()
+            while (k < loggers.size) {
+                var logger: LoggerConfig = loggers.get(k).getOrThrow()
                 let oneLogger = LoggerAppenderReference(
                     LogLevel.getLevelByString(logger.getLevel()),
                     ArrayList<LoggerAppender>()
                 )
-                for (appenderRef in logger.getAppenderRefList()) {
+                var m: Int64 = 0
+                while (m < logger.getAppenderRefList().size) {
+                    var appenderRef: AppenderRef = logger.getAppenderRefList().get(m).getOrThrow()
                     if (enabledMap.contains(appenderRef.getRef().toAsciiLower()) && enabledMap[appenderRef.getRef().
                         toAsciiLower()]) {
                         let oneAppender = this.loggerAppenderFactory.getAppenderByName(
                             appenderRef.getRef().toAsciiLower())
                         oneLogger.getAppenderList().append(oneAppender)
                     }
+                    m++
                 }
                 if (oneLogger.getAppenderList().size > 0) {
                     this.loggerMap[logger.getName()] = oneLogger
                 }
+                k++
             }
         }
     }
@@ -291,35 +305,52 @@ public class LoggerManager {
     private func getAppenderConfiguration(allElements: ArrayList<XmlElement>): ArrayList<AppenderConfig> {
         var configList: ArrayList<AppenderConfig> = ArrayList<AppenderConfig>()
 
-        for (element in allElements where element.name.toAsciiLower().equals("appender")) {
-            let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
-            let allAttrs: ArrayList<XmlAttr> = element.attributes
-            var appender: AppenderConfig = AppenderConfig()
-            var propertyList: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
-            for (attr in allAttrs) {
-                if (attr.name.toAsciiLower().equals("enabled")) {
-                    appender.setEnabled(attr.content)
-                }
-                if (attr.name.toAsciiLower().equals("name")) {
-                    appender.setName(attr.content)
-                }
-            }
-            for (childrenElement in allChildrenElements) {
-                if (childrenElement.name.toAsciiLower().equals("type")) {
-                    appender.setAppenderType(childrenElement.content)
-                }
-                if (childrenElement.name.toAsciiLower().equals("pattern")) {
-                    appender.setPattern(childrenElement.content)
-                } else {
-                    let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                    for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
-                        var property: AppenderProperty = AppenderProperty(childrenAttr.content, childrenElement.content)
-                        propertyList.append(property)
+        var i: Int64 = 0
+        while (i < allElements.size) {
+            var element: XmlElement = allElements.get(i).getOrThrow()
+            if (element.name.toAsciiLower().equals("appender")) {
+                let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
+                let allAttrs: ArrayList<XmlAttr> = element.attributes
+                var appender: AppenderConfig = AppenderConfig()
+                var propertyList: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
+                var j: Int64 = 0
+                while (j < allAttrs.size) {
+                    var attr: XmlAttr = allAttrs.get(j).getOrThrow()
+                    if (attr.name.toAsciiLower().equals("enabled")) {
+                        appender.setEnabled(attr.content)
                     }
-                    appender.setProperties(propertyList)
+                    if (attr.name.toAsciiLower().equals("name")) {
+                        appender.setName(attr.content)
+                    }
+                    j++
                 }
+                var k: Int64 = 0
+                while (k < allChildrenElements.size) {
+                    var childrenElement: XmlElement = allChildrenElements.get(k).getOrThrow()
+                    if (childrenElement.name.toAsciiLower().equals("type")) {
+                        appender.setAppenderType(childrenElement.content)
+                    }
+                    if (childrenElement.name.toAsciiLower().equals("pattern")) {
+                        appender.setPattern(childrenElement.content)
+                    } else {
+                        let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
+                        var m: Int64 = 0
+                        while (allChildrenAttrs.size != 0 && m < allChildrenAttrs.size) {
+                            var childrenAttr: XmlAttr = allChildrenAttrs.get(m).getOrThrow()
+                            var property: AppenderProperty = AppenderProperty(
+                                childrenAttr.content,
+                                childrenElement.content
+                            )
+                            propertyList.append(property)
+                            m++
+                        }
+                        appender.setProperties(propertyList)
+                    }
+                    k++
+                }
+                configList.append(appender)
             }
-            configList.append(appender)
+            i++
         }
         return configList
     }
@@ -332,34 +363,45 @@ public class LoggerManager {
      */
     private func getLoggerConfiguration(allElements: ArrayList<XmlElement>): ArrayList<LoggerConfig> {
         var loggerList: ArrayList<LoggerConfig> = ArrayList<LoggerConfig>()
-
-        for (element in allElements where element.name.equals("logger")) {
-            let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
-            let allAttrs: ArrayList<XmlAttr> = element.attributes
-            var logger: LoggerConfig = LoggerConfig()
-            var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
-            for (attr in allAttrs) {
-                if (attr.name.toAsciiLower().equals("name")) {
-                    logger.setName(attr.content)
-                }
-            }
-            for (childrenElement in allChildrenElements) {
-                if (childrenElement.name.toAsciiLower().equals("level")) {
-                    logger.setLevel(childrenElement.content)
-                } else {
-                    let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                    for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
-                        var appenderRef: AppenderRef = AppenderRef()
-                        if (childrenAttr.name.toAsciiLower().equals("ref")) {
-                            refList.append(AppenderRef(childrenAttr.content))
-                        }
+        var i: Int64 = 0
+        while (i < allElements.size) {
+            var element: XmlElement = allElements.get(i).getOrThrow()
+            if (element.name.toAsciiLower().equals("logger")) {
+                let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
+                let allAttrs: ArrayList<XmlAttr> = element.attributes
+                var logger: LoggerConfig = LoggerConfig()
+                var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
+                var j: Int64 = 0
+                while (j < allAttrs.size) {
+                    var attr: XmlAttr = allAttrs.get(j).getOrThrow()
+                    if (attr.name.toAsciiLower().equals("name")) {
+                        logger.setName(attr.content)
                     }
-                    logger.setAppenderRefList(refList)
+                    j++
                 }
+                var k: Int64 = 0
+                while (k < allChildrenElements.size) {
+                    var childrenElement: XmlElement = allChildrenElements.get(k).getOrThrow()
+                    if (childrenElement.name.toAsciiLower().equals("level")) {
+                        logger.setLevel(childrenElement.content)
+                    } else {
+                        let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
+                        var m: Int64 = 0
+                        while (allChildrenAttrs.size != 0 && m < allChildrenAttrs.size) {
+                            var childrenAttr: XmlAttr = allChildrenAttrs.get(m).getOrThrow()
+                            if (childrenAttr.name.toAsciiLower().equals("ref")) {
+                                refList.append(AppenderRef(childrenAttr.content))
+                            }
+                            m++
+                        }
+                        logger.setAppenderRefList(refList)
+                    }
+                    k++
+                }
+                loggerList.append(logger)
             }
-            loggerList.append(logger)
+            i++
         }
-
         return loggerList
     }
 
@@ -372,23 +414,52 @@ public class LoggerManager {
     private func getRootConfiguration(allElements: ArrayList<XmlElement>): RootLoggerConfig {
         var root: RootLoggerConfig = RootLoggerConfig()
         var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
-        for (element in allElements where element.name.equals("root")) {
-            let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
-            for (childrenElement in allChildrenElements) {
-                if (childrenElement.name.toAsciiLower().equals("level")) {
-                    root.setLevel(childrenElement.content)
-                } else {
-                    let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                    for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
-                        var appenderRef: AppenderRef = AppenderRef()
-                        if (childrenAttr.name.equals("ref")) {
-                            refList.append(AppenderRef(childrenAttr.content))
+        var i: Int64 = 0
+        while (i < allElements.size) {
+            var element: XmlElement = allElements.get(i).getOrThrow()
+            if (element.name.toAsciiLower().equals("root")) {
+                let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
+                var j: Int64 = 0
+                while (j < allChildrenElements.size) {
+                    var childrenElement: XmlElement = allChildrenElements.get(j).getOrThrow()
+                    if (childrenElement.name.toAsciiLower().equals("level")) {
+                        root.setLevel(childrenElement.content)
+                    } else {
+                        let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
+                        var k: Int64 = 0
+                        while (allChildrenAttrs.size != 0 && k < allChildrenAttrs.size) {
+                            var childrenAttr: XmlAttr = allChildrenAttrs.get(k).getOrThrow()
+                            var appenderRef: AppenderRef = AppenderRef()
+                            if (childrenAttr.name.equals("ref")) {
+                                refList.append(AppenderRef(childrenAttr.content))
+                            }
+                            k++
                         }
+                        root.setAppenderRefList(refList)
                     }
-                    root.setAppenderRefList(refList)
+                    j++
                 }
             }
+            i++
         }
+
+        // for (element in allElements where element.name.equals("root")) {
+        //     let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
+        //     for (childrenElement in allChildrenElements) {
+        //         if (childrenElement.name.toAsciiLower().equals("level")) {
+        //             root.setLevel(childrenElement.content)
+        //         } else {
+        //             let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
+        //             for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
+        //                 var appenderRef: AppenderRef = AppenderRef()
+        //                 if (childrenAttr.name.equals("ref")) {
+        //                     refList.append(AppenderRef(childrenAttr.content))
+        //                 }
+        //             }
+        //             root.setAppenderRefList(refList)
+        //         }
+        //     }
+        // }
         return root
     }
 }
