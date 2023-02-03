@@ -442,24 +442,6 @@ public class LoggerManager {
             }
             i++
         }
-
-        // for (element in allElements where element.name.equals("root")) {
-        //     let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
-        //     for (childrenElement in allChildrenElements) {
-        //         if (childrenElement.name.toAsciiLower().equals("level")) {
-        //             root.setLevel(childrenElement.content)
-        //         } else {
-        //             let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-        //             for (childrenAttr in allChildrenAttrs where allChildrenAttrs.size != 0) {
-        //                 var appenderRef: AppenderRef = AppenderRef()
-        //                 if (childrenAttr.name.equals("ref")) {
-        //                     refList.append(AppenderRef(childrenAttr.content))
-        //                 }
-        //             }
-        //             root.setAppenderRefList(refList)
-        //         }
-        //     }
-        // }
         return root
     }
 }
