@@ -56,14 +56,21 @@ public class DefaultPatternConverter <: PatternConverter {
 
         // Split the string into pieces by % signs.
         let pieces = pattern.split("%")
-        for (piece in pieces) {
+        var i: Int64 = 0
+        while (pieces.size != 0 && i < pieces.size) {
+            var piece: String = pieces.get(i).getOrThrow()
             if (piece != pieces[0] && piece.size > 0) {
                 match (piece[0]) {
                     case 'T' => result += timeSlice.getLongTime()
-                    case 'o' => result += (logRecord.getCreatedTime().unixTimeStamp().nanoseconds() / Int64(1e12)).toString()
+                    case 'o' =>
+                        result += (logRecord.getCreatedTime().unixTimeStamp().nanoseconds() / Int64(1e12)).toString()
                     case 'n' => result += flushLeft(logRecord.getCreatedTime().nanosecond().toString(), 9, "0")
-                    case 'm' => result += flushLeft((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(),
-                            3, "0")
+                    case 'm' =>
+                        result += flushLeft(
+                            (logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(),
+                            3,
+                            "0"
+                        )
                     case 't' => result += timeSlice.getShortTime()
                     case 'D' => result += timeSlice.getLongDate()
                     case 'd' => result += timeSlice.getShortDate()
@@ -82,6 +89,7 @@ public class DefaultPatternConverter <: PatternConverter {
             } else if (piece.size > 0) {
                 result += piece
             }
+            i++
         }
         result += "\n"
         return result
