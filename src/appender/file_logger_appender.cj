@@ -49,6 +49,8 @@ public class FileLoggerAppender <: LoggerAppender {
 
     private let lock = ReentrantMutex()
 
+    private var contentList: ArrayList<LogRecord> = ArrayList<LogRecord>()
+
     /**
      * Constructor, initialize variable file.
      */
@@ -98,12 +100,12 @@ public class FileLoggerAppender <: LoggerAppender {
                 case "daily" => daily = value.toAsciiLower() != "false"
                 case "rotate" => rotate = value.toAsciiLower() != "false"
                 case "retentiondays" => retentionDays = getNumByString(value, 7)
-                case _ => print(
-                        "LoadConfiguration: Warning: Unknown property ${properties.get(i).getOrThrow().getName()}")
+                case _ =>
+                    print("LoadConfiguration: Warning: Unknown property ${properties.get(i).getOrThrow().getName()}")
             }
             i++
         }
-        
+
         if (file.size == 0) {
             file = "root.log"
         }
@@ -121,6 +123,40 @@ public class FileLoggerAppender <: LoggerAppender {
         this.file = File(this.fileName, OpenOption.CreateOrAppend)
         this.curSize = this.file.info.length
         this.opendate = this.file.info.creationTime.day()
+
+        let fut = spawn {
+            while (true) {
+                if (contentList.isEmpty()) {
+                    continue
+                }
+                lock.lock()
+                var rec: LogRecord = contentList.get(0).getOrThrow()
+                if (this.file.isClosed()) {
+                    this.file = File(this.fileName, OpenOption.CreateOrAppend)
+                    this.curSize = this.file.info.length
+                    this.opendate = this.file.info.creationTime.day()
+                }
+                let now = Time.now()
+                if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
+                    rollingFile()
+                }
+
+                // Formatting logging.
+                var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
+                try {
+                    this.file.write(mess)
+                } catch (e: FSException) {
+                    println("write file occur exception: ${e.message}")
+                    return
+                }
+                let n = mess.size
+
+                // Update the size.
+                this.curSize += n
+                contentList.remove(0)
+                lock.unlock()
+            }
+        }
     }
 
     /**
@@ -129,29 +165,9 @@ public class FileLoggerAppender <: LoggerAppender {
      * @param rec log recording.
      */
     public func logWrite(rec: LogRecord): Unit {
-        let fut = spawn {
-            if (this.file.isClosed()) {
-                start()
-            }
-            let now = Time.now()
-            if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
-                rollingFile()
-            }
-
-            // Formatting logging.
-            var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
-            try {
-                this.file.write(mess)
-            } catch (e: FSException) {
-                println("write file occur exception: ${e.message}")
-                return
-            }
-            let n = mess.size
-
-            // Update the size.
-            this.curSize += n
-        }
-        fut.getResult(100 * 1000 * 1000)
+        lock.lock()
+        contentList.append(rec)
+        lock.unlock()
     }
 
     /**
