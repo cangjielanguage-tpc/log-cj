@@ -100,8 +100,8 @@ public class FileLoggerAppender <: LoggerAppender {
                 case "daily" => daily = value.toAsciiLower() != "false"
                 case "rotate" => rotate = value.toAsciiLower() != "false"
                 case "retentiondays" => retentionDays = getNumByString(value, 7)
-                case _ => print(
-                        "LoadConfiguration: Warning: Unknown property ${properties.get(i).getOrThrow().getName()}")
+                case _ =>
+                    print("LoadConfiguration: Warning: Unknown property ${properties.get(i).getOrThrow().getName()}")
             }
             i++
         }
@@ -168,29 +168,6 @@ public class FileLoggerAppender <: LoggerAppender {
         lock.lock()
         contentList.append(rec)
         lock.unlock()
-        // let fut = spawn {
-        //     if (this.file.isClosed()) {
-        //         start()
-        //     }
-        //     let now = Time.now()
-        //     if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
-        //         rollingFile()
-        //     }
-        
-        //     // Formatting logging.
-        //     var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
-        //     try {
-        //         this.file.write(mess)
-        //     } catch (e: FSException) {
-        //         println("write file occur exception: ${e.message}")
-        //         return
-        //     }
-        //     let n = mess.size
-        
-        //     // Update the size.
-        //     this.curSize += n
-        // }
-        // fut.getResult(100 * 1000 * 1000)
     }
 
     /**
