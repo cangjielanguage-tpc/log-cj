@@ -12,6 +12,7 @@ package appender
 from std import fs.*
 from std import format.*
 from std import time.*
+from zip4cj import zip4cj.zip.*
 import utils.*
 
 /**
@@ -100,8 +101,8 @@ public class FileLoggerAppender <: LoggerAppender {
                 case "daily" => daily = value.toAsciiLower() != "false"
                 case "rotate" => rotate = value.toAsciiLower() != "false"
                 case "retentiondays" => retentionDays = getNumByString(value, 7)
-                case _ =>
-                    print("LoadConfiguration: Warning: Unknown property ${properties.get(i).getOrThrow().getName()}")
+                case _ => print(
+                        "LoadConfiguration: Warning: Unknown property ${properties.get(i).getOrThrow().getName()}")
             }
             i++
         }
@@ -153,9 +154,12 @@ public class FileLoggerAppender <: LoggerAppender {
 
                 // Update the size.
                 this.curSize += n
-                contentList.remove(0)
+                contentList.remove(0)    
+                compressRollingFile()
                 lock.unlock()
+               
             }
+            
         }
     }
 
@@ -177,6 +181,25 @@ public class FileLoggerAppender <: LoggerAppender {
         if (!this.file.isClosed()) {
             this.file.flush()
             this.file.close()
+        }
+    }
+
+    private func compressRollingFile(): Unit {
+        var fileDir = this.file.info.parentDirectory.getOrThrow()
+
+        // println(fileDir.path.toString())
+        for (file in Directory(fileDir.path).fileList()) {
+            var num = file.path.toString().count(".log")
+            if (file.isFile() && num == 2) {
+                println(file.path.toCanonical().toString())
+                var zip = ZipFile()
+                var name: String = file.path.fileNameWithoutExtension.getOrThrow()
+                var names: Array<String> = name.split("_")
+                zip.setOutPath(fileDir.path.toString() + "/log_" + names.get(1).getOrThrow() + ".zip")
+                zip.addFile(file.path.toString())
+                zip.writeZip()
+                File.delete(file.path)
+            }
         }
     }
 
