@@ -1,0 +1,12 @@
+{
+  "cjc_version": "0.31.4",
+  "organization": "pllab",
+  "name": "charset",
+  "description": "charset encoder/decoder",
+  "version": "1.0.0",
+  "requires": {},
+  "package_requires": {},
+  "foreign_requires": {},
+  "output_type": "dynamic",
+  "command_option": ""
+}

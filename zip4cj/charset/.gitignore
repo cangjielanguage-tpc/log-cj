@@ -1,0 +1,10 @@
+.vscode
+*.cjo
+*.so
+*.bc
+*.txt
+build/
+bin/
+module-resolve.json
+unittest/
+ci_test/
