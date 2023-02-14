@@ -4,7 +4,13 @@
 	"name": "log4cj",
 	"description": "nothing here",
 	"version": "1.0.0",
-	"requires": {},
+	"requires": {
+		"zip4cj": {
+      "organization": "lzj",
+      "version": "0.0.2",
+      "path": "./zip4cj"
+    }
+	},
 	"package_requires": {
 		"path_option": [],
 		"package_option": {}
