@@ -1,9 +1,9 @@
 {
-	"cjc_version": "0.33.3",
+	"cjc_version": "0.36.4",
 	"organization": "cangjie",
 	"name": "log4cj",
 	"description": "nothing here",
-	"version": "1.0.0",
+	"version": "0.0.2",
 	"requires": {},
 	"package_requires": {
 		"path_option": [],

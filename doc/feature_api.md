@@ -1021,14 +1021,6 @@ main(): Int64 {
 #### 4.2.1控制台输出
 
 ```cangjie
-[Start]: run cpm build... 
-
-[Execute Time - 1/13/2023, 10:11:27 AM]
-cpm build success
-
-[Execute Time - 1/13/2023, 10:11:27 AM]
-[Execute Result]
-can not find any logger in xml file!
 [2023/01/13 10:11:27 CST 929] [INFO] [com.hello] () 4
 [2023/01/13 10:11:27 CST 930] [WARN] [com.hello] () 5
 [2023/01/13 10:11:27 CST 930] [ERROR] [com.test1] () 6
