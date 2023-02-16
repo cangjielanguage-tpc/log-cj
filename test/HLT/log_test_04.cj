@@ -74,8 +74,8 @@ public class LogTestD {
         file_01.start()
         var logRecord_01 = LogRecord("file_01", LogLevel.INFO, Time.now(), "source", "message")
         file_01.logWrite(logRecord_01)
-        file_01.close()
         @Assert(getQueryResult("",logRecord_01,"root.log"),true)
+        file_01.close()
     }
 
     // 验证: class FileLoggerAppender
@@ -84,8 +84,7 @@ public class LogTestD {
         var file_02: FileLoggerAppender = FileLoggerAppender()
         var proList_02 = ArrayList<AppenderProperty>()
         var fileName_02 = AppenderProperty("filename", "logRecord_02.log")
-        // 这个设置是限制什么的?不是条数吗?
-        var maxSize_02 = AppenderProperty("maxsize", "3") 
+        var maxSize_02 = AppenderProperty("maxsize", "300") 
         var daily_02 = AppenderProperty("daily", "false")
         var rotate_02 = AppenderProperty("rotate", "true")
         var retentionDays_02 = AppenderProperty("retentiondays", "3")
@@ -104,11 +103,11 @@ public class LogTestD {
         file_02.logWrite(logRecord_02_3)
         var logRecord_02_4= LogRecord("logRecord_02_4", LogLevel.WARN, Time.now(), "source", "message")
         file_02.logWrite(logRecord_02_4)
-        file_02.close()
         @Assert(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_1,"logRecord_02.log"),true)
         @Assert(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_2,"logRecord_02.log"),true)
         @Assert(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_3,"logRecord_02.log"),true)
         @Assert(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_4,"logRecord_02.log"),true)
+        file_02.close()
     }
 
     // 验证: class FileLoggerAppender
@@ -117,7 +116,7 @@ public class LogTestD {
         var file_03: FileLoggerAppender = FileLoggerAppender()
         var proList_03 = ArrayList<AppenderProperty>()
         var fileName_03 = AppenderProperty("filename", "logRecord_03.log")
-        var maxSize_03 = AppenderProperty("maxsize", "3")
+        var maxSize_03 = AppenderProperty("maxsize", "300")
         var daily_03 = AppenderProperty("daily", "false")
         var rotate_03 = AppenderProperty("rotate", "true")
         var retentionDays_03 = AppenderProperty("retentiondays", "3")
@@ -129,10 +128,11 @@ public class LogTestD {
         file_03.initAppender("[%D %T] [%L] (%S) %M", proList_03)
         file_03.start()
         file_03.close()
+        file_03.start()
         var logRecord_03= LogRecord("logRecord_03", LogLevel.WARN, Time.now(), "source", "message")
         file_03.logWrite(logRecord_03)
-        // close 之后还是可以输入进去??
         @Assert(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_03,"logRecord_03.log"),true) 
+        file_03.close()
     }
 
     // 验证: class ConsoleLoggerAppender
