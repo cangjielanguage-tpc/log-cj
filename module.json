@@ -4,16 +4,15 @@
 	"name": "log4cj",
 	"description": "nothing here",
 	"version": "1.0.0",
-	"requires": {
-		"zip4cj": {
-      "organization": "lzj",
-      "version": "0.0.2",
-      "path": "./zip4cj"
-    }
-	},
+	"requires": {},
 	"package_requires": {
 		"path_option": [],
-		"package_option": {}
+		"package_option": {
+			"zip4cj_zip4cj.zip": "./zip4cj/zip4cj.zip.cjo",
+			"zip4cj_zip4cj.utils": "./zip4cj/zip4cj.utils.cjo",
+			"zip4cj_zip4cj.gzip": "./zip4cj/zip4cj.gzip.cjo",
+			"zip4cj_zip4cj.tar": "./zip4cj/zip4cj.tar.cjo"
+		}
 	},
 	"foreign_requires": {},
 	"output_type": "executable",
