@@ -16,8 +16,6 @@ from std import sync.*
  * LoggerAppender factory class, mainly used to register or get the specific implementation object of LoggerAppender according to name or type.
  */
 public class LoggerAppenderFactory {
-    // private var appender = HashMap<String, LoggerAppender>()
-    // private var appenderType = HashMap<String, LoggerAppender>()
     private var appenderNames = ArrayList<String>()
     private var appenderValues = ArrayList<LoggerAppender>()
     private var typeNames = ArrayList<String>()
