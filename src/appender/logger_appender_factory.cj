@@ -16,20 +16,28 @@ from std import sync.*
  * LoggerAppender factory class, mainly used to register or get the specific implementation object of LoggerAppender according to name or type.
  */
 public class LoggerAppenderFactory {
-    private var appender = HashMap<String, LoggerAppender>()
-    private var appenderType = HashMap<String, LoggerAppender>()
+    // private var appender = HashMap<String, LoggerAppender>()
+    // private var appenderType = HashMap<String, LoggerAppender>()
+    private var appenderNames = ArrayList<String>()
+    private var appenderValues = ArrayList<LoggerAppender>()
+    private var typeNames = ArrayList<String>()
+    private var typeValues = ArrayList<LoggerAppender>()
     private var typeLock: ReentrantMutex = ReentrantMutex()
 
     /**
      * Constructor, initialize variables.
      */
     public init(
-        appender: HashMap<String, LoggerAppender>,
-        appenderType: HashMap<String, LoggerAppender>,
+        appenderNames: ArrayList<String>,
+        appenderValues: ArrayList<LoggerAppender>,
+        typeNames: ArrayList<String>,
+        typeValues: ArrayList<LoggerAppender>,
         typeLock: ReentrantMutex
     ) {
-        this.appender = appender
-        this.appenderType = appenderType
+        this.appenderNames = appenderNames
+        this.appenderValues = appenderValues
+        this.typeNames = typeNames
+        this.typeValues = typeValues
         this.typeLock = typeLock
     }
 
@@ -45,12 +53,15 @@ public class LoggerAppenderFactory {
      */
     public func new(): LoggerAppenderFactory {
         this.typeLock.lock()
-        if (this.appender.size > 0) {
-            for ((k, v) in this.appender) {
-                v.close()
+        if (this.appenderValues.size > 0 && this.appenderNames.size > 0) {
+            var index: Int64 = 0
+            while (index < appenderValues.size) {
+                appenderValues.get(index).getOrThrow().close()
+                index++
             }
         }
-        this.appender = HashMap<String, LoggerAppender>()
+        this.appenderNames = ArrayList<String>()
+        this.appenderValues = ArrayList<LoggerAppender>()
         this.typeLock.unlock()
         return this
     }
@@ -65,7 +76,8 @@ public class LoggerAppenderFactory {
     public func registryType(typeName: String, typeClz: LoggerAppender): LoggerAppenderFactory {
         this.typeLock.lock()
         if (typeClz is LoggerAppender) {
-            this.appenderType[typeName.toAsciiLower()] = typeClz
+            typeNames.append(typeName.toAsciiLower())
+            typeValues.append(typeClz)
         }
         this.typeLock.unlock()
         return this
@@ -78,8 +90,14 @@ public class LoggerAppenderFactory {
      * @return implementation class of LoggerAppender. if typeName doesn't meet the condtion, return console appender logger.
      */
     public func getAppenderByType(typeName: String): LoggerAppender {
-        if (this.appenderType.contains(typeName.toAsciiLower())) {
-            return this.appenderType[typeName.toAsciiLower()]
+        if (this.typeNames.contains(typeName.toAsciiLower())) {
+            var index: Int64 = 0
+            while (index < typeNames.size) {
+                if (typeNames.get(index).getOrThrow().equals(typeName.toAsciiLower())) {
+                    return typeValues.get(index).getOrThrow()
+                }
+                index++
+            }
         }
         return ConsoleLoggerAppender()
     }
@@ -91,8 +109,14 @@ public class LoggerAppenderFactory {
      * @return implementation class of LoggerAppender. if typeName doesn't meet the condtion, return console appender logger.
      */
     public func getAppenderByName(name: String): LoggerAppender {
-        if (this.appender.contains(name.toAsciiLower())) {
-            return this.appender[name.toAsciiLower()]
+        if (this.appenderNames.contains(name.toAsciiLower())) {
+            var index: Int64 = 0
+            while (index < appenderNames.size) {
+                if (appenderNames.get(index).getOrThrow().equals(name.toAsciiLower())) {
+                    return appenderValues.get(index).getOrThrow()
+                }
+                index++
+            }
         }
         return ConsoleLoggerAppender()
     }
@@ -114,7 +138,7 @@ public class LoggerAppenderFactory {
     ): LoggerAppenderFactory {
         this.typeLock.lock()
         var appenderName = name.toAsciiLower()
-        if (this.appenderType.size == 0) {
+        if (this.typeNames.size == 0 || this.typeValues.size == 0) {
             println("AppenderType is empty, please RegistryType at first")
             this.typeLock.unlock()
 
@@ -124,7 +148,8 @@ public class LoggerAppenderFactory {
         var newObj = getAppenderByType(typename)
         newObj.initAppender(pattern, properties)
         newObj.start()
-        this.appender[appenderName] = newObj
+        this.appenderNames.append(appenderName)
+        this.appenderValues.append(newObj)
         this.typeLock.unlock()
         return this
     }
