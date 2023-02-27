@@ -170,7 +170,7 @@ python3 ci_test/main.py test
 **-o 输出目录**<br/>
 
 ```cangjie
-cjcov --root=./ -e "xxx/log4cj2/ci_test/ xxx/log4cj2/ci_confg/ xxx/log4cj2/doc/ xxx/log4cj2/zip4cj/ xxx/log4cj2/src/main.cj" --html-details -o html_output
+cjcov --root=./ -e "xxx/log4cj2/ci_test/ xxx/log4cj2/ci_confg/ xxx/log4cj2/doc/ xxx/log4cj2/src/main.cj" --html-details -o html_output
 ```
 
 ## 查看覆盖率报告
