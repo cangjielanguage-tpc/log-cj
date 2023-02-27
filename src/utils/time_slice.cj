@@ -46,7 +46,7 @@ public class TimeSlice {
      * @param time time.
      */
     public func getTimeSlice(time: Time): Unit {
-        var secs = time.unixTimeStamp().nanoseconds() / Int64(1e15)
+        var secs = time.unixTimeStamp().nanoseconds() / Int64(1e9)
         var cached = timeSliceCache
         if (cached.lastUpdateSeconds != secs) {
             let year = time.year()
