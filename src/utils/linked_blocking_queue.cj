@@ -122,6 +122,10 @@ public class LinkedBlockingQueue<E> {
         let next = x.next
         x.next = None
         this.head = next
+        match (next) {
+            case Some(v) => ()
+            case _ => last = None
+        }
         return element
     }
 
