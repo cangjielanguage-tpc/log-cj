@@ -21,11 +21,11 @@
         <property name="maxsize">20M</property>
         <property name="daily">false</property>
     </appender>
-    <logger name="Demo">
+    <!-- <logger name="Demo">
         <level>info</level>
         <appender-ref ref="console" />
         <appender-ref ref="file" />
-    </logger>
+    </logger> -->
     <root>
         <level>info</level>
         <appender-ref ref="console" />

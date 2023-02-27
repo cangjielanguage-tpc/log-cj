@@ -8,7 +8,6 @@
  */
 package utils
 
-from std import sync.*
 from std import math.*
 
 public class Node<E> {

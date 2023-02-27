@@ -13,6 +13,7 @@ from std import collection.*
 
 public interface PatternConverter {
     func formatLogRecord(pattern: String, logRecord: LogRecord): String
+    func formatLogRecordNew(pattern: String, logRecord: LogRecord): String
 }
 
 let defaultPatternConverter = DefaultPatternConverter()
@@ -69,8 +70,13 @@ public class DefaultPatternConverter <: PatternConverter {
                         )
                     case 'n' => result.append(flushLeft(logRecord.getCreatedTime().nanosecond().toString(), 9, "0"))
                     case 'm' =>
-                        result.append(flushLeft((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3,
-                                "0"))
+                        result.append(
+                            flushLeft(
+                                (logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(),
+                                3,
+                                "0"
+                            )
+                        )
                     case 't' => result.append(timeSlice.getShortTime())
                     case 'D' => result.append(timeSlice.getLongDate())
                     case 'd' => result.append(timeSlice.getShortDate())
@@ -94,6 +100,40 @@ public class DefaultPatternConverter <: PatternConverter {
                 result.append(piece)
             }
             i++
+        }
+        result.append("\n")
+        return result.toString()
+    }
+
+    /**
+     * Formatting log recording.
+     *
+     * @param pattern output pattern.
+     * @param logRecord log record.
+     * @return format result.
+     */
+    public func formatLogRecordNew(pattern: String, logRecord: LogRecord): String {
+        var result = StringBuilder()
+        if (pattern.size == 0) {
+            return String.empty
+        }
+        result.append("[${logRecord.getCreatedTime().toString("YYYY/MM/dd HH:mm:ss:SSS")}] ")
+
+        if (pattern.contains("%L")) {
+            result.append("[${logRecord.getLevel().levelName()}] ")
+        }
+        if (pattern.contains("%l")) {
+            result.append("[${logRecord.getTagName()}] ")
+        }
+        if (pattern.contains("%S")) {
+            result.append("(${logRecord.getSource()}) ")
+        }
+        if (pattern.contains("%s")) {
+            var slice: Array<String> = logRecord.getSource().split("/")
+            result.append("[${slice[slice.size - 1]}] ")
+        }
+        if (pattern.contains("%M")) {
+            result.append("${logRecord.getMessage()} ")
         }
         result.append("\n")
         return result.toString()
