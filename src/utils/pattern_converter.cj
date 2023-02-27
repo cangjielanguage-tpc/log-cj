@@ -9,6 +9,8 @@
 
 package utils
 
+from std import collection.*
+
 public interface PatternConverter {
     func formatLogRecord(pattern: String, logRecord: LogRecord): String
 }
@@ -47,9 +49,9 @@ public class DefaultPatternConverter <: PatternConverter {
      * @return format result.
      */
     public func formatLogRecord(pattern: String, logRecord: LogRecord): String {
-        var result = ""
+        var result = StringBuilder()
         if (pattern.size == 0) {
-            return result
+            return String.empty
         }
         let timeSlice = TimeSlice()
         timeSlice.getTimeSlice(logRecord.getCreatedTime())
@@ -61,37 +63,39 @@ public class DefaultPatternConverter <: PatternConverter {
             var piece: String = pieces.get(i).getOrThrow()
             if (piece != pieces[0] && piece.size > 0) {
                 match (piece[0]) {
-                    case 'T' => result += timeSlice.getLongTime()
+                    case 'T' => result.append(timeSlice.getLongTime())
                     case 'o' =>
-                        result += (logRecord.getCreatedTime().unixTimeStamp().nanoseconds() / Int64(1e12)).toString()
-                    case 'n' => result += flushLeft(logRecord.getCreatedTime().nanosecond().toString(), 9, "0")
-                    case 'm' =>
-                        result += flushLeft(
-                            (logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(),
-                            3,
-                            "0"
+                        result.append((logRecord.getCreatedTime().unixTimeStamp().nanoseconds() / Int64(1e6)).toString()
                         )
-                    case 't' => result += timeSlice.getShortTime()
-                    case 'D' => result += timeSlice.getLongDate()
-                    case 'd' => result += timeSlice.getShortDate()
-                    case 'l' => result += logRecord.getTagName()
-                    case 'L' => result += logRecord.getLevel().levelName()
-                    case 'S' => result += logRecord.getSource()
+                    case 'n' => result.append(flushLeft(logRecord.getCreatedTime().nanosecond().toString(), 9, "0"))
+                    case 'm' =>
+                        result.append(flushLeft((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3,
+                                "0"))
+                    case 't' => result.append(timeSlice.getShortTime())
+                    case 'D' => result.append(timeSlice.getLongDate())
+                    case 'd' => result.append(timeSlice.getShortDate())
+                    case 'l' => result.append(logRecord.getTagName())
+                    case 'L' => result.append(logRecord.getLevel().levelName())
+                    case 'S' => result.append(logRecord.getSource())
                     case 's' =>
-                        let slice = logRecord.getSource().split("/")
-                        result += slice[slice.size - 1]
-                    case 'M' => result += logRecord.getMessage()
-                    case _ => result += ""
+                        var slice: Array<String> = logRecord.getSource().split("/")
+                        if (slice.size == 0) {
+                            result.append(String.empty)
+                        } else {
+                            result.append(slice[slice.size - 1])
+                        }
+                    case 'M' => result.append(logRecord.getMessage())
+                    case _ => result.append(String.empty)
                 }
                 if (piece.size > 1) {
-                    result += piece[1..]
+                    result.append(piece[1..])
                 }
             } else if (piece.size > 0) {
-                result += piece
+                result.append(piece)
             }
             i++
         }
-        result += "\n"
-        return result
+        result.append("\n")
+        return result.toString()
     }
 }

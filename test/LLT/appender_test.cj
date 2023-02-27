@@ -241,12 +241,24 @@ func testAppenderFactorWithConsoleType(): Bool {
 }
 
 func testAppenderFactorWithInitParams(): Bool {
-    var appenderMap = HashMap<String, LoggerAppender>()
-    appenderMap.put("file", FileLoggerAppender())
-    var appenderTypeMap = HashMap<String, LoggerAppender>()
-    appenderTypeMap.put("console", ConsoleLoggerAppender())
-    appenderTypeMap.put("file", FileLoggerAppender())
-    var factory: LoggerAppenderFactory = LoggerAppenderFactory(appenderMap, appenderTypeMap, ReentrantMutex())
+    var appenderList = ArrayList<String>()
+    var appenderValueList = ArrayList<LoggerAppender>()
+    appenderList.append("file")
+    appenderValueList.append(FileLoggerAppender())
+    var appenderTypeList = ArrayList<String>()
+    var appenderTypeValueList = ArrayList<LoggerAppender>()
+    appenderTypeList.append("console")
+    appenderTypeValueList.append(ConsoleLoggerAppender())
+    appenderTypeList.append("file")
+    appenderTypeValueList.append(FileLoggerAppender())
+
+    var factory: LoggerAppenderFactory = LoggerAppenderFactory(
+        appenderList,
+        appenderValueList,
+        appenderTypeList,
+        appenderTypeValueList,
+        ReentrantMutex()
+    )
     var instance: LoggerAppenderFactory = factory.new()
     var fileAppender = instance.registryType("file", FileLoggerAppender())
 
@@ -270,11 +282,15 @@ func testAppenderFactorWithInitParams(): Bool {
 }
 
 func testAppenderFactorNoNew(): Bool {
-    var appenderMap = HashMap<String, LoggerAppender>()
-    appenderMap.put("file", FileLoggerAppender())
+    var appenderList = ArrayList<String>()
+    var appenderValueList = ArrayList<LoggerAppender>()
+    appenderList.append("file")
+    appenderValueList.append(FileLoggerAppender())
     var factory: LoggerAppenderFactory = LoggerAppenderFactory(
-        appenderMap,
-        HashMap<String, LoggerAppender>(),
+        appenderList,
+        appenderValueList,
+        ArrayList<String>(),
+        ArrayList<LoggerAppender>(),
         ReentrantMutex()
     )
     var fileAppender = factory.registryType("file", FileLoggerAppender())

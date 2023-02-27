@@ -25,12 +25,12 @@ public func flushLeft(str: String, limit: Int64, placeholder: String): String {
         return str
     }
 
-    var result: String = ""
+    var result: StringBuilder = StringBuilder()
     for (i in 0..len) {
-        result = placeholder + result
+        result.append(placeholder)
     }
-    result += str
-    return result
+    result.append(str)
+    return result.toString()
 }
 
 /**
