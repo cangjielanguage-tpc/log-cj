@@ -13,7 +13,6 @@ from std import collection.*
 
 public interface PatternConverter {
     func formatLogRecord(pattern: String, logRecord: LogRecord): String
-    func formatLogRecordNew(pattern: String, logRecord: LogRecord): String
 }
 
 let defaultPatternConverter = DefaultPatternConverter()
@@ -105,37 +104,4 @@ public class DefaultPatternConverter <: PatternConverter {
         return result.toString()
     }
 
-    /**
-     * Formatting log recording.
-     *
-     * @param pattern output pattern.
-     * @param logRecord log record.
-     * @return format result.
-     */
-    public func formatLogRecordNew(pattern: String, logRecord: LogRecord): String {
-        var result = StringBuilder()
-        if (pattern.size == 0) {
-            return String.empty
-        }
-        result.append("[${logRecord.getCreatedTime().toString("YYYY/MM/dd HH:mm:ss:SSS")}] ")
-
-        if (pattern.contains("%L")) {
-            result.append("[${logRecord.getLevel().levelName()}] ")
-        }
-        if (pattern.contains("%l")) {
-            result.append("[${logRecord.getTagName()}] ")
-        }
-        if (pattern.contains("%S")) {
-            result.append("(${logRecord.getSource()}) ")
-        }
-        if (pattern.contains("%s")) {
-            var slice: Array<String> = logRecord.getSource().split("/")
-            result.append("[${slice[slice.size - 1]}] ")
-        }
-        if (pattern.contains("%M")) {
-            result.append("${logRecord.getMessage()} ")
-        }
-        result.append("\n")
-        return result.toString()
-    }
 }

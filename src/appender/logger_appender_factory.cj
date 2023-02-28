@@ -97,7 +97,7 @@ public class LoggerAppenderFactory {
                 index++
             }
         }
-        return ConsoleLoggerAppender()
+        return FileLoggerAppender()
     }
 
     /**
@@ -116,7 +116,7 @@ public class LoggerAppenderFactory {
                 index++
             }
         }
-        return ConsoleLoggerAppender()
+        return FileLoggerAppender()
     }
 
     /**
