@@ -10,8 +10,8 @@
 		"package_option": {}
 	},
 	"foreign_requires": {},
-	"output_type": "executable",
-	"command_option": " --diagnostic-format=noColor",
+	"output_type": "static",
+	"command_option": "",
 	"condition_option": {},
 	"link_option": "",
 	"cross_compile_configuration": {},
