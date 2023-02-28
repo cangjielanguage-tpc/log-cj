@@ -76,7 +76,7 @@ public class FileLoggerAppender <: LoggerAppender {
      */
     public func initAppender(pattern: String, properties: ArrayList<AppenderProperty>): Unit {
         //delete default.log.
-        File.delete(this.file.info.path)
+        // File.delete(this.file.info.path)
         var file = ""
         let dFormat = "[%T %D %m] [%L][%l] (%S) %M"
         var maxSize = 0
@@ -129,6 +129,7 @@ public class FileLoggerAppender <: LoggerAppender {
                     continue
                 }
                 lock.lock()
+
                 var rec: LogRecord = contentList.get(0).getOrThrow()
                 if (this.file.isClosed()) {
                     this.file = File(this.fileName, OpenOption.CreateOrAppend)
@@ -141,7 +142,7 @@ public class FileLoggerAppender <: LoggerAppender {
                 }
 
                 // Formatting logging.
-                var mess = getDefaultPatternConvert().formatLogRecordNew(this.pattern, rec).toUtf8Array()
+                var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
                 try {
                     this.file.write(mess)
                 } catch (e: FSException) {

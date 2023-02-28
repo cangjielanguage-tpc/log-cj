@@ -12,7 +12,7 @@ package appender
 /**
  * The specific implementation class of LoggerAppender, which enables the console to print logs.
  */
-public class ConsoleLoggerAppender <: LoggerAppender {
+public class ConsoleLoggerAppender {
     private var pattern: String = ""
 
     /**
@@ -40,7 +40,7 @@ public class ConsoleLoggerAppender <: LoggerAppender {
      * @param rec log recording.
      */
     public func logWrite(rec: LogRecord): Unit {
-        print(getDefaultPatternConvert().formatLogRecordNew(pattern, rec))
+        print(getDefaultPatternConvert().formatLogRecord(pattern, rec))
     }
 
     /**
