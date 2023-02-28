@@ -85,10 +85,7 @@ func testGetLogger(): Bool {
 }
 
 func testInitLogggerManager(): Bool {
-    var filePath: Path = Path("${getcwd()}/src/resources/log4cj.xml")
-    var strs:Array<String> = filePath.toString().split("ci_test")
-    var projectPath:String = strs.get(0).getOrThrow()
-    let Logger_Manager = LoggerManager("${projectPath}src/resources/log4cj.xml")
+    //let Logger_Manager = LoggerManager("aa")
     var size: Int64 = Logger_Manager.getRootLogger().getAppenderList().size
     if (size != 2) {
         return false
@@ -172,7 +169,7 @@ func testPrintAllLog(): Bool {
 
 func testGetAppenderFactory(): Bool {
     let loggerManager = LoggerManager()
-    var res: Bool = loggerManager.getLoggerAppenderFactory().getAppenderByType("aa") is ConsoleLoggerAppender
+    var res: Bool = loggerManager.getLoggerAppenderFactory().getAppenderByType("aa") is FileLoggerAppender
     if (!res) {
         return false
     }
