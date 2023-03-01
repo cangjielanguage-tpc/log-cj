@@ -295,11 +295,18 @@ public func getLoggerAppenderFactory(): LoggerAppenderFactory
 public func getRootLogger(): LoggerAppenderReference
 
 /**
+ * 获取所有Logger的名称集合集合
+ *
+ * 返回值 ArrayList<String> LoggerName集合
+ */
+public func getLoggerNameArr(): ArrayList<String> 
+
+/**
  * 获取所有Logger的LoggerAppenderReference集合
  *
- * 返回值 HashMap<String, LoggerAppenderReference> LoggerAppenderReference集合
+ * 返回值 ArrayList<LoggerAppenderReference> LoggerAppenderReference集合
  */
-public func getLoggerMap(): HashMap<String, LoggerAppenderReference>
+public func getLoggerAttrArr(): ArrayList<LoggerAppenderReference>
 
 /**
  * 根据Logger名称获取特定Logger

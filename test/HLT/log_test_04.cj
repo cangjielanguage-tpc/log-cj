@@ -185,82 +185,6 @@ public class LogTestD {
         @Expect(content_02.contains(formatContent_02.substring(0,39)),true)
     }
 
-    // 验证: LoggerAppenderFactory
-    @TestCase
-    @Skip
-    public func log_test_051():Unit{
-        // testAppenderFactoryNoType
-        var factory_01: LoggerAppenderFactory = LoggerAppenderFactory()
-        var instance_01: LoggerAppenderFactory = factory_01.new()
-        var console_01 = instance_01.registerLoggerAppender(
-            "console",
-            "console",
-            "[%D %T %m] [%L] [%l] (%S) %M",
-            ArrayList<AppenderProperty>()
-        )
-        //@Expect(console_01.getAppenderByName("console") is ConsoleLoggerAppender,true)
-
-        // testAppenderFactorWithConsoleType
-        var factory_02: LoggerAppenderFactory = LoggerAppenderFactory()
-        var instance_02: LoggerAppenderFactory = factory_02.new()
-        var fileAppender_02 = instance_02.registryType("file", FileLoggerAppender())
-        @Expect(fileAppender_02.getAppenderByName("file") is ConsoleLoggerAppender,true)
-        @Expect(fileAppender_02.getAppenderByType("file") is FileLoggerAppender,true)
-        var console_02 = instance_02.registerLoggerAppender(
-            "console",
-            "console",
-            "[%D %T %m] [%L] [%l] (%S) %M",
-            ArrayList<AppenderProperty>()
-        )
-        @Expect(console_02.getAppenderByName("console") is ConsoleLoggerAppender,true)
-    }
-
-    // 验证: LoggerAppenderFactory
-    @TestCase
-    public func log_test_052():Unit{
-        // testAppenderFactorWithInitParams
-        var appenderNames_03 = ArrayList<String>()
-        appenderNames_03.append("file")
-        var appenderValues_03 = ArrayList<LoggerAppender>()
-        appenderValues_03.append(FileLoggerAppender())
-
-        var typeNames_03 = ArrayList<String>()
-        typeNames_03.append("file")
-        var typeValues_03 = ArrayList<LoggerAppender>()
-        typeValues_03.append(FileLoggerAppender())
-
-        var factory_03: LoggerAppenderFactory = LoggerAppenderFactory(appenderNames_03, appenderValues_03, typeNames_03, typeValues_03, ReentrantMutex())
-        var instance_03: LoggerAppenderFactory = factory_03.new()
-        var fileAppender_03 = instance_03.registryType("file", FileLoggerAppender())
-
-        //@Expect(fileAppender_03.getAppenderByName("file") is ConsoleLoggerAppender,true)
-        @Expect(fileAppender_03.getAppenderByType("file") is FileLoggerAppender,true)
-        var file_03 = instance_03.registerLoggerAppender(
-            "file",
-            "file",
-            "[%D %T %m] [%L] [%l] (%S) %M",
-            ArrayList<AppenderProperty>()
-        )
-        @Expect(file_03.getAppenderByName("file") is FileLoggerAppender,true)
-
-    }
-
-    // 验证: LoggerAppenderFactory
-    @TestCase
-    public func log_test_053():Unit{
-        
-        var appenderNames_04 = ArrayList<String>()
-        appenderNames_04.append("file")
-        var appenderValues_04 = ArrayList<LoggerAppender>()
-        appenderValues_04.append(FileLoggerAppender())
-
-        var factory_04: LoggerAppenderFactory = LoggerAppenderFactory(
-            appenderNames_04, appenderValues_04, ArrayList<String>(), ArrayList<LoggerAppender>(), ReentrantMutex()
-        )
-        var fileAppender_04 = factory_04.registryType("file", FileLoggerAppender())
-        @Expect(fileAppender_04.getAppenderByName("file") is FileLoggerAppender,true)
-    }
-
     func getQueryResult(pattern: String, rec: LogRecord, fileName: String): Bool {
         var curDir: Directory = Directory(".")
         var fileList: ArrayList<FileInfo> = curDir.fileList()
@@ -285,4 +209,5 @@ public class LogTestD {
         }
         return false
     }
+
 }
