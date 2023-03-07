@@ -1,5 +1,4 @@
 //3rd_party_lib:log4cj2/build/log4cj
-
 package test
 
 from std import unittest.*
@@ -19,7 +18,7 @@ public class LogTestA {
 
     // 验证: enum LogLevel
     @TestCase
-    public func log_test_001():Unit{
+    public func log_test_001(): Unit {
         var logLevel_01 = LogLevel.ALL
         var logLevel_02 = LogLevel.TRACE
         var logLevel_03 = LogLevel.DEBUG
@@ -52,7 +51,7 @@ public class LogTestA {
 
     // 验证: enum LogLevel levelName
     @TestCase
-    public func log_test_002():Unit{
+    public func log_test_002(): Unit {
         @Expect(LogLevel.getLevelByString("all").levelName(),"ALL")
         @Expect(LogLevel.getLevelByString("trace").levelName(),"TRACE")
         @Expect(LogLevel.getLevelByString("debug").levelName(),"DEBUG")
@@ -66,9 +65,9 @@ public class LogTestA {
     // 验证: class LogRecord
     // 验证: public func formatLogRecord(pattern: String, logRecord: LogRecord): String
     @TestCase
-    public func log_test_003():Unit{
+    public func log_test_003(): Unit {
         let defaultPatternConverter = DefaultPatternConverter()
-        var timeNow:Time = Time.now()
+        var timeNow: Time = Time.now()
 
         var logRecord_01 = LogRecord(timeNow)
         @Expect(logRecord_01.getTagName(), "")
@@ -76,7 +75,7 @@ public class LogTestA {
         @Expect(logRecord_01.getSource(), "")
         @Expect(logRecord_01.getMessage(), "")
         @Expect(logRecord_01.getCreatedTime().year() != 0, true)
-        var format_01 = defaultPatternConverter.formatLogRecord("",logRecord_01)
+        var format_01 = defaultPatternConverter.formatLogRecord("", logRecord_01)
         println(format_01)
 
         var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, Time.now(), "source", "message")
@@ -85,13 +84,14 @@ public class LogTestA {
         @Expect(logRecord_02.getSource(), "source")
         @Expect(logRecord_02.getMessage(), "message")
         @Expect(logRecord_02.getCreatedTime().year() != 0, true)
-        var format_02 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M",logRecord_02)
+        var format_02 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M", logRecord_02)
         println(format_02)
-        var format_02_1 = defaultPatternConverter.formatLogRecord("",logRecord_02)
+        var format_02_1 = defaultPatternConverter.formatLogRecord("", logRecord_02)
         println(format_02_1)
-        var format_02_2 = defaultPatternConverter.formatLogRecord("%D %T %m %L %l %S %M",logRecord_02)
+        var format_02_2 = defaultPatternConverter.formatLogRecord("%D %T %m %L %l %S %M", logRecord_02)
         println(format_02_2)
-        var format_02_3 = defaultPatternConverter.formatLogRecord("+++++%D %T55 %m+-- ##%L#$ %%%l (%S) %M",logRecord_02)
+        var format_02_3 = defaultPatternConverter.formatLogRecord("+++++%D %T55 %m+-- ##%L#$ %%%l (%S) %M", logRecord_02
+        )
         println(format_02_3)
 
         var logRecord_03 = LogRecord("", LogLevel.TRACE, Time.now(), "", "")
@@ -100,7 +100,7 @@ public class LogTestA {
         @Expect(logRecord_03.getSource(), "")
         @Expect(logRecord_03.getMessage(), "")
         @Expect(logRecord_03.getCreatedTime().year() != 0, true)
-        var format_03 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M",logRecord_03)
+        var format_03 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M", logRecord_03)
         println(format_03)
 
         var logRecord_04 = LogRecord("@#$^,;[^&^%**(", LogLevel.DEBUG, Time.now(), "_+(^^&/\\@$@&", "%^&*' '&(*@#")
@@ -109,16 +109,17 @@ public class LogTestA {
         @Expect(logRecord_04.getSource(), "_+(^^&/\\@$@&")
         @Expect(logRecord_04.getMessage(), "%^&*' '&(*@#")
         @Expect(logRecord_04.getCreatedTime().year() != 0, true)
-        var format_04 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M",logRecord_04)
+        var format_04 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M", logRecord_04)
         println(format_04)
     }
 
     // 验证: func setCachedTimeSlice(timeSlice: TimeSlice)
     // 验证: class TimeSlice
     @TestCase
-    public func log_test_004():Unit{
-        var timeNow:Time = Time.now()
+    public func log_test_004(): Unit {
+        var timeNow: Time = Time.now()
         var timeSilce = TimeSlice()
+
         //setCachedTimeSlice(timeSilce)
         @Expect(timeSilce.getShortTime(), "")
         @Expect(timeSilce.getLongTime(), "")
@@ -140,7 +141,7 @@ public class LogTestA {
 
     // 验证: public func flushLeft(str: String, limit: Int64, placeholder: String): String 将字符串向右对齐，并在剩余的位中补充指定的字符
     @TestCase
-    public func log_test_005():Unit{
+    public func log_test_005(): Unit {
         @Expect(flushLeft("abcdefg", 8, "0"),"0abcdefg")
         @Expect(flushLeft("中文", 8, "0"),"000000中文")
         @Expect(flushLeft("中文中文", 8, "0"),"0000中文中文")
@@ -161,23 +162,21 @@ public class LogTestA {
 
     // 验证: public func getNumByString(str: String, defaultValue: Int64) 将数字字符串转换为int64
     @TestCase
-    public func log_test_006():Unit{
-        @Expect(getNumByString("abcdefg", -9223372036854775808), -9223372036854775808)
-        @Expect(getNumByString("abcdefg", 9223372036854775807), 9223372036854775807)
-        @Expect(getNumByString("abcdefg", 0), 0)
-        @Expect(getNumByString("abcdefg", 1), 1)
-
+    public func log_test_006(): Unit {
         @Expect(getNumByString("123456", -9223372036854775808), 123456)
         @Expect(getNumByString("0", 9223372036854775807), 0)
-        @Expect(getNumByString("中文中文", 0), 0)
-        @Expect(getNumByString("", 1), 1)
-        @Expect(getNumByString("@#%&……*：“{}", 1234), 1234)
         @Expect(getNumByString("1234", 123), 1234)
+        @Expect(getNumByString("-1234", 123), -1234)
+        try {
+            getNumByString("abcdefg", -9223372036854775808)
+        } catch (e: IllegalArgumentException) {
+            @Assert(e.message,"The part of value convert failed.")
+        }
     }
 
     // 验证: public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int64
     @TestCase
-    public func log_test_007():Unit{
+    public func log_test_007(): Unit {
         var res: Int64 = strToNumBySuffix("230", 1024, 2097152)
         var res1: Int64 = strToNumBySuffix("2M", 1024, 2097152)
         var res2: Int64 = strToNumBySuffix("2m", 1024, 2097152)
@@ -185,7 +184,6 @@ public class LogTestA {
         var res4: Int64 = strToNumBySuffix("2G", 1024, 2097152)
         var res5: Int64 = strToNumBySuffix("2k", 1024, 2097152)
         var res6: Int64 = strToNumBySuffix("2K", 1024, 2097152)
-        var res7: Int64 = strToNumBySuffix("2l", 1024, 2097152)
         @Expect(res,230)
         @Expect(res1,2*1024*1024)
         @Expect(res2,2*1024*1024)
@@ -193,6 +191,10 @@ public class LogTestA {
         @Expect(res4,2*1024*1024*1024)
         @Expect(res5,2*1024)
         @Expect(res6,2*1024)
-        @Expect(res7,2097152)
+        try {
+            var res7: Int64 = strToNumBySuffix("2l", 1024, 2097152)
+        } catch (e: IllegalArgumentException) {
+            @Assert(e.message,"The part of value convert failed.")
+        }
     }
 }

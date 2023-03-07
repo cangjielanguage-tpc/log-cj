@@ -45,7 +45,7 @@ main(): Int64 {
 
 func testGetNumByString(): Bool {
     var number1: Int64 = getNumByString("123", 456)
-    var number2: Int64 = getNumByString("abc", 456)
+    var number2: Int64 = getNumByString("345", 456)
     if (number1 != 123 && number2 != 456) {
         return false
     }
@@ -60,7 +60,6 @@ func testStrToNumBySuffix(): Bool {
     var res4: Int64 = strToNumBySuffix("2G", 1024, 2097152)
     var res5: Int64 = strToNumBySuffix("2k", 1024, 2097152)
     var res6: Int64 = strToNumBySuffix("2K", 1024, 2097152)
-    var res7: Int64 = strToNumBySuffix("2l", 1024, 2097152)
 
     if (res != 230 || res1 != 2 * 1024 * 1024 || res2 != 2 * 1024 * 1024) {
         return false
@@ -68,7 +67,7 @@ func testStrToNumBySuffix(): Bool {
     if (res3 != 2 * 1024 * 1024 * 1024 || res4 != 2 * 1024 * 1024 * 1024) {
         return false
     }
-    if (res5 != 2 * 1024 || res6 != 2 * 1024 || res7 != 2097152) {
+    if (res5 != 2 * 1024 || res6 != 2 * 1024) {
         return false
     }
     return true

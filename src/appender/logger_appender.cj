@@ -9,7 +9,6 @@
 
 package appender
 
-from std import collection.ArrayList
 import config.*
 
 /**
