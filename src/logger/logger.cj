@@ -32,7 +32,7 @@ public class Logger {
      * @param level log level.
      * @param msg log information.
      */
-    private func log(level: LogLevel, msg: String): Unit {
+    public func log(level: LogLevel, msg: String): Unit {
         // Currently, the method of obtaining the file name and line number is not available. Wait for the SDK to provide the method.
         let src = ""
         var rec = LogRecord(this.name, level, Time.now(), src, msg)
@@ -49,11 +49,12 @@ public class Logger {
      */
     private func doLog(level: LogLevel, rec: LogRecord): Unit {
         appendLog(level, rec, Logger_Manager.getRootLogger())
+
         // If there are logs other than root in the configuration, to Print.
         if (Logger_Manager.getLoggerNameArr().size > 0 && Logger_Manager.getLoggerAttrArr().size > 0) {
             var i: Int64 = 0
             while (i < Logger_Manager.getLoggerNameArr().size) {
-                var mapString:String = Logger_Manager.getLoggerNameArr().toArray().toString()
+                var mapString: String = Logger_Manager.getLoggerNameArr().toArray().toString()
                 if (mapString.contains(this.name)) {
                     var j: Int64 = 0
                     var values: Array<LoggerAppenderReference> = Logger_Manager.getLoggerAttrArr().toArray()
@@ -95,6 +96,15 @@ public class Logger {
      */
     public func off(msg: String): Unit {
         log(OFF, msg)
+    }
+
+    /**
+     * Print fatal log.
+     *
+     * @param msg log information.
+     */
+    public func fatal(msg: String): Unit {
+        log(FATAL, msg)
     }
 
     /**

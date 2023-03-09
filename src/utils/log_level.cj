@@ -21,6 +21,7 @@ public enum LogLevel {
     | INFO // Notification information.
     | WARN // Warning message.
     | ERROR // Error message.
+    | FATAL //Exit 
     | OFF // Disabling logs.
 
     /**
@@ -36,7 +37,8 @@ public enum LogLevel {
             case INFO => 4
             case WARN => 5
             case ERROR => 6
-            case OFF => 7
+            case FATAL => 7
+            case OFF => 8
         }
         return num
     }
@@ -54,6 +56,7 @@ public enum LogLevel {
             case INFO => "INFO"
             case WARN => "WARN"
             case ERROR => "ERROR"
+            case FATAL => "FATAL"
             case OFF => "OFF"
         }
         return name
@@ -83,6 +86,7 @@ public enum LogLevel {
             case "INFO" => INFO
             case "WARN" => WARN
             case "ERROR" => ERROR
+            case "FATAL" => FATAL
             case "OFF" => OFF
             case _ => DEFAULT_LOG_LEVEL
         }
