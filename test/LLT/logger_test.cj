@@ -50,6 +50,9 @@ main(): Int64 {
     var result12: Bool = testInitLogggerManagerWithEmptyPath()
     println("testInitLogggerManagerWithEmptyPath = ${result12}")
 
+    var result13: Bool = testPrintFatalLog()
+    println("testPrintFatalLog = ${result13}")
+
     println("测试结束")
 
     if (result1 && result2 && result3 && result4) {
@@ -60,7 +63,7 @@ main(): Int64 {
         return 0
     }
 
-    if (result9 && result10 && result11 && result12) {
+    if (result9 && result10 && result11 && result12 && result13) {
         return 0
     }
 
@@ -126,6 +129,19 @@ func testPrintWarnLog(): Bool {
     }
     return false
 }
+
+func testPrintFatalLog(): Bool {
+    let log = Logger_Manager.getLogger("test")
+    log.fatal("fatal")
+    var res1 = getQueryResult("test", "fatal")
+    var res2 = getQueryResult("test", "off2")
+
+    if (res1 && !res2) {
+        return true
+    }
+    return false
+}
+
 func testPrintOffLog(): Bool {
     let log = Logger_Manager.getLogger("test")
     log.off("off")

@@ -25,7 +25,8 @@ public class LogTestA {
         var logLevel_04 = LogLevel.INFO
         var logLevel_05 = LogLevel.WARN
         var logLevel_06 = LogLevel.ERROR
-        var logLevel_07 = LogLevel.OFF
+        var logLevel_07 = LogLevel.FATAL
+        var logLevel_08 = LogLevel.OFF
 
         @Expect(logLevel_01.level(),1)
         @Expect(logLevel_02.level(),2)
@@ -34,6 +35,7 @@ public class LogTestA {
         @Expect(logLevel_05.level(),5)
         @Expect(logLevel_06.level(),6)
         @Expect(logLevel_07.level(),7)
+        @Expect(logLevel_08.level(),8)
 
         @Expect(logLevel_01.levelName(),"ALL")
         @Expect(logLevel_02.levelName(),"TRACE")
@@ -41,12 +43,14 @@ public class LogTestA {
         @Expect(logLevel_04.levelName(),"INFO")
         @Expect(logLevel_05.levelName(),"WARN")
         @Expect(logLevel_06.levelName(),"ERROR")
-        @Expect(logLevel_07.levelName(),"OFF")
+        @Expect(logLevel_07.levelName(),"FATAL")
+        @Expect(logLevel_08.levelName(),"OFF")
 
         @Expect(logLevel_01 >= logLevel_02,false)
         @Expect(logLevel_03 >= logLevel_03,true)
         @Expect(logLevel_05 >= logLevel_04,true)
         @Expect(logLevel_06 >= logLevel_07,false)
+        @Expect(logLevel_07 >= logLevel_08,false)
     }
 
     // 验证: enum LogLevel levelName
@@ -58,6 +62,7 @@ public class LogTestA {
         @Expect(LogLevel.getLevelByString("info").levelName(),"INFO")
         @Expect(LogLevel.getLevelByString("warn").levelName(),"WARN")
         @Expect(LogLevel.getLevelByString("error").levelName(),"ERROR")
+        @Expect(LogLevel.getLevelByString("fatal").levelName(),"FATAL")
         @Expect(LogLevel.getLevelByString("off").levelName(),"OFF")
         @Expect(LogLevel.getLevelByString("test").levelName(),"INFO")
     }
@@ -167,11 +172,13 @@ public class LogTestA {
         @Expect(getNumByString("0", 9223372036854775807), 0)
         @Expect(getNumByString("1234", 123), 1234)
         @Expect(getNumByString("-1234", 123), -1234)
-        try {
-            getNumByString("abcdefg", -9223372036854775808)
-        } catch (e: IllegalArgumentException) {
-            @Assert(e.message,"The part of value convert failed.")
-        }
+        @Expect(getNumByString("中文中文", 0), 0)
+        @Expect(getNumByString("", 1), 1)
+        @Expect(getNumByString("@#%&……*：“{}", 1234), 1234)
+        @Expect(getNumByString("abcdefg", -9223372036854775808), -9223372036854775808)
+        @Expect(getNumByString("abcdefg", 9223372036854775807), 9223372036854775807)
+        @Expect(getNumByString("abcdefg", 0), 0)
+        @Expect(getNumByString("abcdefg", 1), 1)
     }
 
     // 验证: public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int64
@@ -184,6 +191,7 @@ public class LogTestA {
         var res4: Int64 = strToNumBySuffix("2G", 1024, 2097152)
         var res5: Int64 = strToNumBySuffix("2k", 1024, 2097152)
         var res6: Int64 = strToNumBySuffix("2K", 1024, 2097152)
+        var res7: Int64 = strToNumBySuffix("2l", 1024, 2097152)
         @Expect(res,230)
         @Expect(res1,2*1024*1024)
         @Expect(res2,2*1024*1024)
@@ -191,10 +199,6 @@ public class LogTestA {
         @Expect(res4,2*1024*1024*1024)
         @Expect(res5,2*1024)
         @Expect(res6,2*1024)
-        try {
-            var res7: Int64 = strToNumBySuffix("2l", 1024, 2097152)
-        } catch (e: IllegalArgumentException) {
-            @Assert(e.message,"The part of value convert failed.")
-        }
+        @Expect(res7,2097152)
     }
 }
