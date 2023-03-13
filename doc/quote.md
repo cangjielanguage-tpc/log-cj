@@ -1,0 +1,117 @@
+# 如何引用 log4cj2 项目
+
+## 前提
+
+项目 A 调用 Log4cj2 master 分支代码，项目 A 路径 xxx/workspace/A/
+
+## 复制 PLLab 社区中 ci_tools 项目的 ci_test 文件夹到 A 项目的根目录下
+
+ci_tools 项目地址：https://gitee.com/HW-PLLab/testJekins/<br/>
+ci_test 文件夹所在位置：https://gitee.com/HW-PLLab/testJekins/tree/dev/src/<br/>
+
+**注意**：是整个 ci_test 文件夹包括整个文件夹带其下面的所有文件，不是只复制 ci_test 下的所有文件<br/>
+
+## 配置项目 A 的 gitee_gate.cfg 文件
+
+添加内容如下：<br/>
+![](./images/giteegate.PNG)<br/>
+
+如果项目 A 中没有 gitee_gate.cfg 文件，可参考 PLLab 社区 okhttp 项目的 gitee_gate.cfg 文件添加一个<br/>
+
+**解释**：external_library，因为 log4cj2 是输出静态编译结果文件，所以配置为 static=lib<br/>
+镜头还是动态输出查看 log4cj2 项目的 module.json 文件中 output_type 字段的值，动态则是 dynamic=lib<br/>
+
+## 配置项目 A 的 module.json 文件中的 requires 字段
+
+添加内容如下：<br/>
+![](./images/module.PNG)<br/>
+
+`log4cj`同要引用的 log4cj2 的分支代码的 module.json 中 name 的值保持一致<br/>
+`organization`同要引用的 log4cj2 的分支代码的 module.json 中 organization 的值保持一致<br/>
+`version`同要引用的 log4cj2 的分支代码的 module.json 中 version 的值保持一致<br/>
+`path`直接按照上述截图中的配置就行，因为最终拉取的 log4cj2 代码就是位于 A 项目的根目录下<br/>
+
+## A 项目所在环境安装 python3
+
+因为后续要执行 py 文件，所以需要提前安装 python3<br/>
+python3 版本目前经自测 3.6.9 可用，其他版本需要测试<br/>
+
+## 拉取 log4cj2 项目并且编译项目 A
+
+```
+cd xxx/workspace/A/
+python3 ci_test/main.py build
+```
+
+执行完上述命令，直至出现`cpm build success!!`，则表示 log4cj2 项目拉取成功，并且跟随项目 A 一起编译成功<br/>
+
+## 引用Log4cj2
+
+在需要引用的仓颉文件中引用log4cj2，代码片段如下：<br/>
+
+```
+from log4cj import logger.*
+...
+let logger = Logger_Manager.getLogger("com.test")
+logger.info("test info")
+...
+```
+log4cj2默认日志输出级别为INFO，可输出INFO，WARN，ERROR，FATAL，OFF五种级别日志<br/>
+log4cj2日志级别关系：ALL<TRACE<DEBUG<INFO<WARN<ERROR<FATAL<OFF<br/>
+
+可修改日志输出级别，修改log4cj.xml中`root`节点的`level`属性即可<br/>
+log4cj.xml文件路径：xxx/workspace/A/log4cj/src/resources/log4cj.xml<br/>
+
+注意：logger的另外一种引用方法如下，可自定义log4cj.xml位置，确保可以找到就行<br/>
+
+```
+from log4cj import logger.*
+...
+let logger = LoggerManager("xxx/log4cj.xml").getLogger("com.test")
+logger.info("test info")
+...
+```
+
+## 重新编译项目A
+
+```
+cd xxx/workspace/A/
+cpm build -V
+```
+直至出现`com build --verbose success`，则表示项目A重新编译成功（包含log4cj）<br/>
+
+## 查找日志文件
+
+```
+cd xxx/workspace/A/build/bin
+./main
+```
+执行完上述命令，查看bin目录下是否产生`.log`文件<br/>
+正确情况下产生`root.log`文件，查看`root.log`文件内容和你在引用出编写的信息是否匹配<br/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -69,7 +69,7 @@
 
 #### 使用编译
 
-参见[项目编译文件引用](./doc/quote_compiled_files.md)
+参见[项目引用](./doc/quote.md)
 
 #### 如何运行测试用例
 
