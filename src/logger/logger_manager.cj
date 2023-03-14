@@ -239,16 +239,35 @@ public class LoggerManager {
      * @return logger configuration object.
      */
     public func loadDefaultConfiguration(): LoggerConfiguration {
-        var defaultXml: File = File("${getcwd()}/src/resources/default.xml", OpenOption.Open(true, true))
-        var contentArray: Array<Byte> = File.readFrom(defaultXml.info.path)
-        var content: String = String.fromUtf8(contentArray)
+        let content = """
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender enabled="true" name="console">
+    <type>console</type>
+    <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
+  </appender>
+  <appender enabled="true" name="file">
+    <type>file</type>
+    <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
+    <property name="filename">root.log</property>
+    <property name="rotate">true</property>
+    <property name="maxsize">20M</property>
+    <property name="daily">false</property>
+  </appender>
+  <root>
+    <level>info</level>
+    <appender-ref ref="console"/>
+    <appender-ref ref="file"/>
+  </root>
+</configuration>
+        """
+
         var x: XmlParser = XmlParser()
         var elements: Option<XmlElement> = x.parse(content)
         var xmlElements: XmlElement = elements.getOrThrow()
         var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(xmlElements.childrenElements)
         var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(xmlElements.childrenElements)
         var root: RootLoggerConfig = getRootConfiguration(xmlElements.childrenElements)
-        defaultXml.close()
         return LoggerConfiguration(appenderList, root, loggerList)
     }
 
