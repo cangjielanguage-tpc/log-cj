@@ -56,6 +56,9 @@ public class FileLoggerAppender <: LoggerAppender {
      */
     public init() {
         this.file = File(DEFAULT_OUTPUT_FILE_NAME, OpenOption.CreateOrAppend)
+        if (File.exists(this.file.info.path)) {
+            File.delete(this.file.info.path)
+        }
     }
 
     /**
@@ -75,8 +78,6 @@ public class FileLoggerAppender <: LoggerAppender {
      * @param property file appender properties.
      */
     public func initAppender(pattern: String, properties: ArrayList<AppenderProperty>): Unit {
-        //delete default.log.
-        // File.delete(this.file.info.path)
         var file = ""
         let dFormat = "[%T %D %m] [%L][%l] (%S) %M"
         var maxSize = 0
@@ -125,35 +126,34 @@ public class FileLoggerAppender <: LoggerAppender {
         this.opendate = this.file.info.creationTime.day()
         let fut = spawn {
             while (true) {
-                if (contentList.isEmpty()) {
-                    continue
-                }
                 lock.lock()
+                if (let Some(rec) = contentList.get(0)) {
+                    // var rec: LogRecord = contentList.get(0).getOrThrow()
+                    if (this.file.isClosed()) {
+                        this.file = File(this.fileName, OpenOption.CreateOrAppend)
+                        this.curSize = this.file.info.length
+                        this.opendate = this.file.info.creationTime.day()
+                    }
+                    let now = Time.now()
+                    if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
+                        rollingFile()
+                    }
 
-                var rec: LogRecord = contentList.get(0).getOrThrow()
-                if (this.file.isClosed()) {
-                    this.file = File(this.fileName, OpenOption.CreateOrAppend)
-                    this.curSize = this.file.info.length
-                    this.opendate = this.file.info.creationTime.day()
-                }
-                let now = Time.now()
-                if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
-                    rollingFile()
+                    // Formatting logging.
+                    var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
+                    try {
+                        this.file.write(mess)
+                    } catch (e: FSException) {
+                        println("write file occur exception: ${e.message}")
+                        return
+                    }
+                    let n = mess.size
+
+                    // Update the size.
+                    this.curSize += n
+                    contentList.remove(0)
                 }
 
-                // Formatting logging.
-                var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
-                try {
-                    this.file.write(mess)
-                } catch (e: FSException) {
-                    println("write file occur exception: ${e.message}")
-                    return
-                }
-                let n = mess.size
-
-                // Update the size.
-                this.curSize += n
-                contentList.remove(0)
                 lock.unlock()
             }
         }
