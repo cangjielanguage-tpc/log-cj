@@ -113,7 +113,6 @@ public class FileLoggerAppender <: LoggerAppender {
         this.fileName = file
         this.rotate = rotate
         this.maxSize = maxSize
-        println("maxSize:${this.maxSize}")
         this.daily = daily
         this.retentionDays = retentionDays
     }
