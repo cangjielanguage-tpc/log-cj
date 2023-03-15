@@ -344,12 +344,29 @@ public init()
 public func getName(): String
 
 /**
+ * 根据传入的level和msg打印日志信息
+ *
+ * 参数 level - 日志级别 
+ * 参数 msg - 日志记录消息
+ *
+ */
+public func log(level: LogLevel, msg: String): Unit
+
+/**
 * 打印off级别日志
 *
 * 参数 msg - 日志记录消息
 * 
 */
 public func off(msg: String): Unit
+
+/**
+* 打印fatal级别日志
+*
+* 参数 msg - 日志记录消息
+*
+*/
+public func fatal(msg: String): Unit
 
 /**
 * 打印error级别日志
@@ -722,13 +739,14 @@ DEBUG // Debug级别日志
 INFO // Notification级别日志
 WARN // Warning级别日志
 ERROR // Error级别日志
+FATAL // Fatal级别日志
 OFF // 禁用log
 
 /**
  * 获取日志等级
  *
  * 返回值 Int64 
- *     ALL-1 TRACE-2 DEBUG-3 INFO-4 WARN-5 ERROR-6 OFF-7
+ *     ALL-1 TRACE-2 DEBUG-3 INFO-4 WARN-5 ERROR-6 FATAL-7 OFF-8
  */
 public func level(): Int64
 
@@ -736,7 +754,7 @@ public func level(): Int64
  * 获取日志等级名称
  *
  * 返回值 String
- *     ALL-"ALL" TRACE-"TRACE" DEBUG-"DEBUG" INFO-"INFO" WARN-"WARN" ERROR-"ERROR" OFF-"OFF"
+ *     ALL-"ALL" TRACE-"TRACE" DEBUG-"DEBUG" INFO-"INFO" WARN-"WARN" ERROR-"ERROR" FATAL-"FATAL" OFF-"OFF"
  */
 public func levelName(): String
 
@@ -934,7 +952,7 @@ public func getNumByString(str: String, defaultValue: Int64): Int64
 
 ### 3.1等级关系
 
-- ALL < TRACE < DEBUG < INFO < WARN < ERROR < OFF
+- ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
 
 ### 3.2日志输出说明
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender enabled="true" name="console">
+    <appender enabled="false" name="console">
         <type>console</type>
         <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
     </appender>
@@ -29,6 +29,6 @@
     <root>
         <level>info</level>
         <appender-ref ref="console" />
-        <appender-ref ref="file" />
+        <appender-ref ref="file" />   
     </root>
 </configuration>

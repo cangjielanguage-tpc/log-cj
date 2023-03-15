@@ -21,7 +21,7 @@ public enum LogLevel {
     | INFO // Notification information.
     | WARN // Warning message.
     | ERROR // Error message.
-    | FATAL //Exit 
+    | FATAL // Critical error. 
     | OFF // Disabling logs.
 
     /**

@@ -128,7 +128,6 @@ public class FileLoggerAppender <: LoggerAppender {
             while (true) {
                 lock.lock()
                 if (let Some(rec) = contentList.get(0)) {
-                    // var rec: LogRecord = contentList.get(0).getOrThrow()
                     if (this.file.isClosed()) {
                         this.file = File(this.fileName, OpenOption.CreateOrAppend)
                         this.curSize = this.file.info.length

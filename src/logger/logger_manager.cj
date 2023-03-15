@@ -183,7 +183,7 @@ public class LoggerManager {
 
     private func initLoggerManager(xmlPath: String): Unit {
         // Register the LoggerAppender provided by the system.
-        // Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
+        Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
         Logger_Appender_Factory.registryType("file", FileLoggerAppender())
 
         // Initialize the log configuration file.
