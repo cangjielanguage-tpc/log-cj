@@ -255,6 +255,50 @@ public func getLevel(): LogLevel
  * 参数 level - 日志等级
  */
 public func setLevel(level: LogLevel): Unit
+
+/**
+ * 判断日志配置中Debug级别是否生效
+ *
+ */
+public func isDebugEnabled(): Bool
+
+/**
+ * 判断日志配置中Info级别是否生效
+ *
+ */
+public func isInfoEnabled(): Bool
+
+/**
+ * 判断日志配置中Error级别是否生效
+ *
+ */
+public func isErrorEnabled(): Bool
+
+/**
+ * 判断日志配置中Warn级别是否生效
+ *
+ */
+public func isWarnEnabled(): Bool
+
+/**
+ * 判断日志配置中Trace级别是否生效
+ *
+ */
+public func isTraceEnabled(): Bool
+
+/**
+ * 判断日志配置中Fatal级别是否生效
+ *
+ */
+public func isFatalEnabled(): Bool
+
+/**
+ * 判断日志配置中某个级别日志是否生效
+ *
+ * 参数 level - 日志级别
+ *
+ */
+public func isEnabled(level: LogLevel): Bool
 ```
 
 ### 2.6 LoggerManager
