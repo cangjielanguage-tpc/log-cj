@@ -50,4 +50,54 @@ public class LoggerAppenderReference {
     public func setLevel(level: LogLevel): Unit {
         this.level = level
     }
+
+    public func isDebugEnabled(): Bool {
+        if (getLevel().levelName().equals("DEBUG")) {
+            return true
+        }
+        return false
+    }
+
+    public func isInfoEnabled(): Bool {
+        if (getLevel().levelName().equals("INFO")) {
+            return true
+        }
+        return false
+    }
+
+    public func isErrorEnabled(): Bool {
+        if (getLevel().levelName().equals("ERROR")) {
+            return true
+        }
+        return false
+    }
+
+    public func isWarnEnabled(): Bool {
+        if (getLevel().levelName().equals("WARN")) {
+            return true
+        }
+        return false
+    }
+
+    public func isTraceEnabled(): Bool {
+        if (getLevel().levelName().equals("TRACE")) {
+            return true
+        }
+        return false
+    }
+
+    public func isFatalEnabled(): Bool {
+        if (getLevel().levelName().equals("FATAL")) {
+            return true
+        }
+        return false
+    }
+
+    public func isEnabled(level: LogLevel): Bool {
+        var levelName = level.levelName()
+        if (getLevel().levelName().equals(levelName)) {
+            return true
+        }
+        return false
+    }
 }
