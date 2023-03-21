@@ -20,26 +20,26 @@ main(): Int64 {
     var res2: Bool = testConsoleLoggerAppenderWithOtherPattern()
     println("testConsoleLoggerAppenderWithOtherPattern = ${res2}")
 
-    // var res3: Bool = testFileLoggerAppenderWithDefaultPattern()
-    // println("testFileLoggerAppenderWithDefaultPattern = ${res3}")
+    var res3: Bool = testFileLoggerAppenderWithDefaultPattern()
+    println("testFileLoggerAppenderWithDefaultPattern = ${res3}")
 
-    // var res4: Bool = testFileLoggerAppenderWithOtherPattern()
-    // println("testFileLoggerAppenderWithOtherPattern = ${res4}")
+    var res4: Bool = testFileLoggerAppenderWithOtherPattern()
+    println("testFileLoggerAppenderWithOtherPattern = ${res4}")
 
     var res5: Bool = testFileLoggerAppenderWithErrorRolling()
     println("testFileLoggerAppenderWithErrorRolling = ${res5}")
 
-    // var res6: Bool = testFileLoggerAppenderWithRightRolling()
-    // println("testFileLoggerAppenderWithRightRolling = ${res6}")
+    var res6: Bool = testFileLoggerAppenderWithRightRolling()
+    println("testFileLoggerAppenderWithRightRolling = ${res6}")
 
-    // var res7: Bool = testAppenderFactoryNoType()
-    // println("testAppenderFactoryNoType = ${res7}")
+    var res7: Bool = testAppenderFactoryNoType()
+    println("testAppenderFactoryNoType = ${res7}")
 
-    // var res8: Bool = testAppenderFactorWithConsoleType()
-    // println("testAppenderFactorWithConsoleType = ${res8}")
+    var res8: Bool = testAppenderFactorWithConsoleType()
+    println("testAppenderFactorWithConsoleType = ${res8}")
 
-    // var res9: Bool = testAppenderFactorWithInitParams()
-    // println("testAppenderFactorWithInitParams = ${res9}")
+    var res9: Bool = testAppenderFactorWithInitParams()
+    println("testAppenderFactorWithInitParams = ${res9}")
 
     var res10: Bool = testAppenderFactorNoNew()
     println("testAppenderFactorNoNew = ${res10}")
@@ -47,22 +47,39 @@ main(): Int64 {
     var res11: Bool = testAppenderReference()
     println("testAppenderReference = ${res11}")
 
-    // var res12: Bool = testAppenderReferenceWithInitParams()
-    // println("testAppenderReferenceWithInitParams = ${res12}")
+    var res12: Bool = testAppenderReferenceWithInitParams()
+    println("testAppenderReferenceWithInitParams = ${res12}")
 
-    // var res13: Bool = testAppenderReferenceWithSetter()
-    // println("testAppenderReferenceWithSetter = ${res13}")
+    var res13: Bool = testAppenderReferenceWithSetter()
+    println("testAppenderReferenceWithSetter = ${res13}")
+
+    var res14: Bool = testLevelEnabled()
+    println("testLevelEnabled = ${res14}")
+    var res15: Bool = testLevelEnabled01()
+    println("testLevelEnabled01 = ${res15}")
+    var res16: Bool = testInfoNotEnabled()
+    println("testInfoNotEnabled = ${res16}")
+    var res17: Bool = testErrorEnabled()
+    println("testErrorEnabled = ${res17}")
+    var res18: Bool = testWarnEnabled()
+    println("testWarnEnabled = ${res18}")
+    var res19: Bool = testTraceEnabled()
+    println("testTraceEnabled = ${res19}")
+    var res20: Bool = testFatalEnabled()
+    println("testFatalEnabled = ${res20}")
+    var res21: Bool = testDebugEnabled()
+    println("testDebugEnabled = ${res21}")
 
     println("测试结束")
-    if (res1 && res2) {
+    if (res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8) {
         return 0
     }
 
-    if (res5) {
+    if (res9 && res10 && res11 && res12 && res13) {
         return 0
     }
 
-    if (res10 && res11) {
+    if (res14 && res15 && res16 && res17 && res18 && res19 && res20 && res21) {
         return 0
     }
 
@@ -247,8 +264,8 @@ func testAppenderFactorWithInitParams(): Bool {
     appenderValueList.append(FileLoggerAppender())
     var appenderTypeList = ArrayList<String>()
     var appenderTypeValueList = ArrayList<LoggerAppender>()
-    // appenderTypeList.append("console")
-    // appenderTypeValueList.append(ConsoleLoggerAppender())
+    appenderTypeList.append("console")
+    appenderTypeValueList.append(ConsoleLoggerAppender())
     appenderTypeList.append("file")
     appenderTypeValueList.append(FileLoggerAppender())
 
@@ -314,7 +331,7 @@ func testAppenderReference(): Bool {
 func testAppenderReferenceWithInitParams(): Bool {
     var appenderList = ArrayList<LoggerAppender>()
     appenderList.append(FileLoggerAppender())
-    // appenderList.append(ConsoleLoggerAppender())
+    appenderList.append(ConsoleLoggerAppender())
     var appenderRef = LoggerAppenderReference(LogLevel.INFO, appenderList)
     var levelName: String = appenderRef.getLevel().levelName()
     var size: Int64 = appenderRef.getAppenderList().size
@@ -327,13 +344,105 @@ func testAppenderReferenceWithInitParams(): Bool {
 func testAppenderReferenceWithSetter(): Bool {
     var appenderList = ArrayList<LoggerAppender>()
     appenderList.append(FileLoggerAppender())
-    // appenderList.append(ConsoleLoggerAppender())
+    appenderList.append(ConsoleLoggerAppender())
     var appenderRef = LoggerAppenderReference()
     appenderRef.setLevel(LogLevel.INFO)
     appenderRef.setAppenderList(appenderList)
     var levelName: String = appenderRef.getLevel().levelName()
     var size: Int64 = appenderRef.getAppenderList().size
     if (levelName.equals("INFO") && size == 2) {
+        return true
+    }
+    return false
+}
+
+func testLevelEnabled(): Bool {
+    var appenderRef = LoggerAppenderReference()
+    appenderRef.setLevel(LogLevel.INFO)
+    appenderRef.setAppenderList(ArrayList<LoggerAppender>())
+    var debug = appenderRef.isDebugEnabled()
+    var error = appenderRef.isErrorEnabled()
+    var fatal = appenderRef.isFatalEnabled()
+    var info = appenderRef.isInfoEnabled()
+    var trace = appenderRef.isTraceEnabled()
+    var warn = appenderRef.isWarnEnabled()
+    var res = appenderRef.isEnabled(LogLevel.DEBUG)
+    if (!debug && !error && !fatal && info && !trace && !warn && !res) {
+        return true
+    }
+    return false
+}
+func testLevelEnabled01(): Bool {
+    var appenderRef = LoggerAppenderReference()
+    appenderRef.setLevel(LogLevel.DEBUG)
+    appenderRef.setAppenderList(ArrayList<LoggerAppender>())
+    var res = appenderRef.isEnabled(LogLevel.DEBUG)
+    if (res) {
+        return true
+    }
+    return false
+}
+func testInfoNotEnabled(): Bool {
+    var appenderRef = LoggerAppenderReference()
+    appenderRef.setLevel(LogLevel.DEBUG)
+    appenderRef.setAppenderList(ArrayList<LoggerAppender>())
+    var info = appenderRef.isInfoEnabled()
+    if (!info) {
+        return true
+    }
+    return false
+}
+
+func testDebugEnabled(): Bool {
+    var appenderRef = LoggerAppenderReference()
+    appenderRef.setLevel(LogLevel.DEBUG)
+    appenderRef.setAppenderList(ArrayList<LoggerAppender>())
+    var debug = appenderRef.isDebugEnabled()
+    if (debug) {
+        return true
+    }
+    return false
+}
+
+func testWarnEnabled(): Bool {
+    var appenderRef = LoggerAppenderReference()
+    appenderRef.setLevel(LogLevel.WARN)
+    appenderRef.setAppenderList(ArrayList<LoggerAppender>())
+    var warn = appenderRef.isWarnEnabled()
+    if (warn) {
+        return true
+    }
+    return false
+}
+
+func testTraceEnabled(): Bool {
+    var appenderRef = LoggerAppenderReference()
+    appenderRef.setLevel(LogLevel.TRACE)
+    appenderRef.setAppenderList(ArrayList<LoggerAppender>())
+    var trace = appenderRef.isTraceEnabled()
+    if (trace) {
+        return true
+    }
+    return false
+}
+
+func testFatalEnabled(): Bool {
+    var appenderRef = LoggerAppenderReference()
+    appenderRef.setLevel(LogLevel.FATAL)
+    appenderRef.setAppenderList(ArrayList<LoggerAppender>())
+    var fatal = appenderRef.isFatalEnabled()
+    if (fatal) {
+        return true
+    }
+    return false
+}
+
+func testErrorEnabled(): Bool {
+    var appenderRef = LoggerAppenderReference()
+    appenderRef.setLevel(LogLevel.ERROR)
+    appenderRef.setAppenderList(ArrayList<LoggerAppender>())
+    var error = appenderRef.isErrorEnabled()
+    if (error) {
         return true
     }
     return false

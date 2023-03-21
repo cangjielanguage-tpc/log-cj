@@ -88,7 +88,6 @@ func testGetLogger(): Bool {
 }
 
 func testInitLogggerManager(): Bool {
-    //let Logger_Manager = LoggerManager("aa")
     var size: Int64 = Logger_Manager.getRootLogger().getAppenderList().size
     if (size != 2) {
         return false
