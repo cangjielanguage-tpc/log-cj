@@ -115,5 +115,5 @@ log4cj.xml中配置maxsize为10000，单位默认是字节，大约是10kb<br/>
 ## 屏蔽压缩
 
 如果不是正式生产环境或者日志大小不是很大，可选择屏蔽压缩<br/>
-屏蔽文件：xxx/workspace/log4cj/src/appender/file_logger_appender.cj<br/>
+屏蔽文件：xxx/workspace/A/log4cj/src/appender/file_logger_appender.cj<br/>
 屏蔽位置：注释掉compressRollingFile()方法即可
