@@ -88,3 +88,32 @@ cd xxx/workspace/A/build/bin
 ```
 执行完上述命令，查看bin目录下是否产生`.log`文件<br/>
 正确情况下产生`root.log`文件，查看`root.log`文件内容和你在引用出编写的信息是否匹配<br/>
+
+**注意** 如果出现xxx.so file can not shared类似报错，请执行以下命令<br/>
+
+```
+export LD_LIBRARY_PATH=xxx/workspace/A/build/log4cj/zip4cj/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=xxx/workspace/A/build/log4cj/charset/:$LD_LIBRARY_PATH
+```
+继续执行main文件就行<br/>
+
+## 切分文件压缩说明
+
+压缩机制<br/>
+如果日志产生切分文件，则压缩每一个切分文件，格式为zip
+
+引用的三方库<br/>
+zip4cj[https://gitee.com/HW-PLLab/zip4cj]<br/>
+
+压缩比测试结果：<br/>
+log4cj.xml中配置maxsize为10000，单位默认是字节，大约是10kb<br/>
+调用log方法写入500条日志，大小约为28kb,2个切分文件的压缩文件大小约为2kb<br/>
+得出压缩比大约为5:1
+
+可调节og4cj.xml中maxsize的大小自测压缩比
+
+## 屏蔽压缩
+
+如果不是正式生产环境或者日志大小不是很大，可选择屏蔽压缩<br/>
+屏蔽文件：xxx/workspace/log4cj/src/appender/file_logger_appender.cj<br/>
+屏蔽位置：注释掉compressRollingFile()方法即可
