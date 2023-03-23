@@ -12,6 +12,7 @@ package appender
 from std import fs.*
 from std import format.*
 from std import time.*
+from zip4cj import zip4cj.zip.*
 import utils.*
 
 /**
@@ -151,9 +152,27 @@ public class FileLoggerAppender <: LoggerAppender {
                     // Update the size.
                     this.curSize += n
                     contentList.remove(0)
+                    compressRollingFile()
                 }
 
                 lock.unlock()
+            }
+        }
+    }
+
+    private func compressRollingFile(): Unit {
+        var fileDir = this.file.info.parentDirectory.getOrThrow()
+        var paths: HashSet<String> = HashSet<String>()
+        for (file in Directory(fileDir.path).fileList()) {
+            var num = file.path.toString().count(".log")
+            if (file.isFile() && num == 2) {
+                var zip = ZipFile()
+                var name: String = file.path.fileNameWithoutExtension.getOrThrow()
+                var names: Array<String> = name.split("_")
+                zip.setOutPath(fileDir.path.toString() + "/log_" + names.get(1).getOrThrow() + ".zip")
+                zip.addFile(file.path.toString())
+                zip.writeZip()
+                File.delete(file.path)
             }
         }
     }
