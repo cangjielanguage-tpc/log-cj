@@ -1,4 +1,6 @@
 //3rd_party_lib:log4cj2/build/log4cj
+//3rd_party_lib:log4cj2/build/zip4cj
+//3rd_party_lib:log4cj2/build/charset
 package test
 
 from std import unittest.*
@@ -172,13 +174,41 @@ public class LogTestA {
         @Expect(getNumByString("0", 9223372036854775807), 0)
         @Expect(getNumByString("1234", 123), 1234)
         @Expect(getNumByString("-1234", 123), -1234)
-        @Expect(getNumByString("中文中文", 0), 0)
-        @Expect(getNumByString("", 1), 1)
-        @Expect(getNumByString("@#%&……*：“{}", 1234), 1234)
-        @Expect(getNumByString("abcdefg", -9223372036854775808), -9223372036854775808)
-        @Expect(getNumByString("abcdefg", 9223372036854775807), 9223372036854775807)
-        @Expect(getNumByString("abcdefg", 0), 0)
-        @Expect(getNumByString("abcdefg", 1), 1)
+        try {
+            getNumByString("中文中文", 0)
+        } catch (e: IllegalArgumentException) {
+            @Expect(e.message,"The part of value convert failed.")
+        }
+        try {
+            getNumByString("", 1)
+        } catch (e: IllegalArgumentException) {
+            @Expect(e.message,"The string is empty.")
+        }
+        try {
+            getNumByString("@#%&……*：“{}", 1234)
+        } catch (e: IllegalArgumentException) {
+            @Expect(e.message,"The part of value convert failed.")
+        }
+        try {
+            getNumByString("abcdefg", -9223372036854775808)
+        } catch (e: IllegalArgumentException) {
+            @Expect(e.message,"The part of value convert failed.")
+        }
+        try {
+            getNumByString("abcdefg", 9223372036854775807)
+        } catch (e: IllegalArgumentException) {
+            @Expect(e.message,"The part of value convert failed.")
+        }
+        try {
+            getNumByString("abcdefg", 0)
+        } catch (e: IllegalArgumentException) {
+            @Expect(e.message,"The part of value convert failed.")
+        }
+        try {
+            getNumByString("abcdefg", 1)
+        } catch (e: IllegalArgumentException) {
+            @Expect(e.message,"The part of value convert failed.")
+        }
     }
 
     // 验证: public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int64
@@ -191,7 +221,6 @@ public class LogTestA {
         var res4: Int64 = strToNumBySuffix("2G", 1024, 2097152)
         var res5: Int64 = strToNumBySuffix("2k", 1024, 2097152)
         var res6: Int64 = strToNumBySuffix("2K", 1024, 2097152)
-        var res7: Int64 = strToNumBySuffix("2l", 1024, 2097152)
         @Expect(res,230)
         @Expect(res1,2*1024*1024)
         @Expect(res2,2*1024*1024)
@@ -199,6 +228,10 @@ public class LogTestA {
         @Expect(res4,2*1024*1024*1024)
         @Expect(res5,2*1024)
         @Expect(res6,2*1024)
-        @Expect(res7,2097152)
+        try {
+            strToNumBySuffix("2l", 1024, 2097152)
+        } catch (e: IllegalArgumentException) {
+            @Expect(e.message,"The part of value convert failed.")
+        }
     }
 }
