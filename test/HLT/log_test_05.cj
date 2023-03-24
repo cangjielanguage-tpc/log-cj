@@ -1,4 +1,6 @@
 //3rd_party_lib:log4cj2/build/log4cj
+//3rd_party_lib:log4cj2/build/zip4cj
+//3rd_party_lib:log4cj2/build/charset
 //data_file:src/resources/log4cj.xml
 
 package test
