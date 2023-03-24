@@ -92,8 +92,8 @@ cd xxx/workspace/A/build/bin
 **注意** 如果出现xxx.so file can not shared类似报错，请执行以下命令<br/>
 
 ```
-export LD_LIBRARY_PATH=xxx/workspace/A/build/log4cj/zip4cj/:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=xxx/workspace/A/build/log4cj/charset/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=xxx/workspace/A/build/zip4cj/:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=xxx/workspace/A/build/charset/:$LD_LIBRARY_PATH
 ```
 继续执行main文件就行<br/>
 
