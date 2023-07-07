@@ -21,8 +21,9 @@ main(): Int64 {
     logger.warn("5")
 
     // Create another logger.
-   let logger1 = LoggerManager("/home/helongfei/workspace/log4cj2/log4cj222.json").getLogger("com.test1")
-//    let logger1 = Logger_Manager.getLogger("com.test1")
+    // let logger1 = LoggerManager("/home/helongfei/workspace/log4cj2/log4cj222.json").getLogger("com.test1")
+
+    let logger1 = Logger_Manager.getLogger("com.test1")
     logger1.error("6")
     logger1.off("7")
     return 0
