@@ -45,17 +45,17 @@ public class TimeSlice {
      *
      * @param time time.
      */
-    public func getTimeSlice(time: Time): Unit {
-        var secs = time.unixTimeStamp().nanoseconds() / Int64(1e9)
+    public func getTimeSlice(time: DateTime): Unit {
+        var secs = time.toUnixTimeStamp().toNanoseconds() / Int64(1e9)
         var cached = timeSliceCache
         if (cached.lastUpdateSeconds != secs) {
-            let year = time.year()
-            let month = time.month().value()
-            let day = time.day()
-            let hour = time.hour()
-            let minute = time.minute()
-            let second = time.second()
-            let zone = time.zone()[0]
+            let year = time.year
+            let month = time.monthValue
+            let day = time.dayOfMonth
+            let hour = time.hour
+            let minute = time.minute
+            let second = time.second
+            let zone = time.zoneId
 
             this.lastUpdateSeconds = secs
             this.shortTime = hour.format("02") + ":" + minute.format("02")

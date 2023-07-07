@@ -22,7 +22,7 @@ public class LogRecord {
     private var level: LogLevel = DEFAULT_LOG_LEVEL
 
     // Time when the log record is created.
-    private var createdTime: Time
+    private var createdTime: DateTime
 
     // Log source, which is used to print log location information,for example, the line where the code is located.
     private var source: String = ""
@@ -39,7 +39,7 @@ public class LogRecord {
      * @param source source.
      * @param message message.
      */
-    public init(tagName: String, level: LogLevel, createdTime: Time, source: String, message: String) {
+    public init(tagName: String, level: LogLevel, createdTime: DateTime, source: String, message: String) {
         this.tagName = tagName
         this.level = level
         this.createdTime = createdTime
@@ -52,7 +52,7 @@ public class LogRecord {
      *
      * @param createdTime create time.
      */
-    public init(createdTime: Time) {
+    public init(createdTime: DateTime) {
         this.createdTime = createdTime
     }
 
@@ -72,7 +72,7 @@ public class LogRecord {
         return this.message
     }
 
-    public func getCreatedTime(): Time {
+    public func getCreatedTime(): DateTime {
         return this.createdTime
     }
 }
