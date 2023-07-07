@@ -58,7 +58,7 @@ public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int
     try {
         let parsed = Int64.parse(numStr)
         return parsed * num
-    } catch (e: ConvertException) {
+    } catch (e: IllegalArgumentException) {
         return defaultValue
     }
 }
@@ -73,7 +73,7 @@ public func strToNumBySuffix(str: String, mult: Int64, defaultValue: Int64): Int
 public func getNumByString(str: String, defaultValue: Int64): Int64 {
     try {
         return Int64.parse(str)
-    } catch (e: ConvertException) {
+    } catch (e: IllegalArgumentException) {
         return defaultValue
     }
 }

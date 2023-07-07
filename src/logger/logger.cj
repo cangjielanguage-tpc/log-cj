@@ -35,7 +35,7 @@ public class Logger {
     public func log(level: LogLevel, msg: String): Unit {
         // Currently, the method of obtaining the file name and line number is not available. Wait for the SDK to provide the method.
         let src = ""
-        var rec = LogRecord(this.name, level, Time.now(), src, msg)
+        var rec = LogRecord(this.name, level, DateTime.now(), src, msg)
 
         // Consider whether thread processing needs to be started.
         doLog(level, rec)

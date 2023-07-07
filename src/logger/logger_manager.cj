@@ -9,7 +9,7 @@
 
 package logger
 
-from encoding import xml.*
+from encoding import json.*
 from std import collection.*
 from std import fs.*
 from std import os.posix.*
@@ -19,7 +19,7 @@ import config.*
 import utils.*
 
 public let Logger_Appender_Factory = LoggerAppenderFactory()
-public let Logger_Manager = LoggerManager("${getcwd()}/src/resources/log4cj.xml")
+public let Logger_Manager = LoggerManager("${getcwd()}/src/resources/log4cj.json")
 
 /**
  * Log management class, load and parse log file to get a specific configuration item.
@@ -43,10 +43,10 @@ public class LoggerManager {
     /**
      * Constructor, load and parse xml file.
      *
-     * @param xmlPath log file path.
+     * @param jsonPath log file path.
      */
-    public init(xmlPath: String) {
-        initLoggerManager(xmlPath)
+    public init(jsonPath: String) {
+        initLoggerManager(jsonPath)
     }
 
     public func getLoggerAppenderFactory(): LoggerAppenderFactory {
@@ -79,10 +79,10 @@ public class LoggerManager {
     /**
      * Initialize default configurations of log file.
      *
-     * @param xmlPath log file path.
+     * @param jsonPath log file path.
      */
-    private func initWithDefaultConfig(xmlPath: String): Unit {
-        var loggerConfiguration: LoggerConfiguration = loadXML(xmlPath)
+    private func initWithDefaultConfig(jsonPath: String): Unit {
+        var loggerConfiguration: LoggerConfiguration = parseJson(jsonPath)
         if (loggerConfiguration.getAppenders().size == 0) {
             println("can not find any appender!")
             return
@@ -112,7 +112,8 @@ public class LoggerManager {
             while (i < appenders.size) {
                 nameArr.append(appenders.get(i).getOrThrow().getName().toAsciiLower())
                 enabledArr.append(appenders.get(i).getOrThrow().getEnabled().toAsciiLower().trimAscii())
-                if (!nameArr.get(i).getOrThrow().isEmpty() && enabledArr.get(i).getOrThrow().equals("true")) {
+
+                if (nameArr.get(i).getOrThrow().size > 0 && enabledArr.get(i).getOrThrow().contains("true")) {
                     this.loggerAppenderFactory.registerLoggerAppender(
                         appenders.get(i).getOrThrow().getName(),
                         appenders.get(i).getOrThrow().getAppenderType(),
@@ -136,8 +137,8 @@ public class LoggerManager {
                 var appenderRef = appenderRefList.get(j).getOrThrow()
                 var index: Int64 = 0
                 while (index < nameArr.size) {
-                    if (nameArr.get(index).getOrThrow().equals(appenderRef.getRef().toAsciiLower()) &&
-                        enabledArr.get(index).getOrThrow().equals("true")) {
+                    if (nameArr.get(index).getOrThrow().contains(appenderRef.getRef().toAsciiLower()) &&
+                        enabledArr.get(index).getOrThrow().contains("true")) {
                         let ap = this.loggerAppenderFactory.getAppenderByName(appenderRef.getRef().toAsciiLower())
                         this.rootLogger.getAppenderList().append(ap)
                     }
@@ -162,10 +163,11 @@ public class LoggerManager {
                     var appenderRef: AppenderRef = logger.getAppenderRefList().get(m).getOrThrow()
                     var index: Int64 = 0
                     while (index < nameArr.size) {
-                        if (nameArr.get(index).getOrThrow().equals(appenderRef.getRef().toAsciiLower()) &&
-                            enabledArr.get(index).getOrThrow().equals("true")) {
+                        if (nameArr.get(index).getOrThrow().contains(appenderRef.getRef().toAsciiLower()) &&
+                            enabledArr.get(index).getOrThrow().contains("true")) {
                             let oneAppender = this.loggerAppenderFactory.getAppenderByName(
-                                appenderRef.getRef().toAsciiLower())
+                                appenderRef.getRef().toAsciiLower()
+                            )
                             oneLogger.getAppenderList().append(oneAppender)
                         }
                         index++
@@ -181,50 +183,53 @@ public class LoggerManager {
         }
     }
 
-    private func initLoggerManager(xmlPath: String): Unit {
+    private func initLoggerManager(jsonPath: String): Unit {
         // Register the LoggerAppender provided by the system.
         Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
         Logger_Appender_Factory.registryType("file", FileLoggerAppender())
 
         // Initialize the log configuration file.
-        initWithDefaultConfig(xmlPath)
+        initWithDefaultConfig(jsonPath)
     }
 
     /**
      * This function is used to parse the XML file into the LoggerConfiguration object.
      *
-     * @param xmlPath log file path.
+     * @param jsonPath log file path.
      * @return logger configuration object.
      */
-    private func loadXML(xmlPath: String): LoggerConfiguration {
-        var filePath: Path = Path(xmlPath)
+    private func parseJson(jsonPath: String): LoggerConfiguration {
+        var filePath: Path = Path(jsonPath)
         var isFileExist: Bool = File.exists(filePath)
-        if (xmlPath.size == 0 || !isFileExist) {
+        if (jsonPath.size == 0 || !isFileExist) {
             return loadDefaultConfiguration()
         }
 
-        // Get elements such as appender, logger, root and so on.
-        var allElements: ArrayList<XmlElement> = getXmlBasicProperties(xmlPath)
-        if (allElements.size == 0) {
-            println("can not find any element in xml file!")
+        // read file.
+        let allBytes: Array<Byte> = File.readFrom(jsonPath)
+        if (allBytes.size == 0) {
+            println("can not find any element in json file!")
             return LoggerConfiguration()
         }
 
+        var jsonValue: JsonValue = JsonValue.fromStr(String.fromUtf8(allBytes))
+
         // Get appender configuration.
-        var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(allElements)
+        var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(jsonValue)
+
         if (appenderList.size == 0) {
             println("can not find any appender in xml file!")
             return LoggerConfiguration()
         }
 
         // Get logger configuration.
-        var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(allElements)
+        var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(jsonValue)
         if (loggerList.size == 0) {
             println("can not find any logger in xml file!")
         }
 
         // Get root configuration.
-        var root: RootLoggerConfig = getRootConfiguration(allElements)
+        var root: RootLoggerConfig = getRootConfiguration(jsonValue)
         if (root.getLevel().size == 0 || root.getAppenderRefList().size == 0) {
             println("root configuration has mistakes!")
             return LoggerConfiguration()
@@ -239,135 +244,53 @@ public class LoggerManager {
      * @return logger configuration object.
      */
     public func loadDefaultConfiguration(): LoggerConfiguration {
-        let content = """
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-  <appender enabled="true" name="console">
-    <type>console</type>
-    <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-  </appender>
-  <appender enabled="true" name="file">
-    <type>file</type>
-    <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-    <property name="filename">root.log</property>
-    <property name="rotate">true</property>
-    <property name="maxsize">20M</property>
-    <property name="daily">false</property>
-  </appender>
-  <root>
-    <level>info</level>
-    <appender-ref ref="console"/>
-    <appender-ref ref="file"/>
-  </root>
-</configuration>
-        """
-
-        var x: XmlParser = XmlParser()
-        var elements: Option<XmlElement> = x.parse(content)
-        var xmlElements: XmlElement = elements.getOrThrow()
-        var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(xmlElements.childrenElements)
-        var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(xmlElements.childrenElements)
-        var root: RootLoggerConfig = getRootConfiguration(xmlElements.childrenElements)
+        println("enter default...")
+        var str =
+            ##"{"appenders":[{"enabled":"false","name":"console","type":"console","pattern":"[%D %T %m] [%L] [%l] (%S) %M"},{"enabled":"true","name":"file","type":"file","pattern":"[%D %T %m] [%L] [%l] (%S) %M","properties":[{"name":"filename","value":"root.log"},{"name":"rotate","value":"true"},{"name":"maxsize","value":"20M"},{"name":"daily","value":"false"}]}],"loggers":[{"name":"Demo","level":"info","appender-refs":[{"ref":"console"},{"ref":"file"}]}],"root":{"level":"info","appender-refs":[{"ref":"console"},{"ref":"file"}]}}"##
+        var jsonValue: JsonValue = JsonValue.fromStr(str)
+        var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(jsonValue)
+        var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(jsonValue)
+        var root: RootLoggerConfig = getRootConfiguration(jsonValue)
         return LoggerConfiguration(appenderList, root, loggerList)
-    }
-
-    /**
-     * Get configuration items by parsing xml file.
-     *
-     * @param xmlPath log file path.
-     * @return configuration element list.
-     */
-    private func getXmlBasicProperties(xmlPath: String): ArrayList<XmlElement> {
-        var filePath: Path = Path(xmlPath)
-
-        // Read a file as a string.
-        var allBytes: Array<Byte> = File.readFrom(filePath)
-        if (allBytes.size == 0) {
-            println("xml file is empty!")
-            return ArrayList<XmlElement>()
-        }
-
-        var content: String = String.fromUtf8(allBytes)
-
-        // Parse the file content, Ensure that the file format is correct. Otherwise, the compilation fails.
-        var x: XmlParser = XmlParser()
-        var elements: Option<XmlElement> = Option<XmlElement>.None
-        try {
-            elements = x.parse(content)
-        } catch (e: XmlException) {
-            println("parse xml occur exception ${e.message}!")
-            return ArrayList<XmlElement>()
-        }
-        try {
-            elements.getOrThrow()
-        } catch (e: NoneValueException) {
-            println("get xml element occur exception ${e.message}!")
-            return ArrayList<XmlElement>()
-        }
-        var xmlElements: XmlElement = elements.getOrThrow()
-        var childrenElements: ArrayList<XmlElement> = xmlElements.childrenElements
-        if (childrenElements.size == 0) {
-            println("xml children element is empty!")
-            return ArrayList<XmlElement>()
-        }
-        return childrenElements
     }
 
     /**
      * Get appender configuarations.
      *
-     * @param allElements basic configuration elements by parsing xml file.
+     * @param jsonValue basic configuration elements by parsing json file.
      * @return appender configuration list.
      */
-    private func getAppenderConfiguration(allElements: ArrayList<XmlElement>): ArrayList<AppenderConfig> {
+    private func getAppenderConfiguration(jsonValue: JsonValue): ArrayList<AppenderConfig> {
         var configList: ArrayList<AppenderConfig> = ArrayList<AppenderConfig>()
+        let appenders = jsonValue.asObject().get("appenders").getOrThrow()
+        var jsArr: JsonArray = JsonValue.fromStr(appenders.toJsonString()).asArray()
+        var propertyList: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
 
-        var i: Int64 = 0
-        while (i < allElements.size) {
-            var element: XmlElement = allElements.get(i).getOrThrow()
-            if (element.name.toAsciiLower().equals("appender")) {
-                let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
-                let allAttrs: ArrayList<XmlAttr> = element.attributes
-                var appender: AppenderConfig = AppenderConfig()
-                var propertyList: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
-                var j: Int64 = 0
-                while (j < allAttrs.size) {
-                    var attr: XmlAttr = allAttrs.get(j).getOrThrow()
-                    if (attr.name.toAsciiLower().equals("enabled")) {
-                        appender.setEnabled(attr.content)
-                    }
-                    if (attr.name.toAsciiLower().equals("name")) {
-                        appender.setName(attr.content)
-                    }
-                    j++
-                }
-                var k: Int64 = 0
-                while (k < allChildrenElements.size) {
-                    var childrenElement: XmlElement = allChildrenElements.get(k).getOrThrow()
-                    if (childrenElement.name.toAsciiLower().equals("type")) {
-                        appender.setAppenderType(childrenElement.content)
-                    }
-                    if (childrenElement.name.toAsciiLower().equals("pattern")) {
-                        appender.setPattern(childrenElement.content)
-                    } else {
-                        let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                        var m: Int64 = 0
-                        while (allChildrenAttrs.size != 0 && m < allChildrenAttrs.size) {
-                            var childrenAttr: XmlAttr = allChildrenAttrs.get(m).getOrThrow()
-                            var property: AppenderProperty = AppenderProperty(
-                                childrenAttr.content,
-                                childrenElement.content
-                            )
-                            propertyList.append(property)
-                            m++
-                        }
-                        appender.setProperties(propertyList)
-                    }
-                    k++
-                }
-                configList.append(appender)
+        for (o in 0..jsArr.size()) {
+            var appender: AppenderConfig = AppenderConfig()
+            if (jsArr.get(o).getOrThrow().asObject().containsKey("enabled")) {
+                appender.setEnabled(jsArr.get(o).getOrThrow().asObject().get("enabled").getOrThrow().toString())
             }
-            i++
+            if (jsArr.get(o).getOrThrow().asObject().containsKey("enabled")) {
+                appender.setName(jsArr.get(o).getOrThrow().asObject().get("name").getOrThrow().toString())
+            }
+            if (jsArr.get(o).getOrThrow().asObject().containsKey("type")) {
+                appender.setAppenderType(jsArr.get(o).getOrThrow().asObject().get("type").getOrThrow().toString())
+            }
+            if (jsArr.get(o).getOrThrow().asObject().containsKey("pattern")) {
+                appender.setPattern(jsArr.get(o).getOrThrow().asObject().get("pattern").getOrThrow().toString())
+            }
+            if (jsArr.get(o).getOrThrow().asObject().containsKey("properties")) {
+                var proArr: JsonArray = jsArr.get(o).getOrThrow().asObject().get("properties").getOrThrow().asArray()
+                for (i in 0..proArr.size()) {
+                    var property: AppenderProperty = AppenderProperty()
+                    property.setName(proArr.get(i).getOrThrow().asObject().get("name").getOrThrow().toString())
+                    property.setValue(proArr.get(i).getOrThrow().asObject().get("value").getOrThrow().toString())
+                    propertyList.append(property)
+                }
+                appender.setProperties(propertyList)
+            }
+            configList.append(appender)
         }
         return configList
     }
@@ -375,49 +298,34 @@ public class LoggerManager {
     /**
      * Get logger configuarations.
      *
-     * @param allElements basic configuration elements by parsing xml file.
+     * @param jsonValue basic configuration elements by parsing json file.
      * @return logger configuration list.
      */
-    private func getLoggerConfiguration(allElements: ArrayList<XmlElement>): ArrayList<LoggerConfig> {
+    private func getLoggerConfiguration(jsonValue: JsonValue): ArrayList<LoggerConfig> {
         var loggerList: ArrayList<LoggerConfig> = ArrayList<LoggerConfig>()
-        var i: Int64 = 0
-        while (i < allElements.size) {
-            var element: XmlElement = allElements.get(i).getOrThrow()
-            if (element.name.toAsciiLower().equals("logger")) {
-                let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
-                let allAttrs: ArrayList<XmlAttr> = element.attributes
-                var logger: LoggerConfig = LoggerConfig()
-                var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
-                var j: Int64 = 0
-                while (j < allAttrs.size) {
-                    var attr: XmlAttr = allAttrs.get(j).getOrThrow()
-                    if (attr.name.toAsciiLower().equals("name")) {
-                        logger.setName(attr.content)
-                    }
-                    j++
-                }
-                var k: Int64 = 0
-                while (k < allChildrenElements.size) {
-                    var childrenElement: XmlElement = allChildrenElements.get(k).getOrThrow()
-                    if (childrenElement.name.toAsciiLower().equals("level")) {
-                        logger.setLevel(childrenElement.content)
-                    } else {
-                        let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                        var m: Int64 = 0
-                        while (allChildrenAttrs.size != 0 && m < allChildrenAttrs.size) {
-                            var childrenAttr: XmlAttr = allChildrenAttrs.get(m).getOrThrow()
-                            if (childrenAttr.name.toAsciiLower().equals("ref")) {
-                                refList.append(AppenderRef(childrenAttr.content))
-                            }
-                            m++
-                        }
-                        logger.setAppenderRefList(refList)
-                    }
-                    k++
-                }
-                loggerList.append(logger)
+        let loggers = jsonValue.asObject().get("loggers").getOrThrow()
+        var jsArr: JsonArray = JsonValue.fromStr(loggers.toJsonString()).asArray()
+        var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
+
+        for (o in 0..jsArr.size()) {
+            var logger: LoggerConfig = LoggerConfig()
+            if (jsArr.get(o).getOrThrow().asObject().containsKey("name")) {
+                logger.setName(jsArr.get(o).getOrThrow().asObject().get("name").getOrThrow().toString())
             }
-            i++
+            if (jsArr.get(o).getOrThrow().asObject().containsKey("enabled")) {
+                logger.setLevel(jsArr.get(o).getOrThrow().asObject().get("level").getOrThrow().toString())
+            }
+            if (jsArr.get(o).getOrThrow().asObject().containsKey("appender-refs")) {
+                var refArr: JsonArray = jsArr.get(o).getOrThrow().asObject().get("appender-refs").getOrThrow().asArray()
+                for (i in 0..refArr.size()) {
+                    var ref: AppenderRef = AppenderRef(
+                        refArr.get(i).getOrThrow().asObject().get("ref").getOrThrow().toString()
+                    )
+                    refList.append(ref)
+                }
+                logger.setAppenderRefList(refList)
+            }
+            loggerList.append(logger)
         }
         return loggerList
     }
@@ -425,39 +333,27 @@ public class LoggerManager {
     /**
      * Get root configuarations.
      *
-     * @param allElements basic configuration elements by parsing xml file.
+     * @param jsonValue basic configuration elements by parsing json file.
      * @return root configuration list.
      */
-    private func getRootConfiguration(allElements: ArrayList<XmlElement>): RootLoggerConfig {
+    private func getRootConfiguration(jsonValue: JsonValue): RootLoggerConfig {
+        var configList: ArrayList<AppenderConfig> = ArrayList<AppenderConfig>()
+        let appenders = jsonValue.asObject().get("root").getOrThrow()
+        var jsObj: JsonObject = JsonValue.fromStr(appenders.toJsonString()).asObject()
         var root: RootLoggerConfig = RootLoggerConfig()
         var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
-        var i: Int64 = 0
-        while (i < allElements.size) {
-            var element: XmlElement = allElements.get(i).getOrThrow()
-            if (element.name.toAsciiLower().equals("root")) {
-                let allChildrenElements: ArrayList<XmlElement> = element.childrenElements
-                var j: Int64 = 0
-                while (j < allChildrenElements.size) {
-                    var childrenElement: XmlElement = allChildrenElements.get(j).getOrThrow()
-                    if (childrenElement.name.toAsciiLower().equals("level")) {
-                        root.setLevel(childrenElement.content)
-                    } else {
-                        let allChildrenAttrs: ArrayList<XmlAttr> = childrenElement.attributes
-                        var k: Int64 = 0
-                        while (allChildrenAttrs.size != 0 && k < allChildrenAttrs.size) {
-                            var childrenAttr: XmlAttr = allChildrenAttrs.get(k).getOrThrow()
-                            var appenderRef: AppenderRef = AppenderRef()
-                            if (childrenAttr.name.equals("ref")) {
-                                refList.append(AppenderRef(childrenAttr.content))
-                            }
-                            k++
-                        }
-                        root.setAppenderRefList(refList)
-                    }
-                    j++
-                }
+        if (jsObj.containsKey("level")) {
+            root.setLevel(jsObj.get("level").getOrThrow().toString())
+        }
+        if (jsObj.containsKey("appender-refs")) {
+            var jsArr: JsonArray = jsObj.get("appender-refs").getOrThrow().asArray()
+            for (j in 0..jsArr.size()) {
+                var ref: AppenderRef = AppenderRef(
+                    jsArr.get(j).getOrThrow().asObject().get("ref").getOrThrow().toString()
+                )
+                refList.append(ref)
             }
-            i++
+            root.setAppenderRefList(refList)
         }
         return root
     }

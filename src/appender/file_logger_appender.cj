@@ -95,15 +95,23 @@ public class FileLoggerAppender <: LoggerAppender {
         //Parse properties.
         var i: Int64 = 0
         while (i < properties.size) {
-            var value = properties.get(i).getOrThrow().getValue().trimLeft(" \r\n").trimRight(" \r\n")
-            match (properties.get(i).getOrThrow().getName().toAsciiLower()) {
-                case "filename" => file = value
-                case "maxsize" => maxSize = strToNumBySuffix(value, 1024, 20 * 1024 * 1024) // 默认20M
-                case "daily" => daily = value.toAsciiLower() != "false"
-                case "rotate" => rotate = value.toAsciiLower() != "false"
-                case "retentiondays" => retentionDays = getNumByString(value, 7)
-                case _ => print(
-                        "LoadConfiguration: Warning: Unknown property ${properties.get(i).getOrThrow().getName()}")
+            var value = properties.get(i).getOrThrow().getValue().toAsciiLower().trimLeft(" \r\n").trimRight(" \r\n")
+            var name = properties.get(i).getOrThrow().getName().toAsciiLower()
+
+            if (name.contains("filename")) {
+                file = value
+            }
+            if (name.contains("maxsize")) {
+                maxSize = strToNumBySuffix(value, 1024, 20 * 1024 * 1024)
+            }
+            if (name.contains("daily") && !value.contains("false")) {
+                daily = true
+            }
+            if (name.contains("rotate") && !value.contains("false")) {
+                rotate = true
+            }
+            if (name.contains("retentiondays")) {
+                retentionDays = getNumByString(value, 7)
             }
             i++
         }
@@ -111,7 +119,7 @@ public class FileLoggerAppender <: LoggerAppender {
         if (file.size == 0) {
             file = "root.log"
         }
-        this.fileName = file
+        this.fileName = file.substring(1, 8)
         this.rotate = rotate
         this.maxSize = maxSize
         this.daily = daily
@@ -124,7 +132,7 @@ public class FileLoggerAppender <: LoggerAppender {
     public func start(): Unit {
         this.file = File(this.fileName, OpenOption.CreateOrAppend)
         this.curSize = this.file.info.length
-        this.opendate = this.file.info.creationTime.day()
+        this.opendate = this.file.info.creationTime.dayOfMonth
         let fut = spawn {
             while (true) {
                 lock.lock()
@@ -132,17 +140,22 @@ public class FileLoggerAppender <: LoggerAppender {
                     if (this.file.isClosed()) {
                         this.file = File(this.fileName, OpenOption.CreateOrAppend)
                         this.curSize = this.file.info.length
-                        this.opendate = this.file.info.creationTime.day()
+                        this.opendate = this.file.info.creationTime.dayOfMonth
                     }
-                    let now = Time.now()
-                    if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.day() != this.opendate)) {
+                    let now = DateTime.now()
+                    if ((this.maxSize > 0 && this.curSize >= this.maxSize) ||
+                        (this.daily && now.dayOfMonth != this.opendate)) {
                         rollingFile()
                     }
 
                     // Formatting logging.
-                    var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).toUtf8Array()
+                    var msgStr = getDefaultPatternConvert().formatLogRecord(this.pattern, rec)
+                    var newStr = msgStr.substring(1, msgStr.size - 3)
+                    var mess = newStr.toUtf8Array()
                     try {
+                        // this.file.write("\n".toUtf8Array())
                         this.file.write(mess)
+                        this.file.write("\n".toUtf8Array())
                     } catch (e: FSException) {
                         println("write file occur exception: ${e.message}")
                         return
@@ -215,12 +228,12 @@ public class FileLoggerAppender <: LoggerAppender {
         var fname = ""
 
         // If daily in the configuration is true (archived by day), the opening date is not the same as the current day.
-        if (this.daily && Time.now().day() != this.opendate) {
+        if (this.daily && DateTime.now().dayOfMonth != this.opendate) {
             // Get yesterday's time, format to day.
-            let yesterday = Time.now().addDays(0, 0, -1).toString("YYYYMMddhhmmss-SS")
+            let yesterday = DateTime.now().addDays(-1).toString("YYYYMMddhhmmss-SS")
             fname = this.fileName + "_" + yesterday + ".log"
         } else {
-            fname = this.fileName + "_" + Time.now().toString("YYYYMMddhhmmss-SS") + ".log"
+            fname = this.fileName + "_" + DateTime.now().toString("YYYYMMddhhmmss-SS") + ".log"
         }
         try {
             //An error message is returned when the current file is named fname.
@@ -233,8 +246,9 @@ public class FileLoggerAppender <: LoggerAppender {
             println("rolling file occur exception: ${e.message}")
             return
         }
+
         // Set the daily open date to the current date.
-        this.opendate = Time.now().day()
+        this.opendate = DateTime.now().dayOfMonth
         this.curSize = 0
 
         //Indicates whether to start the thread to run.
@@ -249,8 +263,8 @@ public class FileLoggerAppender <: LoggerAppender {
         try {
             let fileDir = this.file.info.parentDirectory.getOrThrow()
             for (file in Directory(fileDir.path).fileList()) {
-                if (file.path.toString().contains(".log") && file.lastModificationTime.addDays(0, 0, this.retentionDays)<
-                    Time.now()) {
+                if (file.path.toString().contains(".log") && file.lastModificationTime.addDays(this.retentionDays) <
+                    DateTime.now()) {
                     File.delete(file.path)
                 }
             }
