@@ -90,8 +90,8 @@ func testFlushLeft(): Bool {
 
 func testFormatLogRecord(): Bool {
     let defaultPatternConverter = DefaultPatternConverter()
-    var logRecord1 = LogRecord(Time.now())
-    var logRecord2 = LogRecord("com.test", LogLevel.ALL, Time.now(), "source/hello", "message")
+    var logRecord1 = LogRecord(DateTime.now())
+    var logRecord2 = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source/hello", "message")
     var size1 = defaultPatternConverter.formatLogRecord("", logRecord1).size
     var size2 = getDefaultPatternConvert().formatLogRecord("", logRecord1).size
     var size3 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M", logRecord1).size
@@ -105,9 +105,9 @@ func testFormatLogRecord(): Bool {
 }
 
 func testLogRecord(): Bool {
-    var logRecord2 = LogRecord(Time.now())
-    var year = logRecord2.getCreatedTime().year()
-    var logRecord3 = LogRecord("com.test", LogLevel.ALL, Time.now(), "source", "message")
+    var logRecord2 = LogRecord(DateTime.now())
+    var year = logRecord2.getCreatedTime().year
+    var logRecord3 = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source", "message")
     var tagname = logRecord3.getTagName()
     if (year == 0 || tagname != "com.test") {
         return false
@@ -176,7 +176,7 @@ func testGetLevelByString(): Bool {
 
 func testTimeSlice(): Bool {
     let timeSilce = TimeSlice()
-    timeSilce.getTimeSlice(Time.now())
+    timeSilce.getTimeSlice(DateTime.now())
     setCachedTimeSlice(timeSilce)
     if (timeSliceCache.shortTime.size <= 0 || timeSilce.getShortDate().size <= 0 || timeSilce.getShortTime().size <= 0) {
         return false

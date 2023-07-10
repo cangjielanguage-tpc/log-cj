@@ -80,7 +80,7 @@ public class FileLoggerAppender <: LoggerAppender {
      */
     public func initAppender(pattern: String, properties: ArrayList<AppenderProperty>): Unit {
         var file = ""
-        let dFormat = "[%T %D %m] [%L][%l] (%S) %M"
+        let dFormat = "[%D %T %m] [%L] [%l] (%S) %M"
         var maxSize = 0
         var daily = false
         var rotate = false
@@ -99,7 +99,7 @@ public class FileLoggerAppender <: LoggerAppender {
             var name = properties.get(i).getOrThrow().getName().toAsciiLower()
 
             if (name.contains("filename")) {
-                file = value
+                file = value.replace("\"", "")
             }
             if (name.contains("maxsize")) {
                 maxSize = strToNumBySuffix(value, 1024, 20 * 1024 * 1024)
@@ -119,7 +119,8 @@ public class FileLoggerAppender <: LoggerAppender {
         if (file.size == 0) {
             file = "root.log"
         }
-        this.fileName = file.substring(1, 8)
+
+        this.fileName = file
         this.rotate = rotate
         this.maxSize = maxSize
         this.daily = daily
@@ -150,12 +151,10 @@ public class FileLoggerAppender <: LoggerAppender {
 
                     // Formatting logging.
                     var msgStr = getDefaultPatternConvert().formatLogRecord(this.pattern, rec)
-                    var newStr = msgStr.substring(1, msgStr.size - 3)
+                    var newStr = msgStr.replace("\"", "")
                     var mess = newStr.toUtf8Array()
                     try {
-                        // this.file.write("\n".toUtf8Array())
                         this.file.write(mess)
-                        this.file.write("\n".toUtf8Array())
                     } catch (e: FSException) {
                         println("write file occur exception: ${e.message}")
                         return

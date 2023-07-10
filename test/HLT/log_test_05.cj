@@ -33,7 +33,7 @@ public class LogTestE {
         var console_02: ConsoleLoggerAppender = ConsoleLoggerAppender()
         console_02.initAppender("[%T %D] [%L] (%S) [%M]", ArrayList<AppenderProperty>())
         console_02.start()
-        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, Time.now(), "source", "message")
+        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, DateTime.now(), "source", "message")
         @Expect(logRecord_02.getTagName(),"logRecord_02")
         console_02.logWrite(logRecord_02)
         console_02.close()
@@ -113,24 +113,24 @@ public class LogTestE {
         @Expect(size, 0)
 
         var defaultCdonfig: LoggerConfiguration = Logger_Manager.loadDefaultConfiguration()
-        var level = defaultCdonfig.getRoot().getLevel()
+        var level = defaultCdonfig.getRoot().getLevel().replace("\"","")
         @Expect(level, "info")
     }
    
     @TestCase
     public func log_test_055():Unit{
         var path = getcwd()
-        let loggerManager = LoggerManager("${path}/src/resources/log4cj.xml")
+        let loggerManager = LoggerManager("${path}/src/resources/log4cj.json")
         var size: Int64 = loggerManager.getRootLogger().getAppenderList().size
-        @Expect(size, 2)
+        @Expect(size, 1)
 
         var log = loggerManager.getLogger("test")
         @Expect(log.getName(), "test")
 
         var logNameArr:ArrayList<String> = Logger_Manager.getLoggerNameArr()
-        @Expect(logNameArr.size, 3)
+        @Expect(logNameArr.size, 1)
         var getLoggerAttrArr:ArrayList<LoggerAppenderReference> = Logger_Manager.getLoggerAttrArr()
-        @Expect(getLoggerAttrArr.size, 3)
+        @Expect(getLoggerAttrArr.size, 1)
     }
    
 

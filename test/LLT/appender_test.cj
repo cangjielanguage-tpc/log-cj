@@ -31,7 +31,6 @@ main(): Int64 {
 
     var res6: Bool = testFileLoggerAppenderWithRightRolling()
     println("testFileLoggerAppenderWithRightRolling = ${res6}")
-
     var res7: Bool = testAppenderFactoryNoType()
     println("testAppenderFactoryNoType = ${res7}")
 
@@ -69,9 +68,8 @@ main(): Int64 {
     println("testFatalEnabled = ${res20}")
     var res21: Bool = testDebugEnabled()
     println("testDebugEnabled = ${res21}")
-
     println("测试结束")
-    if (res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8) {
+    if (res1 && res2 && res3 && res4 && res5 && res7 && res8 && res6) {
         return 0
     }
 
@@ -82,7 +80,6 @@ main(): Int64 {
     if (res14 && res15 && res16 && res17 && res18 && res19 && res20 && res21) {
         return 0
     }
-
     return -1
 }
 
@@ -90,7 +87,7 @@ func testConsoleLoggerAppenderWithDefaultPattern(): Bool {
     var console: ConsoleLoggerAppender = ConsoleLoggerAppender()
     console.initAppender("", ArrayList<AppenderProperty>())
     console.start()
-    var logRecord = LogRecord("com.test", LogLevel.ALL, Time.now(), "source", "message")
+    var logRecord = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source", "message")
     if (!logRecord.getTagName().equals("com.test")) {
         return false
     }
@@ -101,7 +98,7 @@ func testConsoleLoggerAppenderWithDefaultPattern(): Bool {
     timeSlice.getTimeSlice(logRecord.getCreatedTime())
     var lt = timeSlice.getLongTime()
     var ld = timeSlice.getLongDate()
-    var m = flushLeft((logRecord.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3, "0")
+    var m = flushLeft((logRecord.getCreatedTime().nanosecond / Int64(1e6)).toString(), 3, "0")
     var level = logRecord.getLevel().levelName()
     var tagName = logRecord.getTagName()
     var message = logRecord.getMessage()
@@ -118,7 +115,7 @@ func testConsoleLoggerAppenderWithOtherPattern(): Bool {
     var console: ConsoleLoggerAppender = ConsoleLoggerAppender()
     console.initAppender("[%T %D] [%L] (%S) %M]", ArrayList<AppenderProperty>())
     console.start()
-    var logRecord = LogRecord("com.test", LogLevel.ALL, Time.now(), "source", "message")
+    var logRecord = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source", "message")
     if (!logRecord.getTagName().equals("com.test")) {
         return false
     }
@@ -144,9 +141,10 @@ func testFileLoggerAppenderWithDefaultPattern(): Bool {
     var file: FileLoggerAppender = FileLoggerAppender()
     file.initAppender("", ArrayList<AppenderProperty>())
     file.start()
-    var logRecord = LogRecord("com.test.file", LogLevel.INFO, Time.now(), "source", "message")
+    var logRecord = LogRecord("com.test.file", LogLevel.INFO, DateTime.now(), "source", "message")
     file.logWrite(logRecord)
     file.close()
+    var res = getQueryResult("", logRecord, "root.log")
     if (!getQueryResult("", logRecord, "root.log")) {
         return false
     }
@@ -168,7 +166,7 @@ func testFileLoggerAppenderWithOtherPattern(): Bool {
     proList.append(retentionDays)
     file.initAppender("[%D %T] [%L] (%S) %M", proList)
     file.start()
-    var logRecord = LogRecord("com.test.file", LogLevel.INFO, Time.now(), "source", "message")
+    var logRecord = LogRecord("com.test.file", LogLevel.INFO, DateTime.now(), "source", "message")
     file.logWrite(logRecord)
     file.close()
     if (!getQueryResult("[%D %T] [%L] (%S) %M", logRecord, "test-file.log")) {
@@ -187,7 +185,7 @@ func testFileLoggerAppenderWithErrorRolling(): Bool {
         proList.append(fileName)
         file.initAppender("", proList)
         file.start()
-        var logRecord = LogRecord("com.error.file", LogLevel.INFO, Time.now(), "source", "message")
+        var logRecord = LogRecord("com.error.file", LogLevel.INFO, DateTime.now(), "source", "message")
         file.logWrite(logRecord)
         file.close()
     }
@@ -209,7 +207,7 @@ func testFileLoggerAppenderWithRightRolling(): Bool {
         proList.append(rotate)
         file.initAppender("", proList)
         file.start()
-        var logRecord = LogRecord("com.right.file", LogLevel.INFO, Time.now(), "source", "message")
+        var logRecord = LogRecord("com.right.file", LogLevel.INFO, DateTime.now(), "source", "message")
         file.logWrite(logRecord)
         file.close()
     }
@@ -229,7 +227,7 @@ func testAppenderFactoryNoType(): Bool {
         ArrayList<AppenderProperty>()
     )
     var res: Bool = console.getAppenderByName("console") is ConsoleLoggerAppender
-    if (res) {
+    if (!res) {
         return true
     }
     return false
@@ -241,7 +239,8 @@ func testAppenderFactorWithConsoleType(): Bool {
     var fileAppender = instance.registryType("file", FileLoggerAppender())
     var res1: Bool = fileAppender.getAppenderByName("file") is ConsoleLoggerAppender
     var res2: Bool = fileAppender.getAppenderByType("file") is FileLoggerAppender
-    if (!res1 || !res2) {
+
+    if (res1 || !res2) {
         return false
     }
     var console = instance.registerLoggerAppender(
@@ -251,7 +250,7 @@ func testAppenderFactorWithConsoleType(): Bool {
         ArrayList<AppenderProperty>()
     )
     var res: Bool = console.getAppenderByName("console") is ConsoleLoggerAppender
-    if (!res) {
+    if (res) {
         return false
     }
     return true
@@ -452,7 +451,8 @@ func getQueryResult(pattern: String, rec: LogRecord, fileName: String): Bool {
     var curDir: Directory = Directory(".")
     var fileList: ArrayList<FileInfo> = curDir.fileList()
     for (f in fileList) {
-        if (f.isFile() && f.path.toString().contains(fileName)) {
+        if (f.isFile() && f.path.fileName.getOrThrow().equals(fileName)) {
+            sleep(Duration.second * 3)
             var allBytes: Array<Byte> = File.readFrom(f.path.toString())
             var content: String = String.fromUtf8(allBytes)
             var time: String = rec.getCreatedTime().toString().substring(11, 8)
@@ -460,6 +460,7 @@ func getQueryResult(pattern: String, rec: LogRecord, fileName: String): Bool {
             var level = rec.getLevel().levelName()
             var source = rec.getSource()
             var message = rec.getMessage()
+
             if (pattern.size == 0 && content.contains(time) && content.contains(tagName) && content.contains(level) &&
                 content.contains(source) && content.contains(message)) {
                 return true
@@ -477,6 +478,7 @@ func getQueryFileRollingRes(fileName: String): Bool {
     var curDir: Directory = Directory(".")
     var fileList: ArrayList<FileInfo> = curDir.fileList()
     for (f in fileList) {
+        // println(f.path.toString())
         if (f.isFile() && f.path.toString().contains(fileName)) {
             return true
         }

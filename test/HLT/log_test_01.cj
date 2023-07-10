@@ -74,23 +74,23 @@ public class LogTestA {
     @TestCase
     public func log_test_003(): Unit {
         let defaultPatternConverter = DefaultPatternConverter()
-        var timeNow: Time = Time.now()
+        var timeNow: DateTime = DateTime.now()
 
         var logRecord_01 = LogRecord(timeNow)
         @Expect(logRecord_01.getTagName(), "")
         @Expect(logRecord_01.getLevel().level(), 4)
         @Expect(logRecord_01.getSource(), "")
         @Expect(logRecord_01.getMessage(), "")
-        @Expect(logRecord_01.getCreatedTime().year() != 0, true)
+        @Expect(logRecord_01.getCreatedTime().year != 0, true)
         var format_01 = defaultPatternConverter.formatLogRecord("", logRecord_01)
         println(format_01)
 
-        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, Time.now(), "source", "message")
+        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, DateTime.now(), "source", "message")
         @Expect(logRecord_02.getTagName(),"logRecord_02")
         @Expect(logRecord_02.getLevel().level(), 1)
         @Expect(logRecord_02.getSource(), "source")
         @Expect(logRecord_02.getMessage(), "message")
-        @Expect(logRecord_02.getCreatedTime().year() != 0, true)
+        @Expect(logRecord_02.getCreatedTime().year != 0, true)
         var format_02 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M", logRecord_02)
         println(format_02)
         var format_02_1 = defaultPatternConverter.formatLogRecord("", logRecord_02)
@@ -101,21 +101,21 @@ public class LogTestA {
         )
         println(format_02_3)
 
-        var logRecord_03 = LogRecord("", LogLevel.TRACE, Time.now(), "", "")
+        var logRecord_03 = LogRecord("", LogLevel.TRACE, DateTime.now(), "", "")
         @Expect(logRecord_03.getTagName(),"")
         @Expect(logRecord_03.getLevel().level(), 2)
         @Expect(logRecord_03.getSource(), "")
         @Expect(logRecord_03.getMessage(), "")
-        @Expect(logRecord_03.getCreatedTime().year() != 0, true)
+        @Expect(logRecord_03.getCreatedTime().year != 0, true)
         var format_03 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M", logRecord_03)
         println(format_03)
 
-        var logRecord_04 = LogRecord("@#$^,;[^&^%**(", LogLevel.DEBUG, Time.now(), "_+(^^&/\\@$@&", "%^&*' '&(*@#")
+        var logRecord_04 = LogRecord("@#$^,;[^&^%**(", LogLevel.DEBUG, DateTime.now(), "_+(^^&/\\@$@&", "%^&*' '&(*@#")
         @Expect(logRecord_04.getTagName(),"@#$^,;[^&^%**(")
         @Expect(logRecord_04.getLevel().level(), 3)
         @Expect(logRecord_04.getSource(), "_+(^^&/\\@$@&")
         @Expect(logRecord_04.getMessage(), "%^&*' '&(*@#")
-        @Expect(logRecord_04.getCreatedTime().year() != 0, true)
+        @Expect(logRecord_04.getCreatedTime().year != 0, true)
         var format_04 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M", logRecord_04)
         println(format_04)
     }
@@ -124,7 +124,7 @@ public class LogTestA {
     // 验证: class TimeSlice
     @TestCase
     public func log_test_004(): Unit {
-        var timeNow: Time = Time.now()
+        var timeNow: DateTime = DateTime.now()
         var timeSilce = TimeSlice()
 
         //setCachedTimeSlice(timeSilce)

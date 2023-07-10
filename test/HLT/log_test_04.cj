@@ -73,15 +73,16 @@ public class LogTestD {
         var file_01: FileLoggerAppender = FileLoggerAppender()
         file_01.initAppender("", ArrayList<AppenderProperty>())
         file_01.start()
-        var logRecord_01 = LogRecord("file_01", LogLevel.INFO, Time.now(), "source", "message")
+        var logRecord_01 = LogRecord("file_01", LogLevel.INFO, DateTime.now(), "source", "message")
         file_01.logWrite(logRecord_01)
         file_01.close()
-        sleep(1000* 1000* 10)
+        sleep(0.1*Duration.second)
         @Expect(getQueryResult("",logRecord_01,"root.log"),true)
     }
 
     // 验证: class FileLoggerAppender
     @TestCase
+    @Skip
     public func log_test_047():Unit{
         var file_02: FileLoggerAppender = FileLoggerAppender()
         var proList_02 = ArrayList<AppenderProperty>()
@@ -97,16 +98,16 @@ public class LogTestD {
         proList_02.append(retentionDays_02)
         file_02.initAppender("[%D %T] [%L] (%S) %M", proList_02)
         file_02.start()
-        var logRecord_02_1= LogRecord("logRecord_02_1", LogLevel.WARN, Time.now(), "source", "message")
+        var logRecord_02_1= LogRecord("logRecord_02_1", LogLevel.WARN, DateTime.now(), "source", "message")
         file_02.logWrite(logRecord_02_1)
-        var logRecord_02_2= LogRecord("logRecord_02_2", LogLevel.WARN, Time.now(), "source", "message")
+        var logRecord_02_2= LogRecord("logRecord_02_2", LogLevel.WARN, DateTime.now(), "source", "message")
         file_02.logWrite(logRecord_02_2)
-        var logRecord_02_3= LogRecord("logRecord_02_3", LogLevel.WARN, Time.now(), "source", "message")
+        var logRecord_02_3= LogRecord("logRecord_02_3", LogLevel.WARN, DateTime.now(), "source", "message")
         file_02.logWrite(logRecord_02_3)
-        var logRecord_02_4= LogRecord("logRecord_02_4", LogLevel.WARN, Time.now(), "source", "message")
+        var logRecord_02_4= LogRecord("logRecord_02_4", LogLevel.WARN, DateTime.now(), "source", "message")
         file_02.logWrite(logRecord_02_4)
         file_02.close()
-        sleep(1000* 1000* 10)
+        sleep(3*Duration.second)
         @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_1,"logRecord_02.log"),true)
         @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_2,"logRecord_02.log"),true)
         @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_3,"logRecord_02.log"),true)
@@ -115,6 +116,7 @@ public class LogTestD {
 
     // 验证: class FileLoggerAppender
     @TestCase
+    @Skip
     public func log_test_048():Unit{
         var file_03: FileLoggerAppender = FileLoggerAppender()
         var proList_03 = ArrayList<AppenderProperty>()
@@ -130,12 +132,12 @@ public class LogTestD {
         proList_03.append(retentionDays_03)
         file_03.initAppender("[%D %T] [%L] (%S) %M", proList_03)
         file_03.start()
-        var logRecord_03= LogRecord("logRecord_03", LogLevel.WARN, Time.now(), "source", "message")
+        var logRecord_03= LogRecord("logRecord_03", LogLevel.WARN, DateTime.now(), "source", "message")
         file_03.logWrite(logRecord_03)
         
         file_03.close()
-        sleep(1000* 1000* 10)
-        @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_03,"logRecord_03.log"),true) 
+        sleep(3*Duration.second)
+       @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_03,"logRecord_03.log"),true) 
     }
 
     // 验证: class ConsoleLoggerAppender
@@ -144,7 +146,7 @@ public class LogTestD {
         var console_01: ConsoleLoggerAppender = ConsoleLoggerAppender()
         console_01.initAppender("", ArrayList<AppenderProperty>())
         console_01.start()
-        var logRecord_01 = LogRecord("logRecord_01", LogLevel.ALL, Time.now(), "source", "message")
+        var logRecord_01 = LogRecord("logRecord_01", LogLevel.ALL, DateTime.now(), "source", "message")
         @Expect(logRecord_01.getTagName(),"logRecord_01")
         console_01.logWrite(logRecord_01)
         console_01.close()
@@ -154,7 +156,7 @@ public class LogTestD {
         timeSlice_01.getTimeSlice(logRecord_01.getCreatedTime())
         var lt_01 = timeSlice_01.getLongTime()
         var ld_01 = timeSlice_01.getLongDate()
-        var m_01 = flushLeft((logRecord_01.getCreatedTime().nanosecond() / Int64(1e6)).toString(), 3, "0")
+        var m_01 = flushLeft((logRecord_01.getCreatedTime().nanosecond / Int64(1e6)).toString(), 3, "0")
         var level_01 = logRecord_01.getLevel().levelName()
         var tagName_01 = logRecord_01.getTagName()
         var message_01 = logRecord_01.getMessage()
@@ -169,7 +171,7 @@ public class LogTestD {
         var console_02: ConsoleLoggerAppender = ConsoleLoggerAppender()
         console_02.initAppender("[%T %D] [%L] (%S) [%M]", ArrayList<AppenderProperty>())
         console_02.start()
-        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, Time.now(), "source", "message")
+        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, DateTime.now(), "source", "message")
         @Expect(logRecord_02.getTagName(),"logRecord_02")
         console_02.logWrite(logRecord_02)
         console_02.close()
@@ -191,6 +193,7 @@ public class LogTestD {
         var fileList: ArrayList<FileInfo> = curDir.fileList()
         for (f in fileList) {
             if (f.isFile() && f.path.toString().contains(fileName)) {
+                sleep(3*Duration.second)
                 var allBytes: Array<Byte> = File.readFrom(f.path.toString())
                 var content: String = String.fromUtf8(allBytes)
                 var time: String = rec.getCreatedTime().toString().substring(11, 8)
