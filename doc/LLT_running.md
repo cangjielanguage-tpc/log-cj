@@ -12,7 +12,7 @@ test/LLT下xxx_test的仓颉文件
 │   │    ├── xxx_test.cj
 │   │    ├── ...
 ├── resources
-│   ├── log4cj.xml
+│   ├── log4cj.json
 ```
 
 ## LLT运行先决条件
@@ -26,7 +26,7 @@ test/LLT下xxx_test的仓颉文件
 LLT = true
 ```
 
-### 下载[测试库](https://gitee.com/HW-PLLab/testJekins/tree/dev)，将测试库中src目录下ci_test 和 ci_config 两个文件夹复制到项目根目录中
+### 下载[测试库](https://gitee.com/HW-PLLab/testJekins/tree/dev)，将测试库中src目录下ci_test 文件夹复制到项目根目录中
 
 
 ## 运行LLT
@@ -170,7 +170,7 @@ python3 ci_test/main.py test
 **-o 输出目录**<br/>
 
 ```cangjie
-cjcov --root=./ -e "xxx/log4cj2/ci_test/ xxx/log4cj2/ci_confg/ xxx/log4cj2/doc/ xxx/log4cj2/src/main.cj" --html-details -o html_output
+cjcov --root=./ -e "xxx/log4cj2/ci_test/ xxx/log4cj2/doc/ xxx/log4cj2/src/main.cj" --html-details -o html_output
 ```
 
 ## 查看覆盖率报告
