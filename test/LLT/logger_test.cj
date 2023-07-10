@@ -206,7 +206,7 @@ func getQueryResult(name: String, msg: String): Bool {
         if (f.isFile() && f.path.toString().contains("root.log")) {
             var allBytes: Array<Byte> = File.readFrom(f.path.toString())
             var content: String = String.fromUtf8(allBytes)
-            var time: String = Time.now().toString().substring(11, 8)
+            var time: String = DateTime.now().toString().substring(11, 8)
             if (content.contains(time) && content.contains(name) && content.contains(msg)) {
                 return true
             }
