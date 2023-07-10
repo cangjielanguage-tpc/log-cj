@@ -52,7 +52,7 @@
 │       ├── time_slice.cj
 │       └── util.cj
 ├── resources
-│   ├── log4cj.xml
+│   ├── log4cj.json
 ├── test
 │   ├── LLT
 │   ├── UT
@@ -66,6 +66,10 @@
 
 #### 接口说明
 参见[主要类和函数说明](./doc/feature_api.md)
+
+#### 支持XML&JSON配置
+master支持JSON配置
+0.38.2分支支持XML配置
 
 #### 使用编译&&压缩机制
 
