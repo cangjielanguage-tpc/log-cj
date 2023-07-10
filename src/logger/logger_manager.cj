@@ -112,7 +112,6 @@ public class LoggerManager {
             while (i < appenders.size) {
                 nameArr.append(appenders.get(i).getOrThrow().getName().toAsciiLower())
                 enabledArr.append(appenders.get(i).getOrThrow().getEnabled().toAsciiLower().trimAscii())
-
                 if (nameArr.get(i).getOrThrow().size > 0 && enabledArr.get(i).getOrThrow().contains("true")) {
                     this.loggerAppenderFactory.registerLoggerAppender(
                         appenders.get(i).getOrThrow().getName(),
