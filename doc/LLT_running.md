@@ -162,6 +162,7 @@ python3 ci_test/main.py test
 [01-16 15:28:00] INFO -   TestSuiteTask: Total: 4, PASS: 4, FAIL: 0
 ```
 
+## 以下步骤本版本（0.39.4）暂不支持
 ## 生成覆盖率报告（前提：LLT运行完成）
 
 ### 进入项目根目录，执行如下命令(xxx为自己机器目录)
