@@ -79,6 +79,7 @@ public class Logger {
         if (appenderRef.getAppenderList().size == 0) {
             return
         }
+
         if (level >= appenderRef.getLevel()) {
             var i: Int64 = 0
             while (i < appenderRef.getAppenderList().size) {

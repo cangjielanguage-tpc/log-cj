@@ -40,7 +40,7 @@ public class ConsoleLoggerAppender <: LoggerAppender {
      * @param rec log recording.
      */
     public func logWrite(rec: LogRecord): Unit {
-        println(getDefaultPatternConvert().formatLogRecord(pattern, rec))
+        print(getDefaultPatternConvert().formatLogRecord(pattern, rec).replace("\"", ""))
     }
 
     /**

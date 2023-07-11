@@ -88,16 +88,16 @@ public class LoggerAppenderFactory {
      * @return implementation class of LoggerAppender. if typeName doesn't meet the condtion, return console appender logger.
      */
     public func getAppenderByType(typeName: String): LoggerAppender {
-        if (this.typeNames.contains(typeName.toAsciiLower())) {
+        if (this.typeNames.contains(typeName.toAsciiLower().replace("\"", ""))) {
             var index: Int64 = 0
             while (index < typeNames.size) {
-                if (typeNames.get(index).getOrThrow().equals(typeName.toAsciiLower())) {
+                if (typeNames.get(index).getOrThrow().equals(typeName.toAsciiLower().replace("\"", ""))) {
                     return typeValues.get(index).getOrThrow()
                 }
                 index++
             }
         }
-        return FileLoggerAppender()
+        return ConsoleLoggerAppender()
     }
 
     /**
@@ -110,13 +110,13 @@ public class LoggerAppenderFactory {
         if (this.appenderNames.contains(name.toAsciiLower())) {
             var index: Int64 = 0
             while (index < appenderNames.size) {
-                if (appenderNames.get(index).getOrThrow().equals(name.toAsciiLower())) {
+                if (appenderNames.get(index).getOrThrow().contains(name.toAsciiLower().replace("\"", ""))) {
                     return appenderValues.get(index).getOrThrow()
                 }
                 index++
             }
         }
-        return FileLoggerAppender()
+        return ConsoleLoggerAppender()
     }
 
     /**
@@ -143,6 +143,7 @@ public class LoggerAppenderFactory {
             //Error handling should return null
             return LoggerAppenderFactory()
         }
+
         var newObj = getAppenderByType(typename)
         newObj.initAppender(pattern, properties)
         newObj.start()

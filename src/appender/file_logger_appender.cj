@@ -150,9 +150,8 @@ public class FileLoggerAppender <: LoggerAppender {
                     }
 
                     // Formatting logging.
-                    var msgStr = getDefaultPatternConvert().formatLogRecord(this.pattern, rec)
-                    var newStr = msgStr.replace("\"", "")
-                    var mess = newStr.toUtf8Array()
+                    var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).replace("\"", "").toUtf8Array()
+                    
                     try {
                         this.file.write(mess)
                     } catch (e: FSException) {

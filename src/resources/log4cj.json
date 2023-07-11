@@ -1,7 +1,7 @@
 {
     "appenders": [
         {
-            "enabled": "false",
+            "enabled": "true",
             "name": "console",
             "type": "console",
             "pattern": "[%D %T %m] [%L] [%l] (%S) %M"
