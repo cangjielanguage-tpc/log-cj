@@ -146,7 +146,7 @@ public class LoggerManager {
                 j++
             }
         }
-
+ 
         // Initialize logger configuration.
         if (configuration.getLogger().size > 0) {
             var k: Int64 = 0

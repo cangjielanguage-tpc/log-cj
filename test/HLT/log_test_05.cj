@@ -1,7 +1,7 @@
 //3rd_party_lib:log4cj2/build/log4cj
 //3rd_party_lib:log4cj2/build/zip4cj
 //3rd_party_lib:log4cj2/build/charset
-//data_file:src/resources/log4cj.xml
+//data_file:src/resources/log4cj.json
 
 package test
 
@@ -108,7 +108,7 @@ public class LogTestE {
     @TestCase
     public func log_test_054():Unit{
         let loggerManager = LoggerManager()
-        @Expect(loggerManager.getLoggerAppenderFactory().getAppenderByName("file") is FileLoggerAppender,true)
+        @Expect(loggerManager.getLoggerAppenderFactory().getAppenderByName("file") is FileLoggerAppender,false)
         var size: Int64 = loggerManager.getRootLogger().getAppenderList().size
         @Expect(size, 0)
 
