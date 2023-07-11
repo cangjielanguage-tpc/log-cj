@@ -68,8 +68,8 @@
 参见[主要类和函数说明](./doc/feature_api.md)
 
 #### 支持XML&JSON配置
-master支持JSON配置
-0.38.2分支支持XML配置
+master支持JSON配置[JSON](./doc/log4cj_json_detail_desc.md)<br/>
+0.38.2分支支持XML配置[XML](./doc/log4cj_xml_detail_desc.md)
 
 #### 使用编译&&压缩机制
 
@@ -77,8 +77,8 @@ master支持JSON配置
 
 #### 如何运行测试用例
 
-LLT参见[LLT测试用例运行说明](./doc/LLT_running.md)<br/>
-HLT参见[HLT测试用例运行说明](./doc/HLT_running.md)
+LLT参见[LLT运行说明](./doc/LLT_running.md)<br/>
+HLT参见[HLT运行说明](./doc/HLT_running.md)
 
 #### 使用说明
 
