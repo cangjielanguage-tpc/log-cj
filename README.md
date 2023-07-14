@@ -80,21 +80,21 @@ master支持JSON配置[JSON](./doc/log4cj_json_detail_desc.md)<br/>
 LLT参见[LLT运行说明](./doc/LLT_running.md)<br/>
 HLT参见[HLT运行说明](./doc/HLT_running.md)
 
-#### zip4cj适配
+#### zip4cj适配(适用于0.38.2分支XML配置)
 
-因仓颉0.39.4版本时间API变动，又因为zip4cj版本为0.37.2，时间API存在不兼容问题。<br/>
-拉取zip4cj之后需要变动的文件如下：<br/>
+仓颉0.38.2和0.39.4版本时间API存在不兼容问题。<br/>
+log4cj2项目0.38.2分支，利用python3 ci_test/main.py build拉取zip4cj之后需要变动的文件如下：<br/>
 zip4cj/src/zip4cj/zip/HeaderParser.cj<br/>
 zip4cj/src/zip4cj/zip/MsDosUtils.cj<br/>
 变动点：<br/>
-Time->DateTime<br/>
-Time.now()->DateTime.now()<br/>
-time.year()->time.year<br/>
-time.month()->time.month.value()<br/>
-time.day()->time.dayOfMonth<br/>
-time.hour()->time.hour<br/>
-time.minute()->time.minute<br/>
-time.second()->time.second
+DateTime->Time<br/>
+DateTime.now()->Time.now()<br/>
+time.year->time.year()<br/>
+time.month.value()->time.month()<br/>
+time.dayOfMonth->time.day()<br/>
+time.hour->time.hour()<br/>
+time.minute->time.minute()<br/>
+time.second->time.second()
 
 #### 使用说明
 
