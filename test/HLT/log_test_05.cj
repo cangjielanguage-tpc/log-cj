@@ -1,6 +1,6 @@
-//3rd_party_lib:log4cj2/build/log4cj
-//3rd_party_lib:log4cj2/build/zip4cj
-//3rd_party_lib:log4cj2/build/charset
+//3rd_party_lib:log-cj/build/log4cj
+//3rd_party_lib:log-cj/build/zip4cj
+//3rd_party_lib:log-cj/build/charset
 //data_file:src/resources/log4cj.json
 
 package test
@@ -133,32 +133,4 @@ public class LogTestE {
         @Expect(getLoggerAttrArr.size, 1)
     }
    
-
-    func getQueryResult(pattern: String, rec: LogRecord, fileName: String): Bool {
-        var curDir: Directory = Directory(".")
-        var fileList: ArrayList<FileInfo> = curDir.fileList()
-        for (f in fileList) {
-            if (f.isFile() && f.path.toString().contains(fileName)) {
-                var allBytes: Array<Byte> = File.readFrom(f.path.toString())
-                var content: String = String.fromUtf8(allBytes)
-                var time: String = rec.getCreatedTime().toString().substring(11, 8)
-                var tagName = rec.getTagName()
-                var level = rec.getLevel().levelName()
-                var source = rec.getSource()
-                var message = rec.getMessage()
-                if (pattern.size == 0 && content.contains(time) && content.contains(tagName) && content.contains(level) &&
-                    content.contains(source) && content.contains(message)) {
-                    return true
-                }
-                if (pattern.size != 0 && !pattern.contains("%l") && content.contains(time) && content.contains(level) &&
-                    content.contains(source) && content.contains(message)) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-    
-    
 }

@@ -1,6 +1,6 @@
-//3rd_party_lib:log4cj2/build/log4cj
-//3rd_party_lib:log4cj2/build/zip4cj
-//3rd_party_lib:log4cj2/build/charset
+//3rd_party_lib:log-cj/build/log4cj
+//3rd_party_lib:log-cj/build/zip4cj
+//3rd_party_lib:log-cj/build/charset
 package test
 
 from std import unittest.*
