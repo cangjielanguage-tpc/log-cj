@@ -1,5 +1,5 @@
 <div align="center">
-<h1>Log4CJ2</h1>
+<h1>log-cj</h1>
 </div>
 
 <p align="center">
@@ -22,7 +22,7 @@
 
 #### 软件架构
 
-参见[Log4CJ 设计文档](./doc/Log4CJ%20Design.md)
+参见[log-cj 设计文档](./doc/log-cj_design.md)
 
 源码目录
 
@@ -83,7 +83,7 @@ HLT参见[HLT运行说明](./doc/HLT_running.md)
 #### zip4cj适配(适用于0.38.2分支XML配置)
 
 仓颉0.38.2和0.39.4版本时间API存在不兼容问题。<br/>
-log4cj2项目0.38.2分支，利用python3 ci_test/main.py build拉取zip4cj之后需要变动的文件如下：<br/>
+log-cj项目0.38.2分支，利用python3 ci_test/main.py build拉取zip4cj之后需要变动的文件如下：<br/>
 zip4cj/src/zip4cj/zip/HeaderParser.cj<br/>
 zip4cj/src/zip4cj/zip/MsDosUtils.cj<br/>
 变动点：<br/>
