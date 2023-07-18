@@ -1,6 +1,6 @@
-//3rd_party_lib:log4cj2/build/log4cj
-//3rd_party_lib:log4cj2/build/zip4cj
-//3rd_party_lib:log4cj2/build/charset
+//3rd_party_lib:log-cj/build/log4cj
+//3rd_party_lib:log-cj/build/zip4cj
+//3rd_party_lib:log-cj/build/charset
 package test
 
 from std import unittest.*
@@ -82,11 +82,10 @@ public class LogTestD {
 
     // 验证: class FileLoggerAppender
     @TestCase
-    @Skip
     public func log_test_047():Unit{
         var file_02: FileLoggerAppender = FileLoggerAppender()
         var proList_02 = ArrayList<AppenderProperty>()
-        var fileName_02 = AppenderProperty("filename", "logRecord_02.log")
+        var fileName_02 = AppenderProperty("filename", "logrecord_02.log")
         var maxSize_02 = AppenderProperty("maxsize", "300") 
         var daily_02 = AppenderProperty("daily", "false")
         var rotate_02 = AppenderProperty("rotate", "true")
@@ -108,19 +107,31 @@ public class LogTestD {
         file_02.logWrite(logRecord_02_4)
         file_02.close()
         sleep(3*Duration.second)
-        @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_1,"logRecord_02.log"),true)
-        @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_2,"logRecord_02.log"),true)
-        @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_3,"logRecord_02.log"),true)
-        @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_4,"logRecord_02.log"),true)
+        
+        let result_1: Bool = getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_1,"logrecord_02.log")
+        @Expect(result_1, true)
+        println(result)
+
+        let result_2: Bool = getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_2,"logrecord_02.log")
+        @Expect(result_2, true) 
+        println(result)
+
+        let result_3: Bool = getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_3,"logrecord_02.log")
+        @Expect(result_3, true) 
+        println(result)
+
+        let result_4: Bool = getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_4,"logrecord_02.log")
+        @Expect(result_4, true) 
+        println(result_4)
+
     }
 
     // 验证: class FileLoggerAppender
     @TestCase
-    @Skip
     public func log_test_048():Unit{
         var file_03: FileLoggerAppender = FileLoggerAppender()
         var proList_03 = ArrayList<AppenderProperty>()
-        var fileName_03 = AppenderProperty("filename", "logRecord_03.log")
+        var fileName_03 = AppenderProperty("filename", "logrecord_03.log")
         var maxSize_03 = AppenderProperty("maxsize", "300")
         var daily_03 = AppenderProperty("daily", "false")
         var rotate_03 = AppenderProperty("rotate", "true")
@@ -137,7 +148,9 @@ public class LogTestD {
         
         file_03.close()
         sleep(3*Duration.second)
-       @Expect(getQueryResult("[%D %T] [%L] (%S) %M",logRecord_03,"logRecord_03.log"),true) 
+        let result: Bool = getQueryResult("[%D %T] [%L] (%S) %M",logRecord_03,"logrecord_03.log")
+        @Expect(result, true) 
+        println(result)
     }
 
     // 验证: class ConsoleLoggerAppender
