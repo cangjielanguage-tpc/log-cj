@@ -110,15 +110,15 @@ public class LogTestD {
         
         let result_1: Bool = getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_1,"logrecord_02.log")
         @Expect(result_1, true)
-        println(result)
+        println(result_1)
 
         let result_2: Bool = getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_2,"logrecord_02.log")
         @Expect(result_2, true) 
-        println(result)
+        println(result_2)
 
         let result_3: Bool = getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_3,"logrecord_02.log")
         @Expect(result_3, true) 
-        println(result)
+        println(result_3)
 
         let result_4: Bool = getQueryResult("[%D %T] [%L] (%S) %M",logRecord_02_4,"logrecord_02.log")
         @Expect(result_4, true) 
