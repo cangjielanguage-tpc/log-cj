@@ -8,7 +8,7 @@
 
 - 支持控制台系统输出
 - 支持文件系统日志输出
-- 支持使用 XML 进行配置
+- 支持使用 JSON 进行配置
 - 支持日志文件滚动
 
 ## 架构
@@ -63,32 +63,70 @@
 
 #### 配置文件位置
 
-支持通过 xml 文件配置日志信息，配置文件命名为 `log4cj.xml` ,位置为代码工程的 `src/resources` 目录。
+支持通过 json 文件配置日志信息，配置文件命名为 `logcj.json` ,位置为代码工程的 `src/resources` 目录。
 
 配置示例
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <appender enabled="true" name="console">
-        <type>console</type>
-        <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-    </appender>
-    <appender enabled="true" name="file">
-        <type>file</type>
-        <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-        <property name="filename">root.log</property>
-        <property name="rotate">true</property>
-        <property name="maxsize">400</property>
-        <property name="daily">false</property>
-        <property name="retentiondays">7</property>
-    </appender>
-    <root>
-        <level>info</level>
-        <appender-ref ref="console" />
-        <appender-ref ref="file" />
-    </root>
-</configuration>
+```
+{
+    "appenders": [
+        {
+            "enabled": "true",
+            "name": "console",
+            "type": "console",
+            "pattern": "[%D %T %m] [%L] [%l] (%S) %M"
+        },
+        {
+            "enabled": "true",
+            "name": "file",
+            "type": "file",
+            "pattern": "[%D %T %m] [%L] [%l] (%S) %M",
+            "properties": [
+                {
+                    "name": "filename",
+                    "value": "root.log"
+                },
+                {
+                    "name": "rotate",
+                    "value": "true"
+                },
+                {
+                    "name": "maxsize",
+                    "value": "20M"
+                },
+                {
+                    "name": "daily",
+                    "value": "false"
+                }
+            ]
+        }
+    ],
+    "loggers":[
+        {
+            "name":"Demo",
+            "level":"info",
+            "appender-refs": [
+                {
+                    "ref": "console"
+                },
+                {
+                    "ref": "file"
+                }
+            ]
+        }
+    ],
+    "root": {
+        "level": "info",
+        "appender-refs": [
+            {
+                "ref": "console"
+            },
+            {
+                "ref": "file"
+            }
+        ]
+    }
+}
 ```
 
 #### 配置文件支持属性
@@ -140,7 +178,7 @@
 
 ```python
 # 引用组件
-from log4cj import *   
+from logcj import *   
 
 # Logger_Manager 加载时已经根据日志配置文件做好初始化操作，
 # "com.hello" 即为日志记录器的名称，可以是类名或自定义方便识别的字符串

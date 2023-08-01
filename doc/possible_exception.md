@@ -6,30 +6,54 @@
 如果三方调用配置的日志文件为空或者路径配置错误，则按以下配置默认加载
 
 ```
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <appender enabled="true" name="console">
-        <type>console</type>
-        <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-    </appender>
-    <appender enabled="true" name="file">
-        <type>file</type>
-        <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-        <property name="filename">root.log</property>
-        <property name="rotate">true</property>
-        <property name="maxsize">230</property>
-        <property name="daily">false</property>
-    </appender>
-    <root>
-        <level>info</level>
-        <appender-ref ref="console" />
-        <appender-ref ref="file" />
-    </root>
-</configuration>
+{
+	"appenders": [{
+		"enabled": "false",
+		"name": "console",
+		"type": "console",
+		"pattern": "[%D %T %m] [%L] [%l] (%S) %M"
+	}, {
+		"enabled": "true",
+		"name": "file",
+		"type": "file",
+		"pattern": "[%D %T %m] [%L] [%l] (%S) %M",
+		"properties": [{
+			"name": "filename",
+			"value": "root.log"
+		}, {
+			"name": "rotate",
+			"value": "true"
+		}, {
+			"name": "maxsize",
+			"value": "20M"
+		}, {
+			"name": "daily",
+			"value": "false"
+		}]
+	}],
+	"loggers": [{
+		"name": "Demo",
+		"level": "info",
+		"appender-refs": [{
+			"ref": "console"
+		}, {
+			"ref": "file"
+		}]
+	}],
+	"root": {
+		"level": "info",
+		"appender-refs": [{
+			"ref": "console"
+		}, {
+			"ref": "file"
+		}]
+	}
+}
 ```
 如果需要改变单个日志文件的默认大小，请修改logger_manager.cj中如下代码片段，再重新编译测试
 ```
-<property name="maxsize">230</property>
+"name": "maxsize",
+"value": "20M"
 ```
 
 ## 日志配置文件file appender中相关property缺失或者不配置内容

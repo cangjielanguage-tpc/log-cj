@@ -68,8 +68,8 @@
 参见[主要类和函数说明](./doc/feature_api.md)
 
 #### 支持XML&JSON配置
-master支持JSON配置[JSON](./doc/log4cj_json_detail_desc.md)<br/>
-0.38.2分支支持XML配置[XML](./doc/log4cj_xml_detail_desc.md)
+master支持JSON配置[JSON](./doc/logcj_json_detail_desc.md)<br/>
+0.38.2分支支持XML配置[XML](./doc/logcj_xml_detail_desc.md)
 
 #### 使用编译&&压缩机制
 

@@ -1,13 +1,13 @@
-# 配置文件（log4cj.json）说明（此说明适用于主分支master）
+# 配置文件（logcj.json）说明（此说明适用于主分支master）
 
 #### 三方调用位置以及文件名说明
 
 位置: 默认resources目录下<br/>
-文件名：默认log4cj.json<br/>
+文件名：默认logcj.json<br/>
 **注意** <br/>
 如果想更改默认位置，请搜索logger_manager.cj文件，自行更改如下代码，重新编译测试
 ```
-public let Logger_Manager = LoggerManager("./src/resources/log4cj.json")
+public let Logger_Manager = LoggerManager("./src/resources/logcj.json")
 ```
 
 #### 文件结构如下
