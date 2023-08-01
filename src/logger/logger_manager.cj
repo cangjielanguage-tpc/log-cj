@@ -19,7 +19,7 @@ import config.*
 import utils.*
 
 public let Logger_Appender_Factory = LoggerAppenderFactory()
-public let Logger_Manager = LoggerManager("${getcwd()}/src/resources/log4cj.json")
+public let Logger_Manager = LoggerManager("${getcwd()}/src/resources/logcj.json")
 
 /**
  * Log management class, load and parse log file to get a specific configuration item.

@@ -52,7 +52,7 @@
 │       ├── time_slice.cj
 │       └── util.cj
 ├── resources
-│   ├── log4cj.json
+│   ├── logcj.json
 ├── test
 │   ├── LLT
 │   ├── UT
