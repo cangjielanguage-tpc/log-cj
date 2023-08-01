@@ -1,12 +1,12 @@
-# Log4CJ2
+# LogCJ
 
 ## 1.介绍
 仓颉语言实现日志打印功能，类似 log4j 三方件
 
-- 1.前置条件：xml文件路径和名称为 ./src/resources/log4cj.xml 未配置该文件时会使用默认设置
+- 1.前置条件：json文件路径和名称为 ./src/resources/logcj.xml 未配置该文件时会使用默认设置
 
 - 2.场景：
-     * 支持使用XML进行配置
+     * 支持使用JSON进行配置
      * 支持配置stdout、stderr等系统输出，支持文件系统日志输出
      * 支持配置单个日志大小，是否打包等属性
  
@@ -1011,55 +1011,66 @@ public func getNumByString(str: String, defaultValue: Int64): Int64
 
 ### 3.3配置文件说明
 
-```cangjie
-<?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <!-- appender配置：enabled-是否使用 name-名称 -->
-    <appender enabled="true" name="console">
-        <!-- appender类型为console-控制台输出 -->
-        <type>console</type>
-        <!-- 输出的格式 -->
-        <!--
-            %T - Time (15:04:05 MST)
-            %t - Time (15:04)
-            %D - Date (2006/01/02)
-            %d - Date (01/02/06)
-            %o - UnixMilli (1649224315937)
-            %m - Millisecond (607)
-            %n - Nanosecond (794411287)
-            %L - Level (ALL, TRACE, DEBUG, INFO, WARN, ERROR, OFF)
-            %l - Label (TagName)
-            %S - Source
-            %M - Message
-            Ignores unknown formats
-        -->
-        <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-    </appender>
-
-    <appender enabled="true" name="file">
-        <!-- appender类型为file-文件输出 -->
-        <type>file</type>
-        <pattern>[%D %T %m] [%L] [%l] (%S) %M</pattern>
-        <!-- 文件名称 -->
-        <property name="filename">root.log</property>
-        <!-- 是否打包日志 -->
-        <property name="rotate">true</property>
-        <!-- 单个日志的最大限制，0表示无限制 -->
-        <property name="maxsize">400</property>
-        <!-- 是否按天存档 -->
-        <property name="daily">false</property>
-    </appender>
-
-    <!-- root日志配置 -->
-    <root>
-        <!-- 日志等级info -->
-        <level>info</level>
-        <!-- appender-ref属性 ref-console控制台输出，对应上面的appender配置的名称 -->
-        <appender-ref ref="console" />
-        <!-- appender-ref属性 ref-file文件输出，对应上面的appender配置的名称 -->
-        <appender-ref ref="file" />
-    </root>
-</configuration>
+```
+{
+    "appenders": [
+        {
+            "enabled": "true",
+            "name": "console",
+            "type": "console",
+            "pattern": "[%D %T %m] [%L] [%l] (%S) %M"
+        },
+        {
+            "enabled": "true",
+            "name": "file",
+            "type": "file",
+            "pattern": "[%D %T %m] [%L] [%l] (%S) %M",
+            "properties": [
+                {
+                    "name": "filename",
+                    "value": "root.log"
+                },
+                {
+                    "name": "rotate",
+                    "value": "true"
+                },
+                {
+                    "name": "maxsize",
+                    "value": "20M"
+                },
+                {
+                    "name": "daily",
+                    "value": "false"
+                }
+            ]
+        }
+    ],
+    "loggers":[
+        {
+            "name":"Demo",
+            "level":"info",
+            "appender-refs": [
+                {
+                    "ref": "console"
+                },
+                {
+                    "ref": "file"
+                }
+            ]
+        }
+    ],
+    "root": {
+        "level": "info",
+        "appender-refs": [
+            {
+                "ref": "console"
+            },
+            {
+                "ref": "file"
+            }
+        ]
+    }
+}
 ```
 ## 4.使用示例
 ### 4.1示例代码
