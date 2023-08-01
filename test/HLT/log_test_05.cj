@@ -1,16 +1,16 @@
-//3rd_party_lib:log-cj/build/log4cj
+//3rd_party_lib:log-cj/build/logcj
 //3rd_party_lib:log-cj/build/zip4cj
 //3rd_party_lib:log-cj/build/charset
-//data_file:src/resources/log4cj.json
+//data_file:src/resources/logcj.json
 
 package test
 
 from std import unittest.*
 from std import unittest.testmacro.*
-from log4cj import appender.*
-from log4cj import config.*
-from log4cj import logger.*
-from log4cj import utils.*
+from logcj import appender.*
+from logcj import config.*
+from logcj import logger.*
+from logcj import utils.*
 from std import time.*
 from std import collection.*
 from std import fs.*

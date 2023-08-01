@@ -1,7 +1,7 @@
 {
 	"cjc_version": "0.39.4",
 	"organization": "cangjie",
-	"name": "log4cj",
+	"name": "logcj",
 	"description": "nothing here",
 	"version": "0.0.2",
 	"requires": {
