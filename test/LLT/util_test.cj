@@ -2,7 +2,7 @@
 // EXEC: ./main
 package test
 
-from log4cj import utils.*
+from logcj import utils.*
 from std import time.*
 
 main(): Int64 {

@@ -2,8 +2,8 @@
 // EXEC: ./main
 package test
 
-from log4cj import utils.*
-from log4cj import config.*
+from logcj import utils.*
+from logcj import config.*
 from std import collection.*
 
 main(): Int64 {

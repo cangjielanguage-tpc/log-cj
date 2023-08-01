@@ -2,10 +2,10 @@
 // EXEC: ./main
 package test
 
-from log4cj import appender.*
-from log4cj import config.*
-from log4cj import logger.*
-from log4cj import utils.*
+from logcj import appender.*
+from logcj import config.*
+from logcj import logger.*
+from logcj import utils.*
 from std import time.*
 from std import fs.*
 from std import os.posix.*
