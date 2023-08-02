@@ -1,5 +1,5 @@
 {
-	"cjc_version": "0.39.4",
+	"cjc_version": "0.39.5",
 	"organization": "cangjie",
 	"name": "logcj",
 	"description": "nothing here",
@@ -17,7 +17,7 @@
 		"package_option": {}
 	},
 	"foreign_requires": {},
-	"output_type": "executable",
+	"output_type": "static",
 	"command_option": "",	
 	"condition_option": {},
 	"link_option": "",
