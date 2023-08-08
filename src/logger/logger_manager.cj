@@ -245,7 +245,7 @@ public class LoggerManager {
     public func loadDefaultConfiguration(): LoggerConfiguration {
         println("enter default...")
         var str =
-            ##"{"appenders":[{"enabled":"false","name":"console","type":"console","pattern":"[%D %T %m] [%L] [%l] (%S) %M"},{"enabled":"true","name":"file","type":"file","pattern":"[%D %T %m] [%L] [%l] (%S) %M","properties":[{"name":"filename","value":"root.log"},{"name":"rotate","value":"true"},{"name":"maxsize","value":"20M"},{"name":"daily","value":"false"}]}],"loggers":[{"name":"Demo","level":"info","appender-refs":[{"ref":"console"},{"ref":"file"}]}],"root":{"level":"info","appender-refs":[{"ref":"console"},{"ref":"file"}]}}"##
+            ##"{"appenders":[{"enabled":"true","name":"console","type":"console","pattern":"[%D %T %m] [%L] [%l] (%S) %M"},{"enabled":"true","name":"file","type":"file","pattern":"[%D %T %m] [%L] [%l] (%S) %M","properties":[{"name":"filename","value":"root.log"},{"name":"rotate","value":"true"},{"name":"maxsize","value":"20M"},{"name":"daily","value":"false"}]}],"loggers":[{"name":"Demo","level":"info","appender-refs":[{"ref":"console"},{"ref":"file"}]}],"root":{"level":"info","appender-refs":[{"ref":"console"},{"ref":"file"}]}}"##
         var jsonValue: JsonValue = JsonValue.fromStr(str)
         var appenderList: ArrayList<AppenderConfig> = getAppenderConfiguration(jsonValue)
         var loggerList: ArrayList<LoggerConfig> = getLoggerConfiguration(jsonValue)
