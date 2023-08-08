@@ -5,7 +5,23 @@ bin-release/
 [Bb]in/
 
 # Other files and folders
-.settings/
+.cjpm-history
+.vscode/*
+build/*
+ci_lib/*
+ci_test/*
+log/*
+module-lock.json
+module-resolve.json
+root.log
+test/HLT/log/*
+test/HLT/report/*
+test/HLT/tmp/*
+test/log/*
+test/report/*
+test/tmp/*
+zip4cj/*
+
 
 # Executables
 *.swf
