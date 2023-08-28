@@ -48,9 +48,9 @@ public class FileLoggerAppender <: LoggerAppender {
 
     private var retentionDays: Int64 = 7
 
-    private let lock = ReentrantMutex()
-
     private var contentList: ArrayList<LogRecord> = ArrayList<LogRecord>()
+
+    private let lock = Monitor()
 
     /**
      * Constructor, initialize variable file.
@@ -164,6 +164,8 @@ public class FileLoggerAppender <: LoggerAppender {
                     this.curSize += n
                     contentList.remove(0)
                     compressRollingFile()
+                }else {
+                    lock.wait()
                 }
 
                 lock.unlock()
@@ -196,6 +198,7 @@ public class FileLoggerAppender <: LoggerAppender {
     public func logWrite(rec: LogRecord): Unit {
         lock.lock()
         contentList.append(rec)
+        lock.notifyAll()
         lock.unlock()
     }
 
