@@ -122,13 +122,14 @@ public class LogTestE {
         var path = getcwd()
         let loggerManager = LoggerManager("${path}/src/resources/log4cj.json")
         var size: Int64 = loggerManager.getRootLogger().getAppenderList().size
-        @Expect(size, 1)
+        @Expect(size, 2)
 
         var log = loggerManager.getLogger("test")
         @Expect(log.getName(), "test")
 
         var logNameArr:ArrayList<String> = Logger_Manager.getLoggerNameArr()
         @Expect(logNameArr.size, 1)
+
         var getLoggerAttrArr:ArrayList<LoggerAppenderReference> = Logger_Manager.getLoggerAttrArr()
         @Expect(getLoggerAttrArr.size, 1)
     }
