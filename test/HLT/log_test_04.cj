@@ -73,7 +73,7 @@ public class LogTestD {
         var file_01: FileLoggerAppender = FileLoggerAppender()
         file_01.initAppender("", ArrayList<AppenderProperty>())
         file_01.start()
-        var logRecord_01 = LogRecord("file_01", LogLevel.INFO, DateTime.now(), "source", "message")
+        var logRecord_01 = LogRecord("file_01", LogLevel.INFO, DateTime.now(), "source", "message", Thread.currentThread.id)
         file_01.logWrite(logRecord_01)
         file_01.close()
         sleep(0.1*Duration.second)
@@ -97,13 +97,13 @@ public class LogTestD {
         proList_02.append(retentionDays_02)
         file_02.initAppender("[%D %T] [%L] (%S) %M", proList_02)
         file_02.start()
-        var logRecord_02_1= LogRecord("logRecord_02_1", LogLevel.WARN, DateTime.now(), "source", "message")
+        var logRecord_02_1= LogRecord("logRecord_02_1", LogLevel.WARN, DateTime.now(), "source", "message", Thread.currentThread.id)
         file_02.logWrite(logRecord_02_1)
-        var logRecord_02_2= LogRecord("logRecord_02_2", LogLevel.WARN, DateTime.now(), "source", "message")
+        var logRecord_02_2= LogRecord("logRecord_02_2", LogLevel.WARN, DateTime.now(), "source", "message", Thread.currentThread.id)
         file_02.logWrite(logRecord_02_2)
-        var logRecord_02_3= LogRecord("logRecord_02_3", LogLevel.WARN, DateTime.now(), "source", "message")
+        var logRecord_02_3= LogRecord("logRecord_02_3", LogLevel.WARN, DateTime.now(), "source", "message", Thread.currentThread.id)
         file_02.logWrite(logRecord_02_3)
-        var logRecord_02_4= LogRecord("logRecord_02_4", LogLevel.WARN, DateTime.now(), "source", "message")
+        var logRecord_02_4= LogRecord("logRecord_02_4", LogLevel.WARN, DateTime.now(), "source", "message", Thread.currentThread.id)
         file_02.logWrite(logRecord_02_4)
         file_02.close()
         sleep(3*Duration.second)
@@ -143,7 +143,7 @@ public class LogTestD {
         proList_03.append(retentionDays_03)
         file_03.initAppender("[%D %T] [%L] (%S) %M", proList_03)
         file_03.start()
-        var logRecord_03= LogRecord("logRecord_03", LogLevel.WARN, DateTime.now(), "source", "message")
+        var logRecord_03= LogRecord("logRecord_03", LogLevel.WARN, DateTime.now(), "source", "message", Thread.currentThread.id)
         file_03.logWrite(logRecord_03)
         
         file_03.close()
@@ -159,7 +159,7 @@ public class LogTestD {
         var console_01: ConsoleLoggerAppender = ConsoleLoggerAppender()
         console_01.initAppender("", ArrayList<AppenderProperty>())
         console_01.start()
-        var logRecord_01 = LogRecord("logRecord_01", LogLevel.ALL, DateTime.now(), "source", "message")
+        var logRecord_01 = LogRecord("logRecord_01", LogLevel.ALL, DateTime.now(), "source", "message", Thread.currentThread.id)
         @Expect(logRecord_01.getTagName(),"logRecord_01")
         console_01.logWrite(logRecord_01)
         console_01.close()
@@ -175,7 +175,7 @@ public class LogTestD {
         var message_01 = logRecord_01.getMessage()
         var source_01 = logRecord_01.getSource()
         var formatContent_01: String = "[${lt_01} ${ld_01} ${m_01}] [${level_01}][${tagName_01}] (${source_01}) ${message_01}"
-        @Expect(content_01.contains(formatContent_01.substring(0,55)),true)
+        @Expect(content_01.contains(formatContent_01[0..55]),true)
     }
 
     // 验证: class ConsoleLoggerAppender
@@ -184,7 +184,7 @@ public class LogTestD {
         var console_02: ConsoleLoggerAppender = ConsoleLoggerAppender()
         console_02.initAppender("[%T %D] [%L] (%S) [%M]", ArrayList<AppenderProperty>())
         console_02.start()
-        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, DateTime.now(), "source", "message")
+        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, DateTime.now(), "source", "message", Thread.currentThread.id)
         @Expect(logRecord_02.getTagName(),"logRecord_02")
         console_02.logWrite(logRecord_02)
         console_02.close()
@@ -198,7 +198,7 @@ public class LogTestD {
         var message_02 = logRecord_02.getMessage()
         var source_02 = logRecord_02.getSource()
         var formatContent_02: String = "[${ld_02} ${lt_02}] [${level_02}] (${source_02}) ${message_02}"
-        @Expect(content_02.contains(formatContent_02.substring(0,39)),true)
+        @Expect(content_02.contains(formatContent_02[0..39]),true)
     }
 
     func getQueryResult(pattern: String, rec: LogRecord, fileName: String): Bool {
@@ -209,7 +209,7 @@ public class LogTestD {
                 sleep(3*Duration.second)
                 var allBytes: Array<Byte> = File.readFrom(f.path.toString())
                 var content: String = String.fromUtf8(allBytes)
-                var time: String = rec.getCreatedTime().toString().substring(11, 8)
+                var time: String = rec.getCreatedTime().toString()[11..19]
                 var tagName = rec.getTagName()
                 var level = rec.getLevel().levelName()
                 var source = rec.getSource()

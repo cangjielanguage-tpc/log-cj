@@ -30,6 +30,9 @@ public class LogRecord {
     // Log information, which is printed.
     private var message: String = ""
 
+    // Log information, Thread id
+    private var threadId: Int64 = -1
+
     /**
      * Constructor, initialize variables.
      *
@@ -39,12 +42,13 @@ public class LogRecord {
      * @param source source.
      * @param message message.
      */
-    public init(tagName: String, level: LogLevel, createdTime: DateTime, source: String, message: String) {
+    public init(tagName: String, level: LogLevel, createdTime: DateTime, source: String, message: String, threadId: Int64) {
         this.tagName = tagName
         this.level = level
         this.createdTime = createdTime
         this.source = source
         this.message = message
+        this.threadId = threadId
     }
 
     /**
@@ -74,5 +78,9 @@ public class LogRecord {
 
     public func getCreatedTime(): DateTime {
         return this.createdTime
+    }
+
+    public func getThreadId(): Int64 {
+        return this.threadId
     }
 }

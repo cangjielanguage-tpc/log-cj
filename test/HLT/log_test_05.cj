@@ -31,14 +31,14 @@ public class LogTestE {
     @TestCase
     public func log_test_050():Unit{
         var console_02: ConsoleLoggerAppender = ConsoleLoggerAppender()
-        console_02.initAppender("[%T %D] [%L] (%S) [%M]", ArrayList<AppenderProperty>())
+        console_02.initAppender("[%T %D] [%L] [%I] (%S) [%M]", ArrayList<AppenderProperty>())
         console_02.start()
-        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, DateTime.now(), "source", "message")
+        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, DateTime.now(), "source", "message", Thread.currentThread.id)
         @Expect(logRecord_02.getTagName(),"logRecord_02")
         console_02.logWrite(logRecord_02)
         console_02.close()
         console_02.logWrite(logRecord_02)
-        var content_02: String = getDefaultPatternConvert().formatLogRecord("[%D %T] [%L] (%S) %M", logRecord_02)
+        var content_02: String = getDefaultPatternConvert().formatLogRecord("[%D %T] [%L] [%I] (%S) %M", logRecord_02)
         let timeSlice_02 = TimeSlice()
         timeSlice_02.getTimeSlice(logRecord_02.getCreatedTime())
         var lt_02 = timeSlice_02.getLongTime()
@@ -46,8 +46,9 @@ public class LogTestE {
         var level_02 = logRecord_02.getLevel().levelName()
         var message_02 = logRecord_02.getMessage()
         var source_02 = logRecord_02.getSource()
-        var formatContent_02: String = "[${ld_02} ${lt_02}] [${level_02}] (${source_02}) ${message_02}"
-        @Expect(content_02.contains(formatContent_02.substring(0,39)),true)
+        var id_02 = logRecord_02.getThreadId()
+        var formatContent_02: String = "[${ld_02} ${lt_02}] [${level_02}] [${id_02}] (${source_02}) ${message_02}"
+        @Expect(content_02.contains(formatContent_02[0..39]),true)
     }
 
     // 验证: LoggerAppenderFactory
@@ -82,7 +83,7 @@ public class LogTestE {
         var file_03 = instance_03.registerLoggerAppender(
             "file",
             "file",
-            "[%D %T %m] [%L] [%l] (%S) %M",
+            "[%D %T %m] [%L] [%I] [%l] (%S) %M",
             ArrayList<AppenderProperty>()
         )
         @Expect(file_03.getAppenderByName("file") is FileLoggerAppender,true)
@@ -107,10 +108,10 @@ public class LogTestE {
 
     @TestCase
     public func log_test_054():Unit{
-        let loggerManager = LoggerManager()
-        @Expect(loggerManager.getLoggerAppenderFactory().getAppenderByName("file") is FileLoggerAppender,false)
+        let loggerManager = LoggerManager.createManager("")
+        @Expect(loggerManager.getLoggerAppenderFactory().getAppenderByName("file") is FileLoggerAppender)
         var size: Int64 = loggerManager.getRootLogger().getAppenderList().size
-        @Expect(size, 0)
+        @Expect(size, 2)
 
         var defaultCdonfig: LoggerConfiguration = Logger_Manager.loadDefaultConfiguration()
         var level = defaultCdonfig.getRoot().getLevel().replace("\"","")
@@ -120,7 +121,7 @@ public class LogTestE {
     @TestCase
     public func log_test_055():Unit{
         var path = getcwd()
-        let loggerManager = LoggerManager("${path}/src/resources/log4cj.json")
+        let loggerManager = LoggerManager.createManager("${path}/src/resources/log4cj.json")
         var size: Int64 = loggerManager.getRootLogger().getAppenderList().size
         @Expect(size, 2)
 

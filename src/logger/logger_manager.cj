@@ -18,8 +18,8 @@ import appender.*
 import config.*
 import utils.*
 
-public let Logger_Appender_Factory = LoggerAppenderFactory()
-public let Logger_Manager = LoggerManager("${getcwd()}/src/resources/logcj.json")
+public var Logger_Appender_Factory = LoggerAppenderFactory()
+public var Logger_Manager = LoggerManager("")
 
 /**
  * Log management class, load and parse log file to get a specific configuration item.
@@ -36,17 +36,17 @@ public class LoggerManager {
     private var loggerAttrArr: ArrayList<LoggerAppenderReference> = ArrayList<LoggerAppenderReference>()
 
     /**
-     * No-parameter constructor.
-     */
-    public init() {}
-
-    /**
      * Constructor, load and parse xml file.
      *
      * @param jsonPath log file path.
      */
-    public init(jsonPath: String) {
-        initLoggerManager(jsonPath)
+    public static func createManager(jsonPath: String): LoggerManager {
+        Logger_Manager = LoggerManager(jsonPath)
+        return Logger_Manager
+    }
+    
+    init(jsonPath: String) {
+        initWithDefaultConfig(jsonPath)
     }
 
     public func getLoggerAppenderFactory(): LoggerAppenderFactory {
@@ -82,6 +82,10 @@ public class LoggerManager {
      * @param jsonPath log file path.
      */
     private func initWithDefaultConfig(jsonPath: String): Unit {
+        // Register the LoggerAppender provided by the system.
+        Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
+        Logger_Appender_Factory.registryType("file", FileLoggerAppender())
+
         var loggerConfiguration: LoggerConfiguration = parseJson(jsonPath)
         if (loggerConfiguration.getAppenders().size == 0) {
             println("can not find any appender!")
@@ -182,15 +186,6 @@ public class LoggerManager {
         }
     }
 
-    private func initLoggerManager(jsonPath: String): Unit {
-        // Register the LoggerAppender provided by the system.
-        Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
-        Logger_Appender_Factory.registryType("file", FileLoggerAppender())
-
-        // Initialize the log configuration file.
-        initWithDefaultConfig(jsonPath)
-    }
-
     /**
      * This function is used to parse the XML file into the LoggerConfiguration object.
      *
@@ -200,7 +195,13 @@ public class LoggerManager {
     private func parseJson(jsonPath: String): LoggerConfiguration {
         var filePath: Path = Path(jsonPath)
         var isFileExist: Bool = File.exists(filePath)
-        if (jsonPath.size == 0 || !isFileExist) {
+
+        if (jsonPath.size == 0) {
+            return loadDefaultConfiguration()
+        }
+
+        if (!isFileExist) {
+            println("can not find config file, use default config")
             return loadDefaultConfiguration()
         }
 
@@ -268,23 +269,23 @@ public class LoggerManager {
         for (o in 0..jsArr.size()) {
             var appender: AppenderConfig = AppenderConfig()
             if (jsArr.get(o).getOrThrow().asObject().containsKey("enabled")) {
-                appender.setEnabled(jsArr.get(o).getOrThrow().asObject().get("enabled").getOrThrow().toString())
+                appender.setEnabled(jsArr.get(o).getOrThrow().asObject().get("enabled").getOrThrow().asString().getValue())
             }
             if (jsArr.get(o).getOrThrow().asObject().containsKey("enabled")) {
-                appender.setName(jsArr.get(o).getOrThrow().asObject().get("name").getOrThrow().toString())
+                appender.setName(jsArr.get(o).getOrThrow().asObject().get("name").getOrThrow().asString().getValue())
             }
             if (jsArr.get(o).getOrThrow().asObject().containsKey("type")) {
-                appender.setAppenderType(jsArr.get(o).getOrThrow().asObject().get("type").getOrThrow().toString())
+                appender.setAppenderType(jsArr.get(o).getOrThrow().asObject().get("type").getOrThrow().asString().getValue())
             }
             if (jsArr.get(o).getOrThrow().asObject().containsKey("pattern")) {
-                appender.setPattern(jsArr.get(o).getOrThrow().asObject().get("pattern").getOrThrow().toString())
+                appender.setPattern(jsArr.get(o).getOrThrow().asObject().get("pattern").getOrThrow().asString().getValue())
             }
             if (jsArr.get(o).getOrThrow().asObject().containsKey("properties")) {
                 var proArr: JsonArray = jsArr.get(o).getOrThrow().asObject().get("properties").getOrThrow().asArray()
                 for (i in 0..proArr.size()) {
                     var property: AppenderProperty = AppenderProperty()
-                    property.setName(proArr.get(i).getOrThrow().asObject().get("name").getOrThrow().toString())
-                    property.setValue(proArr.get(i).getOrThrow().asObject().get("value").getOrThrow().toString())
+                    property.setName(proArr.get(i).getOrThrow().asObject().get("name").getOrThrow().asString().getValue())
+                    property.setValue(proArr.get(i).getOrThrow().asObject().get("value").getOrThrow().asString().getValue())
                     propertyList.append(property)
                 }
                 appender.setProperties(propertyList)
@@ -309,16 +310,16 @@ public class LoggerManager {
         for (o in 0..jsArr.size()) {
             var logger: LoggerConfig = LoggerConfig()
             if (jsArr.get(o).getOrThrow().asObject().containsKey("name")) {
-                logger.setName(jsArr.get(o).getOrThrow().asObject().get("name").getOrThrow().toString())
+                logger.setName(jsArr.get(o).getOrThrow().asObject().get("name").getOrThrow().asString().getValue())
             }
-            if (jsArr.get(o).getOrThrow().asObject().containsKey("enabled")) {
-                logger.setLevel(jsArr.get(o).getOrThrow().asObject().get("level").getOrThrow().toString())
+            if (jsArr.get(o).getOrThrow().asObject().containsKey("level")) {
+                logger.setLevel(jsArr.get(o).getOrThrow().asObject().get("level").getOrThrow().asString().getValue())
             }
             if (jsArr.get(o).getOrThrow().asObject().containsKey("appender-refs")) {
                 var refArr: JsonArray = jsArr.get(o).getOrThrow().asObject().get("appender-refs").getOrThrow().asArray()
                 for (i in 0..refArr.size()) {
                     var ref: AppenderRef = AppenderRef(
-                        refArr.get(i).getOrThrow().asObject().get("ref").getOrThrow().toString()
+                        refArr.get(i).getOrThrow().asObject().get("ref").getOrThrow().asString().getValue()
                     )
                     refList.append(ref)
                 }
@@ -342,13 +343,13 @@ public class LoggerManager {
         var root: RootLoggerConfig = RootLoggerConfig()
         var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
         if (jsObj.containsKey("level")) {
-            root.setLevel(jsObj.get("level").getOrThrow().toString())
+            root.setLevel(jsObj.get("level").getOrThrow().asString().getValue())
         }
         if (jsObj.containsKey("appender-refs")) {
             var jsArr: JsonArray = jsObj.get("appender-refs").getOrThrow().asArray()
             for (j in 0..jsArr.size()) {
                 var ref: AppenderRef = AppenderRef(
-                    jsArr.get(j).getOrThrow().asObject().get("ref").getOrThrow().toString()
+                    jsArr.get(j).getOrThrow().asObject().get("ref").getOrThrow().asString().getValue()
                 )
                 refList.append(ref)
             }

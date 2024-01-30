@@ -38,6 +38,7 @@ public class DefaultPatternConverter <: PatternConverter {
     // %l - Label (TagName)
     // %S - Source
     // %M - Message
+    // %I - ThreadID
     // Ignores unknown formats
     // Recommended: "[%D %T] [%L] (%S) %M"
     
@@ -63,12 +64,12 @@ public class DefaultPatternConverter <: PatternConverter {
             var piece: String = pieces.get(i).getOrThrow()
             if (piece != pieces[0] && piece.size > 0) {
                 match (piece[0]) {
-                    case 'T' => result.append(timeSlice.getLongTime())
-                    case 'o' =>
+                    case b'T' => result.append(timeSlice.getLongTime())
+                    case b'o' =>
                         result.append((logRecord.getCreatedTime().toUnixTimeStamp().toNanoseconds() / Int64(1e6)).toString()
                         )
-                    case 'n' => result.append(flushLeft(logRecord.getCreatedTime().nanosecond.toString(), 9, "0"))
-                    case 'm' =>
+                    case b'n' => result.append(flushLeft(logRecord.getCreatedTime().nanosecond.toString(), 9, "0"))
+                    case b'm' =>
                         result.append(
                             flushLeft(
                                 (logRecord.getCreatedTime().nanosecond / Int64(1e6)).toString(),
@@ -76,20 +77,21 @@ public class DefaultPatternConverter <: PatternConverter {
                                 "0"
                             )
                         )
-                    case 't' => result.append(timeSlice.getShortTime())
-                    case 'D' => result.append(timeSlice.getLongDate())
-                    case 'd' => result.append(timeSlice.getShortDate())
-                    case 'l' => result.append(logRecord.getTagName())
-                    case 'L' => result.append(logRecord.getLevel().levelName())
-                    case 'S' => result.append(logRecord.getSource())
-                    case 's' =>
+                    case b't' => result.append(timeSlice.getShortTime())
+                    case b'D' => result.append(timeSlice.getLongDate())
+                    case b'd' => result.append(timeSlice.getShortDate())
+                    case b'l' => result.append(logRecord.getTagName())
+                    case b'L' => result.append(logRecord.getLevel().levelName())
+                    case b'S' => result.append(logRecord.getSource())
+                    case b's' =>
                         var slice: Array<String> = logRecord.getSource().split("/")
                         if (slice.size == 0) {
                             result.append(String.empty)
                         } else {
                             result.append(slice[slice.size - 1])
                         }
-                    case 'M' => result.append(logRecord.getMessage())
+                    case b'M' => result.append(logRecord.getMessage())
+                    case b'I' => result.append(logRecord.getThreadId())
                     case _ => result.append(String.empty)
                 }
                 if (piece.size > 1) {

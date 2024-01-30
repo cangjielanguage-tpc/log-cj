@@ -1,16 +1,16 @@
 {
     "appenders": [
         {
-            "enabled": "false",
+            "enabled": "true",
             "name": "console",
             "type": "console",
-            "pattern": "[%D %T %m] [%L] [%l] (%S) %M"
+            "pattern": "[%D %T %m] [%L] [%I] [%l] (%S) %M"
         },
         {
             "enabled": "true",
             "name": "file",
             "type": "file",
-            "pattern": "[%D %T %m] [%L] [%l] (%S) %M",
+            "pattern": "[%D %T %m] [%L] [%I] [%l] (%S) %M",
             "properties": [
                 {
                     "name": "filename",
@@ -34,7 +34,7 @@
     "loggers":[
         {
             "name":"Demo",
-            "level":"info",
+            "level":"warn",
             "appender-refs": [
                 {
                     "ref": "console"

@@ -91,7 +91,7 @@ public class LoggerAppenderFactory {
         if (this.typeNames.contains(typeName.toAsciiLower().replace("\"", ""))) {
             var index: Int64 = 0
             while (index < typeNames.size) {
-                if (typeNames.get(index).getOrThrow().equals(typeName.toAsciiLower().replace("\"", ""))) {
+                if (typeNames.get(index).getOrThrow() == typeName.toAsciiLower().replace("\"", "")) {
                     return typeValues.get(index).getOrThrow()
                 }
                 index++

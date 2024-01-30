@@ -79,7 +79,7 @@ func testLoggerConfig(): Bool {
     var level: String = logger.getLevel()
     var size: Int64 = logger.getAppenderRefList().size
 
-    if (name.equals("") && level.equals("") && size == 0) {
+    if (name == "" && level == "" && size == 0) {
         return true
     }
     return false
@@ -96,7 +96,7 @@ func testLoggerConfigWithAttrs(): Bool {
     var name: String = logger.getName()
     var level: String = logger.getLevel()
     var size: Int64 = logger.getAppenderRefList().size
-    if (name.equals("name") && level.equals("info") && size == 1) {
+    if (name == "name" && level == "info" && size == 1) {
         return true
     }
     return false
@@ -110,7 +110,7 @@ func testLoggerConfigWithInitParams(): Bool {
     var name: String = logger.getName()
     var level: String = logger.getLevel()
     var size: Int64 = logger.getAppenderRefList().size
-    if (name.equals("name") && level.equals("info") && size == 1) {
+    if (name == "name" && level == "info" && size == 1) {
         return true
     }
     return false
@@ -123,7 +123,7 @@ func testAppenderConfig(): Bool {
     var appenderType: String = appenderConfig.getAppenderType()
     var pattern: String = appenderConfig.getPattern()
     var size: Int64 = appenderConfig.getProperties().size
-    if (enabled.equals("") && name.equals("") && appenderType.equals("") && pattern.equals("") && size == 0) {
+    if (enabled == "" && name == "" && appenderType == "" && pattern == "" && size == 0) {
         return true
     }
     return false
@@ -144,7 +144,7 @@ func testAppenderConfigWithAttrs(): Bool {
     var appenderType: String = appenderConfig.getAppenderType()
     var pattern: String = appenderConfig.getPattern()
     var size: Int64 = appenderConfig.getProperties().size
-    if (enabled.equals("true") && name.equals("config") && appenderType.equals("file") && pattern.equals("pattern") &&
+    if (enabled == "true" && name == "config" && appenderType == "file" && pattern == "pattern" &&
         size == 1) {
         return true
     }
@@ -161,7 +161,7 @@ func testAppenderConfigWithInitParams(): Bool {
     var appenderType: String = appenderConfig.getAppenderType()
     var pattern: String = appenderConfig.getPattern()
     var size: Int64 = appenderConfig.getProperties().size
-    if (enabled.equals("true") && name.equals("config") && appenderType.equals("file") && pattern.equals("pattern") &&
+    if (enabled == "true" && name == "config" && appenderType == "file" && pattern == "pattern" &&
         size == 1) {
         return true
     }
@@ -172,7 +172,7 @@ func testAppenderProperty(): Bool {
     var property: AppenderProperty = AppenderProperty()
     var name: String = property.getName()
     var value: String = property.getValue()
-    if (name.equals("") && value.equals("")) {
+    if (name == "" && value == "") {
         return true
     }
     return false
@@ -184,7 +184,7 @@ func testAppenderPropertyWithAttrs(): Bool {
     property.setValue("value")
     var name: String = property.getName()
     var value: String = property.getValue()
-    if (name.equals("name") && value.equals("value")) {
+    if (name == "name" && value == "value") {
         return true
     }
     return false
@@ -194,7 +194,7 @@ func testAppenderPropertyWithInitParams(): Bool {
     var property: AppenderProperty = AppenderProperty("name", "value")
     var name: String = property.getName()
     var value: String = property.getValue()
-    if (name.equals("name") && value.equals("value")) {
+    if (name == "name" && value == "value") {
         return true
     }
     return false
@@ -203,7 +203,7 @@ func testAppenderPropertyWithInitParams(): Bool {
 func testAppenderRef(): Bool {
     var ref: AppenderRef = AppenderRef()
     var ref2: AppenderRef = AppenderRef("file")
-    if (ref.getRef().equals("") && ref2.getRef().equals("file")) {
+    if (ref.getRef() == "" && ref2.getRef() == "file") {
         return true
     }
     return false
@@ -214,7 +214,7 @@ func testLoggerConfiguartion(): Bool {
     var size: Int64 = config.getAppenders().size
     var level: String = config.getRoot().getLevel()
     var size2: Int64 = config.getLogger().size
-    if (size == 0 && level.equals("INFO") && size2 == 0) {
+    if (size == 0 && level == "INFO" && size2 == 0) {
         return true
     }
     return false
@@ -251,7 +251,7 @@ func testRootLoggerConfig(): Bool {
     var root: RootLoggerConfig = RootLoggerConfig()
     var level: String = root.getLevel()
     var size: Int64 = root.getAppenderRefList().size
-    if (level.equals("") && size == 0) {
+    if (level == "" && size == 0) {
         return true
     }
     return false
@@ -266,7 +266,7 @@ func testRootLoggerConfigWithAttrs(): Bool {
     root.setAppenderRefList(list)
     var level: String = root.getLevel()
     var size: Int64 = root.getAppenderRefList().size
-    if (level.equals("info") && size == 1) {
+    if (level == "info" && size == 1) {
         return true
     }
     return false
@@ -279,7 +279,7 @@ func testRootLoggerConfigWithInitParams(): Bool {
     var root: RootLoggerConfig = RootLoggerConfig("info", list)
     var level: String = root.getLevel()
     var size: Int64 = root.getAppenderRefList().size
-    if (level.equals("info") && size == 1) {
+    if (level == "info" && size == 1) {
         return true
     }
     return false

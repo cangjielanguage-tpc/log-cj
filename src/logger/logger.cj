@@ -17,6 +17,7 @@ from std import time.*
 public class Logger {
     // Logger name.
     private var name: String
+    private var manager: LoggerManager = Logger_Manager
 
     public init(name: String) {
         this.name = name
@@ -35,8 +36,10 @@ public class Logger {
     public func log(level: LogLevel, msg: String): Unit {
         // Currently, the method of obtaining the file name and line number is not available. Wait for the SDK to provide the method.
         let src = ""
-        var rec = LogRecord(this.name, level, DateTime.now(), src, msg)
+        var rootRecord = LogRecord("root", level, DateTime.now(), src, msg, Thread.currentThread.id)
+        appendLog(level, rootRecord, manager.getRootLogger())
 
+        var rec = LogRecord(this.name, level, DateTime.now(), src, msg, Thread.currentThread.id)
         // Consider whether thread processing needs to be started.
         doLog(level, rec)
     }
@@ -48,16 +51,14 @@ public class Logger {
      * @param rec log record.
      */
     private func doLog(level: LogLevel, rec: LogRecord): Unit {
-        appendLog(level, rec, Logger_Manager.getRootLogger())
-
         // If there are logs other than root in the configuration, to Print.
-        if (Logger_Manager.getLoggerNameArr().size > 0 && Logger_Manager.getLoggerAttrArr().size > 0) {
+        if (manager.getLoggerNameArr().size > 0 && manager.getLoggerAttrArr().size > 0) {
             var i: Int64 = 0
-            while (i < Logger_Manager.getLoggerNameArr().size) {
-                var mapString: String = Logger_Manager.getLoggerNameArr().toArray().toString()
+            while (i < manager.getLoggerNameArr().size) {
+                var mapString: String = manager.getLoggerNameArr().toArray().toString()
                 if (mapString.contains(this.name)) {
                     var j: Int64 = 0
-                    var values: Array<LoggerAppenderReference> = Logger_Manager.getLoggerAttrArr().toArray()
+                    var values: Array<LoggerAppenderReference> = manager.getLoggerAttrArr().toArray()
                     while (j < values.size) {
                         appendLog(level, rec, values.get(j).getOrThrow())
                         j++

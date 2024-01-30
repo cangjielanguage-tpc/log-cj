@@ -85,7 +85,7 @@ public class LogTestA {
         var format_01 = defaultPatternConverter.formatLogRecord("", logRecord_01)
         println(format_01)
 
-        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, DateTime.now(), "source", "message")
+        var logRecord_02 = LogRecord("logRecord_02", LogLevel.ALL, DateTime.now(), "source", "message", Thread.currentThread.id)
         @Expect(logRecord_02.getTagName(),"logRecord_02")
         @Expect(logRecord_02.getLevel().level(), 1)
         @Expect(logRecord_02.getSource(), "source")
@@ -101,7 +101,7 @@ public class LogTestA {
         )
         println(format_02_3)
 
-        var logRecord_03 = LogRecord("", LogLevel.TRACE, DateTime.now(), "", "")
+        var logRecord_03 = LogRecord("", LogLevel.TRACE, DateTime.now(), "", "", Thread.currentThread.id)
         @Expect(logRecord_03.getTagName(),"")
         @Expect(logRecord_03.getLevel().level(), 2)
         @Expect(logRecord_03.getSource(), "")
@@ -110,7 +110,7 @@ public class LogTestA {
         var format_03 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M", logRecord_03)
         println(format_03)
 
-        var logRecord_04 = LogRecord("@#$^,;[^&^%**(", LogLevel.DEBUG, DateTime.now(), "_+(^^&/\\@$@&", "%^&*' '&(*@#")
+        var logRecord_04 = LogRecord("@#$^,;[^&^%**(", LogLevel.DEBUG, DateTime.now(), "_+(^^&/\\@$@&", "%^&*' '&(*@#", Thread.currentThread.id)
         @Expect(logRecord_04.getTagName(),"@#$^,;[^&^%**(")
         @Expect(logRecord_04.getLevel().level(), 3)
         @Expect(logRecord_04.getSource(), "_+(^^&/\\@$@&")
@@ -149,9 +149,10 @@ public class LogTestA {
     // 验证: public func flushLeft(str: String, limit: Int64, placeholder: String): String 将字符串向右对齐，并在剩余的位中补充指定的字符
     @TestCase
     public func log_test_005(): Unit {
+        // 中文按照3个字符算, 补位的字符都算1个
         @Expect(flushLeft("abcdefg", 8, "0"),"0abcdefg")
-        @Expect(flushLeft("中文", 8, "0"),"000000中文")
-        @Expect(flushLeft("中文中文", 8, "0"),"0000中文中文")
+        @Expect(flushLeft("中文", 8, "0"),"00中文")
+        @Expect(flushLeft("中文中文", 8, "0"),"中文中文")
         @Expect(flushLeft("@#%&……*：“{}", 8, "0"),"@#%&……*：“{}")
         @Expect(flushLeft("", 8, "0"),"")
 
@@ -162,8 +163,8 @@ public class LogTestA {
         @Expect(flushLeft("abcdefghijklmn", 8, "0"),"abcdefghijklmn")
 
         @Expect(flushLeft("abcdefg", 8, ""),"abcdefg")
-        @Expect(flushLeft("文", 8, "中"),"中中中中中中中文")
-        @Expect(flushLeft("中文中文", 8, "中文"),"中文中文中文中文中文中文")
+        @Expect(flushLeft("文", 8, "中"),"中中中中中文")
+        @Expect(flushLeft("中文中文", 8, "中文"),"中文中文")
         @Expect(flushLeft("abcdefg", 8, ":%^"),":%^abcdefg")
     }
 

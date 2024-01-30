@@ -87,8 +87,8 @@ func testConsoleLoggerAppenderWithDefaultPattern(): Bool {
     var console: ConsoleLoggerAppender = ConsoleLoggerAppender()
     console.initAppender("", ArrayList<AppenderProperty>())
     console.start()
-    var logRecord = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source", "message")
-    if (!logRecord.getTagName().equals("com.test")) {
+    var logRecord = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source", "message", Thread.currentThread.id)
+    if (logRecord.getTagName() != "com.test") {
         return false
     }
     console.logWrite(logRecord)
@@ -104,7 +104,7 @@ func testConsoleLoggerAppenderWithDefaultPattern(): Bool {
     var message = logRecord.getMessage()
     var source = logRecord.getSource()
     var formatContent: String = "[${lt} ${ld} ${m}] [${level}][${tagName}] (${source}) ${message}"
-    var containResult: Bool = content.contains(formatContent.substring(0, 55))
+    var containResult: Bool = content.contains(formatContent[0..55])
     if (!containResult) {
         return false
     }
@@ -115,8 +115,8 @@ func testConsoleLoggerAppenderWithOtherPattern(): Bool {
     var console: ConsoleLoggerAppender = ConsoleLoggerAppender()
     console.initAppender("[%T %D] [%L] (%S) %M]", ArrayList<AppenderProperty>())
     console.start()
-    var logRecord = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source", "message")
-    if (!logRecord.getTagName().equals("com.test")) {
+    var logRecord = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source", "message", Thread.currentThread.id)
+    if (logRecord.getTagName() != "com.test") {
         return false
     }
     console.logWrite(logRecord)
@@ -130,7 +130,7 @@ func testConsoleLoggerAppenderWithOtherPattern(): Bool {
     var message = logRecord.getMessage()
     var source = logRecord.getSource()
     var formatContent: String = "[${ld} ${lt}] [${level}] (${source}) ${message}"
-    var containResult: Bool = content.contains(formatContent.substring(0, 39))
+    var containResult: Bool = content.contains(formatContent[0..39])
     if (!containResult) {
         return false
     }
@@ -141,7 +141,7 @@ func testFileLoggerAppenderWithDefaultPattern(): Bool {
     var file: FileLoggerAppender = FileLoggerAppender()
     file.initAppender("", ArrayList<AppenderProperty>())
     file.start()
-    var logRecord = LogRecord("com.test.file", LogLevel.INFO, DateTime.now(), "source", "message")
+    var logRecord = LogRecord("com.test.file", LogLevel.INFO, DateTime.now(), "source", "message", Thread.currentThread.id)
     file.logWrite(logRecord)
     file.close()
     var res = getQueryResult("", logRecord, "root.log")
@@ -166,7 +166,7 @@ func testFileLoggerAppenderWithOtherPattern(): Bool {
     proList.append(retentionDays)
     file.initAppender("[%D %T] [%L] (%S) %M", proList)
     file.start()
-    var logRecord = LogRecord("com.test.file", LogLevel.INFO, DateTime.now(), "source", "message")
+    var logRecord = LogRecord("com.test.file", LogLevel.INFO, DateTime.now(), "source", "message", Thread.currentThread.id)
     file.logWrite(logRecord)
     file.close()
     if (!getQueryResult("[%D %T] [%L] (%S) %M", logRecord, "test-file.log")) {
@@ -185,7 +185,7 @@ func testFileLoggerAppenderWithErrorRolling(): Bool {
         proList.append(fileName)
         file.initAppender("", proList)
         file.start()
-        var logRecord = LogRecord("com.error.file", LogLevel.INFO, DateTime.now(), "source", "message")
+        var logRecord = LogRecord("com.error.file", LogLevel.INFO, DateTime.now(), "source", "message", Thread.currentThread.id)
         file.logWrite(logRecord)
         file.close()
     }
@@ -207,7 +207,7 @@ func testFileLoggerAppenderWithRightRolling(): Bool {
         proList.append(rotate)
         file.initAppender("", proList)
         file.start()
-        var logRecord = LogRecord("com.right.file", LogLevel.INFO, DateTime.now(), "source", "message")
+        var logRecord = LogRecord("com.right.file", LogLevel.INFO, DateTime.now(), "source", "message", Thread.currentThread.id)
         file.logWrite(logRecord)
         file.close()
     }
@@ -321,7 +321,7 @@ func testAppenderReference(): Bool {
     var appenderRef = LoggerAppenderReference()
     var levelName: String = appenderRef.getLevel().levelName()
     var size: Int64 = appenderRef.getAppenderList().size
-    if (levelName.equals("INFO") && size == 0) {
+    if (levelName == "INFO" && size == 0) {
         return true
     }
     return false
@@ -334,7 +334,7 @@ func testAppenderReferenceWithInitParams(): Bool {
     var appenderRef = LoggerAppenderReference(LogLevel.INFO, appenderList)
     var levelName: String = appenderRef.getLevel().levelName()
     var size: Int64 = appenderRef.getAppenderList().size
-    if (levelName.equals("INFO") && size == 2) {
+    if (levelName == "INFO" && size == 2) {
         return true
     }
     return false
@@ -349,7 +349,7 @@ func testAppenderReferenceWithSetter(): Bool {
     appenderRef.setAppenderList(appenderList)
     var levelName: String = appenderRef.getLevel().levelName()
     var size: Int64 = appenderRef.getAppenderList().size
-    if (levelName.equals("INFO") && size == 2) {
+    if (levelName == "INFO" && size == 2) {
         return true
     }
     return false
@@ -451,11 +451,11 @@ func getQueryResult(pattern: String, rec: LogRecord, fileName: String): Bool {
     var curDir: Directory = Directory(".")
     var fileList: ArrayList<FileInfo> = curDir.fileList()
     for (f in fileList) {
-        if (f.isFile() && f.path.fileName.getOrThrow().equals(fileName)) {
+        if (f.isFile() && f.path.fileName.getOrThrow() == fileName) {
             sleep(Duration.second * 3)
             var allBytes: Array<Byte> = File.readFrom(f.path.toString())
             var content: String = String.fromUtf8(allBytes)
-            var time: String = rec.getCreatedTime().toString().substring(11, 8)
+            var time: String = rec.getCreatedTime().toString()[11..19]
             var tagName = rec.getTagName()
             var level = rec.getLevel().levelName()
             var source = rec.getSource()
