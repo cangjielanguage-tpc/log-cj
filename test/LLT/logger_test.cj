@@ -10,6 +10,7 @@ from std import time.*
 from std import fs.*
 from std import os.posix.*
 from std import collection.*
+from std import sync.*
 
 main(): Int64 {
     println("测试开始")
@@ -55,15 +56,9 @@ main(): Int64 {
 
     println("测试结束")
 
-    if (result1 && result2 && result3 && result4) {
-        return 0
-    }
-
-    if (result5 && result6 && result7 && result8) {
-        return 0
-    }
-
-    if (result9 && result10 && result11 && result12 && result13) {
+    if (result1 && result2 && result3 && result4 && 
+        result5 && result6 && result7 && result8 &&
+        result9 && result10 && result11 && result12 && result13) {
         return 0
     }
 
@@ -73,7 +68,7 @@ main(): Int64 {
 func testLoadDefaultConfig(): Bool {
     var config: LoggerConfiguration = Logger_Manager.loadDefaultConfiguration()
     var rootLevel: String = config.getRoot().getLevel()
-    if (!rootLevel.equals("info")) {
+    if (rootLevel != "info") {
         return false
     }
     return true
@@ -81,7 +76,7 @@ func testLoadDefaultConfig(): Bool {
 
 func testGetLogger(): Bool {
     var log = Logger_Manager.getLogger("test")
-    if (!log.getName().equals("test")) {
+    if (log.getName() != "test") {
         return false
     }
     return true
@@ -98,8 +93,9 @@ func testInitLogggerManager(): Bool {
 func testPrintInfoLog(): Bool {
     let log = Logger_Manager.getLogger("test")
     log.info("info")
-    var res1 = getQueryResult("test", "info")
-    var res2 = getQueryResult("test", "info2")
+    sleep(Duration.microsecond * 500)
+    var res1 = getQueryResult("root", "info")
+    var res2 = getQueryResult("root", "info2")
 
     if (res1 && !res2) {
         return true
@@ -109,8 +105,9 @@ func testPrintInfoLog(): Bool {
 func testPrintErrorLog(): Bool {
     let log = Logger_Manager.getLogger("test")
     log.error("error")
-    var res1 = getQueryResult("test", "error")
-    var res2 = getQueryResult("test", "error2")
+    sleep(Duration.microsecond * 500) 
+    var res1 = getQueryResult("root", "error")
+    var res2 = getQueryResult("root", "error2")
 
     if (res1 && !res2) {
         return true
@@ -120,8 +117,9 @@ func testPrintErrorLog(): Bool {
 func testPrintWarnLog(): Bool {
     let log = Logger_Manager.getLogger("test")
     log.warn("warn")
-    var res1 = getQueryResult("test", "warn")
-    var res2 = getQueryResult("test", "warn2")
+    sleep(Duration.microsecond * 500) 
+    var res1 = getQueryResult("root", "warn")
+    var res2 = getQueryResult("root", "warn2")
 
     if (res1 && !res2) {
         return true
@@ -132,8 +130,9 @@ func testPrintWarnLog(): Bool {
 func testPrintFatalLog(): Bool {
     let log = Logger_Manager.getLogger("test")
     log.fatal("fatal")
-    var res1 = getQueryResult("test", "fatal")
-    var res2 = getQueryResult("test", "off2")
+    sleep(Duration.microsecond * 500) 
+    var res1 = getQueryResult("root", "fatal")
+    var res2 = getQueryResult("root", "fatal2")
 
     if (res1 && !res2) {
         return true
@@ -144,8 +143,9 @@ func testPrintFatalLog(): Bool {
 func testPrintOffLog(): Bool {
     let log = Logger_Manager.getLogger("test")
     log.off("off")
-    var res1 = getQueryResult("test", "off")
-    var res2 = getQueryResult("test", "off2")
+    sleep(Duration.microsecond * 500) 
+    var res1 = getQueryResult("root", "off")
+    var res2 = getQueryResult("root", "off2")
 
     if (res1 && !res2) {
         return true
@@ -156,7 +156,8 @@ func testPrintOffLog(): Bool {
 func testPrintDebugLog(): Bool {
     let log = Logger_Manager.getLogger("test")
     log.debug("debug")
-    var res1 = getQueryResult("test", "debug")
+    sleep(Duration.microsecond * 500) 
+    var res1 = getQueryResult("root", "debug")
     if (!res1) {
         return true
     }
@@ -166,7 +167,8 @@ func testPrintDebugLog(): Bool {
 func testPrintTraceLog(): Bool {
     let log = Logger_Manager.getLogger("test")
     log.trace("trace")
-    var res1 = getQueryResult("test", "trace")
+    sleep(Duration.microsecond * 500) 
+    var res1 = getQueryResult("root", "trace")
     if (!res1) {
         return true
     }
@@ -175,7 +177,8 @@ func testPrintTraceLog(): Bool {
 func testPrintAllLog(): Bool {
     let log = Logger_Manager.getLogger("test")
     log.all("all msg")
-    var res1 = getQueryResult("test", "all msg")
+    sleep(Duration.microsecond * 500) 
+    var res1 = getQueryResult("root", "all msg")
     if (!res1) {
         return true
     }
@@ -183,8 +186,8 @@ func testPrintAllLog(): Bool {
 }
 
 func testGetAppenderFactory(): Bool {
-    let loggerManager = LoggerManager()
-    var res: Bool = loggerManager.getLoggerAppenderFactory().getAppenderByType("aa") is FileLoggerAppender
+    let loggerManager = LoggerManager.createManager("")
+    var res: Bool = loggerManager.getLoggerAppenderFactory().getAppenderByType("aa") is ConsoleLoggerAppender
     if (!res) {
         return false
     }
@@ -192,7 +195,7 @@ func testGetAppenderFactory(): Bool {
 }
 
 func testInitLogggerManagerWithEmptyPath(): Bool {
-    let Logger_Manager = LoggerManager("")
+    let Logger_Manager = LoggerManager.createManager("")
     var size: Int64 = Logger_Manager.getRootLogger().getAppenderList().size
     if (size != 2) {
         return false
@@ -206,7 +209,7 @@ func getQueryResult(name: String, msg: String): Bool {
         if (f.isFile() && f.path.toString().contains("root.log")) {
             var allBytes: Array<Byte> = File.readFrom(f.path.toString())
             var content: String = String.fromUtf8(allBytes)
-            var time: String = DateTime.now().toString().substring(11, 8)
+            var time: String = DateTime.now().toString()[11..19]
             if (content.contains(time) && content.contains(name) && content.contains(msg)) {
                 return true
             }

@@ -23,7 +23,7 @@ public class ConsoleLoggerAppender <: LoggerAppender {
      */
     public func initAppender(pattern: String, property: ArrayList<AppenderProperty>): Unit {
         if (pattern.size == 0) {
-            this.pattern = "[%T %D %m] [%L][%l] (%S) %M"
+            this.pattern = "[%T %D %m] [%L] [%I] [%l] (%S) %M"
         } else {
             this.pattern = pattern
         }

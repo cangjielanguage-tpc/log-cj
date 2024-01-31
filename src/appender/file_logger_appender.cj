@@ -80,7 +80,7 @@ public class FileLoggerAppender <: LoggerAppender {
      */
     public func initAppender(pattern: String, properties: ArrayList<AppenderProperty>): Unit {
         var file = ""
-        let dFormat = "[%D %T %m] [%L] [%l] (%S) %M"
+        let dFormat = "[%D %T %m] [%L] [%I] [%l] (%S) %M"
         var maxSize = 0
         var daily = false
         var rotate = false
@@ -137,7 +137,7 @@ public class FileLoggerAppender <: LoggerAppender {
         let fut = spawn {
             while (true) {
                 lock.lock()
-                if (let Some(rec) = contentList.get(0)) {
+                if (let Some(rec) <- contentList.get(0)) {
                     if (this.file.isClosed()) {
                         this.file = File(this.fileName, OpenOption.CreateOrAppend)
                         this.curSize = this.file.info.length
@@ -150,7 +150,7 @@ public class FileLoggerAppender <: LoggerAppender {
                     }
 
                     // Formatting logging.
-                    var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).replace("\"", "").toUtf8Array()
+                    var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).replace("\"", "").toArray()
                     
                     try {
                         this.file.write(mess)

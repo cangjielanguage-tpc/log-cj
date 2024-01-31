@@ -91,7 +91,7 @@ func testFlushLeft(): Bool {
 func testFormatLogRecord(): Bool {
     let defaultPatternConverter = DefaultPatternConverter()
     var logRecord1 = LogRecord(DateTime.now())
-    var logRecord2 = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source/hello", "message")
+    var logRecord2 = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source/hello", "message", Thread.currentThread.id)
     var size1 = defaultPatternConverter.formatLogRecord("", logRecord1).size
     var size2 = getDefaultPatternConvert().formatLogRecord("", logRecord1).size
     var size3 = defaultPatternConverter.formatLogRecord("[%D %T %m] [%L] [%l] (%S) %M", logRecord1).size
@@ -107,7 +107,7 @@ func testFormatLogRecord(): Bool {
 func testLogRecord(): Bool {
     var logRecord2 = LogRecord(DateTime.now())
     var year = logRecord2.getCreatedTime().year
-    var logRecord3 = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source", "message")
+    var logRecord3 = LogRecord("com.test", LogLevel.ALL, DateTime.now(), "source", "message", Thread.currentThread.id)
     var tagname = logRecord3.getTagName()
     if (year == 0 || tagname != "com.test") {
         return false
