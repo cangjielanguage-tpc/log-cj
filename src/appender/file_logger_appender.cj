@@ -12,7 +12,7 @@ package appender
 from std import fs.*
 from std import format.*
 from std import time.*
-from zip4cj import zip4cj.zip.*
+from zip4cj import zip4cj.*
 import utils.*
 
 /**
@@ -179,12 +179,10 @@ public class FileLoggerAppender <: LoggerAppender {
         for (file in Directory(fileDir.path).fileList()) {
             var num = file.path.toString().count(".log")
             if (file.isFile() && num == 2) {
-                var zip = ZipFile()
                 var name: String = file.path.fileNameWithoutExtension.getOrThrow()
                 var names: Array<String> = name.split("_")
-                zip.setOutPath(fileDir.path.toString() + "/log_" + names.get(1).getOrThrow() + ".zip")
-                zip.addFile(file.path.toString())
-                zip.writeZip()
+                var zip = ZipFile(fileDir.path.toString() + "/log_" + names.get(1).getOrThrow() + ".zip")
+                zip.addFile(file.path)
                 File.delete(file.path)
             }
         }
