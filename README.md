@@ -1,39 +1,151 @@
-# Log4CJ2
+<div align="center">
+<h1>log-cj</h1>
+</div>
+
+<p align="center">
+<img alt="" src="https://img.shields.io/badge/release-v0.0.2-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjc-v0.49.2-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjcov-89.8%25-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
+</p>
 
 #### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+
+仓颉语言实现日志打印功能，类似 log4j 三方件。
+
+代码参考: https://github.com/gohutool/log4go
+
+#### 路线
+
+![](./doc/images/milestone.PNG)
 
 #### 软件架构
-软件架构说明
 
+参见[log-cj 设计文档](./doc/log-cj_design.md)
 
-#### 安装教程
+源码目录
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+```shell
+├── doc
+├── src
+│   ├── appender
+│   │   ├── console_logger_appender.cj
+│   │   ├── file_logger_appender.cj
+│   │   ├── logger_appender.cj
+│   │   ├── logger_appender_factory.cj
+│   │   └──logger_appender_reference.cj
+│   ├── config
+│   │   ├── appender_config.cj
+│   │   ├── appender_property.cj
+│   │   ├── appender_ref.cj
+│   │   ├── logger_config.cj
+│   │   ├── logger_configuration.cj
+│   │   └── root_logger_config.cj
+│   ├── logger
+│   │   ├── logger.cj
+│   │   └── logger_manager.cj
+│   └── utils
+│       ├── log_level.cj
+│       ├── log_record.cj
+│       ├── pattern_converter.cj
+│       ├── time_slice.cj
+│       └── util.cj
+├── resources
+│   ├── logcj.json
+├── test
+│   ├── LLT
+│   ├── UT
+│   ├── HLT
+```
+
+- `doc` 库的设计文档、提案、库的使用文档、LLT 覆盖率报告
+- `src` 库源码目录
+- `resources` 资源文件目录
+- `test` 测试用例目录
+
+#### 接口说明
+参见[主要类和函数说明](./doc/feature_api.md)
+
+#### 支持XML&JSON配置
+master支持JSON配置[JSON](./doc/logcj_json_detail_desc.md)<br/>
+0.38.2分支支持XML配置[XML](./doc/logcj_xml_detail_desc.md)
+
+#### 使用编译&&压缩机制
+
+参见[项目引用](./doc/quote.md)
+
+#### 如何运行测试用例
+
+LLT参见[LLT运行说明](./doc/LLT_running.md)<br/>
+HLT参见[HLT运行说明](./doc/HLT_running.md)
+
+#### zip4cj适配(适用于0.38.2分支XML配置)
+
+仓颉0.38.2和0.39.4版本时间API存在不兼容问题。<br/>
+log-cj项目0.38.2分支，利用python3 ci_test/main.py build拉取zip4cj之后需要变动的文件如下：<br/>
+zip4cj/src/zip4cj/zip/HeaderParser.cj<br/>
+zip4cj/src/zip4cj/zip/MsDosUtils.cj<br/>
+变动点：<br/>
+DateTime->Time<br/>
+DateTime.now()->Time.now()<br/>
+time.year->time.year()<br/>
+time.month.value()->time.month()<br/>
+time.dayOfMonth->time.day()<br/>
+time.hour->time.hour()<br/>
+time.minute->time.minute()<br/>
+time.second->time.second()
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1. 打印日志
+   
+   代码示例：
+
+```go
+main(): Int64 {
+    // 创建一个 Logger
+    let logger = Logger_Manager.getLogger("com.hello")
+
+    // 打印日志
+    logger.info("hello")
+    logger.info("hello")
+    logger.error("hello")
+
+    // 创建另一个 Logger
+    let logger1 = Logger_Manager.getLogger("com.test1")
+    logger1.warn("test1 waring")
+    return 0
+}
+```
+
+   打印结果：
+
+```textile
+[2022/10/22 23:38:08 CST 460] [INFO][com.hello] () hello
+[2022/10/22 23:38:08 CST 460] [INFO][com.hello] () hello
+[2022/10/22 23:38:08 CST 460] [ERROR][com.hello] () hello
+[2022/10/22 23:38:08 CST 460] [WARN][com.test1] () test1 waring
+```
+
+   ()中为待实现的打印日志的具体文件执行代码行（仓颉暂未开放该api接口）
+
+#### 待办事务
+
+1. 代码健壮性处理
+
+2. 多线程处理(目前采用spawn..getResult..方式)
+
+3. 日志打包后压缩文件(引用三方库zip4cj)
+
+4. 安全加固（文件权限，命令注入等）
+
+5. 代码打包
+
+6. UT补充(目前LLT89.8%)
 
 #### 参与贡献
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+[@zhangxyjlu](https://gitee.com/zhangxyjlu)
 
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+[@helongfei](https://gitee.com/helongfei_it)

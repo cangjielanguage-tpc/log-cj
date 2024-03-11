@@ -1,0 +1,69 @@
+<?xml version="1.0" ?>
+<testsuites tests="56" failures="0" errors="0" skipped="0">
+    <testsuite name="kspace/cjproject/log-cj/test/log/split_log/log_test_01.LogTestA" time="0.0001785" tests="7" failures="0" errors="0" skipped="0">
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_01.LogTestA" name="log_test_001" time="2.74e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_01.LogTestA" name="log_test_002" time="5.7000000000000005e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_01.LogTestA" name="log_test_003" time="8.25e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_01.LogTestA" name="log_test_004" time="5.7999999999999995e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_01.LogTestA" name="log_test_005" time="5.0999999999999995e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_01.LogTestA" name="log_test_006" time="3.1e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_01.LogTestA" name="log_test_007" time="9.3e-06"/>
+    </testsuite>
+    <testsuite name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" time="0.0001416" tests="17" failures="0" errors="0" skipped="0">
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_008" time="2.64e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_009" time="3.7e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_010" time="2.7e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_011" time="2.5999999999999997e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_012" time="6.520000000000001e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_013" time="2.7e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_014" time="2.5e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_015" time="2.1000000000000002e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_016" time="2e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_017" time="2.2e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_018" time="2e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_019" time="2.1000000000000002e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_020" time="2.8e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_021" time="1.8e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_022" time="1.8e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_023" time="1.8e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_02.LogTestB" name="log_test_024" time="1.8e-06"/>
+    </testsuite>
+    <testsuite name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" time="24.1451672" tests="9" failures="0" errors="0" skipped="0">
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" name="log_test_042" time="2.4500000000000003e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" name="log_test_043" time="3.17e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" name="log_test_044" time="2.4e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" name="log_test_045" time="2.7e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" name="log_test_046" time="3.1080691000000003"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" name="log_test_047" time="15.025555400000002"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" name="log_test_048" time="6.0113467"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" name="log_test_049" time="7.33e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_04.LogTestD" name="log_test_050" time="1.7500000000000002e-05"/>
+    </testsuite>
+    <testsuite name="kspace/cjproject/log-cj/test/log/split_log/log_test_05.LogTestE" time="0.0005547999999999999" tests="6" failures="0" errors="0" skipped="0">
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_05.LogTestE" name="log_test_050" time="9.16e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_05.LogTestE" name="log_test_051" time="3.75e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_05.LogTestE" name="log_test_052" time="0.0001041"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_05.LogTestE" name="log_test_053" time="6.4e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_05.LogTestE" name="log_test_054" time="0.0001319"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_05.LogTestE" name="log_test_055" time="0.00011009999999999999"/>
+    </testsuite>
+    <testsuite name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" time="0.0001454" tests="17" failures="0" errors="0" skipped="0">
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_025" time="3.0100000000000003e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_026" time="3.3999999999999996e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_027" time="2.7e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_028" time="2.5999999999999997e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_029" time="2.5999999999999997e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_030" time="5.92e-05"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_031" time="2.4e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_032" time="3e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_033" time="3.2000000000000003e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_034" time="2.8e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_035" time="2.1000000000000002e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_036" time="2.4e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_037" time="3.1e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_038" time="2.1000000000000002e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_039" time="2.2e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_040" time="2.3e-06"/>
+        <testcase class_name="kspace/cjproject/log-cj/test/log/split_log/log_test_03.LogTestC" name="log_test_041" time="1.9e-06"/>
+    </testsuite>
+</testsuites>
