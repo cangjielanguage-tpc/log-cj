@@ -28,12 +28,16 @@ public class LoggerManager {
     // Logger appender factory, mainly register logger appender.
     private var loggerAppenderFactory: LoggerAppenderFactory = LoggerAppenderFactory()
 
+    // Logger multiple appenders, multiple registers logger appender. 
+    public var LoggerAppenderFactoryHashMap: HashMap<String, LoggerAppenderFactory> = HashMap<String, LoggerAppenderFactory>()
+
     // Root configuation variable.
     private var rootLogger: LoggerAppenderReference = LoggerAppenderReference()
 
     // Logger configuration map, mainly stores configurtion items related to logger configuration.
     private var loggerNameArr: ArrayList<String> = ArrayList<String>()
     private var loggerAttrArr: ArrayList<LoggerAppenderReference> = ArrayList<LoggerAppenderReference>()
+    private var loggerArr: HashMap<String, LoggerAppenderReference> = HashMap<String, LoggerAppenderReference>()
 
     /**
      * Constructor, load and parse xml file.
@@ -63,6 +67,10 @@ public class LoggerManager {
 
     public func getLoggerAttrArr(): ArrayList<LoggerAppenderReference> {
         return this.loggerAttrArr
+    }
+
+    public func getLoggerArr(): HashMap<String, LoggerAppenderReference> {
+        return this.loggerArr
     }
 
     /**
@@ -102,6 +110,14 @@ public class LoggerManager {
     private func initWithConfig(configuration: LoggerConfiguration): Unit {
         this.loggerAppenderFactory = Logger_Appender_Factory.new()
 
+        for( i in 0..configuration.getLogger().size){
+            var loggerFactory = LoggerAppenderFactory().new()
+            loggerFactory.registryType("console", ConsoleLoggerAppender())
+            loggerFactory.registryType("file", FileLoggerAppender())
+            var name: String = configuration.getLogger().get(i).getOrThrow().getName()
+            LoggerAppenderFactoryHashMap.put(name, loggerFactory)
+        }
+
         this.loggerNameArr = ArrayList<String>()
         this.loggerAttrArr = ArrayList<LoggerAppenderReference>()
         this.rootLogger = LoggerAppenderReference(DEFAULT_LOG_LEVEL, ArrayList<LoggerAppender>())
@@ -116,14 +132,6 @@ public class LoggerManager {
             while (i < appenders.size) {
                 nameArr.append(appenders.get(i).getOrThrow().getName().toAsciiLower())
                 enabledArr.append(appenders.get(i).getOrThrow().getEnabled().toAsciiLower().trimAscii())
-                if (nameArr.get(i).getOrThrow().size > 0 && enabledArr.get(i).getOrThrow().contains("true")) {
-                    this.loggerAppenderFactory.registerLoggerAppender(
-                        appenders.get(i).getOrThrow().getName(),
-                        appenders.get(i).getOrThrow().getAppenderType(),
-                        appenders.get(i).getOrThrow().getPattern(),
-                        appenders.get(i).getOrThrow().getProperties()
-                    )
-                }
                 i++
             }
         }
@@ -140,8 +148,15 @@ public class LoggerManager {
                 var appenderRef = appenderRefList.get(j).getOrThrow()
                 var index: Int64 = 0
                 while (index < nameArr.size) {
-                    if (nameArr.get(index).getOrThrow().contains(appenderRef.getRef().toAsciiLower()) &&
+                    if (nameArr.get(index).getOrThrow() == (appenderRef.getRef().toAsciiLower()) &&
                         enabledArr.get(index).getOrThrow().contains("true")) {
+                        var appenders: ArrayList<AppenderConfig> = configuration.getAppenders()
+                        this.loggerAppenderFactory.registerLoggerAppender(
+                            appenders.get(index).getOrThrow().getName(),
+                            appenders.get(index).getOrThrow().getAppenderType(),
+                            appenders.get(index).getOrThrow().getPattern(),
+                            appenders.get(index).getOrThrow().getProperties()
+                        )
                         let ap = this.loggerAppenderFactory.getAppenderByName(appenderRef.getRef().toAsciiLower())
                         this.rootLogger.getAppenderList().append(ap)
                     }
@@ -161,13 +176,21 @@ public class LoggerManager {
                     LogLevel.getLevelByString(logger.getLevel()),
                     ArrayList<LoggerAppender>()
                 )
+                this.loggerAppenderFactory = LoggerAppenderFactoryHashMap[logger.getName()]
                 var m: Int64 = 0
                 while (m < logger.getAppenderRefList().size) {
                     var appenderRef: AppenderRef = logger.getAppenderRefList().get(m).getOrThrow()
                     var index: Int64 = 0
+                    var appenders: ArrayList<AppenderConfig> = configuration.getAppenders()
                     while (index < nameArr.size) {
-                        if (nameArr.get(index).getOrThrow().contains(appenderRef.getRef().toAsciiLower()) &&
+                        if (nameArr.get(index).getOrThrow() == (appenderRef.getRef().toAsciiLower()) &&
                             enabledArr.get(index).getOrThrow().contains("true")) {
+                            this.loggerAppenderFactory.registerLoggerAppender(
+                                appenders.get(index).getOrThrow().getName(),
+                                appenders.get(index).getOrThrow().getAppenderType(),
+                                appenders.get(index).getOrThrow().getPattern(),
+                                appenders.get(index).getOrThrow().getProperties()
+                            )
                             let oneAppender = this.loggerAppenderFactory.getAppenderByName(
                                 appenderRef.getRef().toAsciiLower()
                             )
@@ -180,6 +203,7 @@ public class LoggerManager {
                 if (oneLogger.getAppenderList().size > 0) {
                     this.loggerNameArr.append(logger.getName())
                     this.loggerAttrArr.append(oneLogger)
+                    this.loggerArr.put(logger.getName(), oneLogger)
                 }
                 k++
             }
@@ -264,7 +288,6 @@ public class LoggerManager {
         var configList: ArrayList<AppenderConfig> = ArrayList<AppenderConfig>()
         let appenders = jsonValue.asObject().get("appenders").getOrThrow()
         var jsArr: JsonArray = JsonValue.fromStr(appenders.toJsonString()).asArray()
-        var propertyList: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
 
         for (o in 0..jsArr.size()) {
             var appender: AppenderConfig = AppenderConfig()
@@ -281,6 +304,7 @@ public class LoggerManager {
                 appender.setPattern(jsArr.get(o).getOrThrow().asObject().get("pattern").getOrThrow().asString().getValue())
             }
             if (jsArr.get(o).getOrThrow().asObject().containsKey("properties")) {
+                var propertyList: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
                 var proArr: JsonArray = jsArr.get(o).getOrThrow().asObject().get("properties").getOrThrow().asArray()
                 for (i in 0..proArr.size()) {
                     var property: AppenderProperty = AppenderProperty()
@@ -305,7 +329,6 @@ public class LoggerManager {
         var loggerList: ArrayList<LoggerConfig> = ArrayList<LoggerConfig>()
         let loggers = jsonValue.asObject().get("loggers").getOrThrow()
         var jsArr: JsonArray = JsonValue.fromStr(loggers.toJsonString()).asArray()
-        var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
 
         for (o in 0..jsArr.size()) {
             var logger: LoggerConfig = LoggerConfig()
@@ -316,6 +339,7 @@ public class LoggerManager {
                 logger.setLevel(jsArr.get(o).getOrThrow().asObject().get("level").getOrThrow().asString().getValue())
             }
             if (jsArr.get(o).getOrThrow().asObject().containsKey("appender-refs")) {
+                var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
                 var refArr: JsonArray = jsArr.get(o).getOrThrow().asObject().get("appender-refs").getOrThrow().asArray()
                 for (i in 0..refArr.size()) {
                     var ref: AppenderRef = AppenderRef(

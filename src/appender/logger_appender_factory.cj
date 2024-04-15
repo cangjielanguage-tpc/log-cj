@@ -110,7 +110,7 @@ public class LoggerAppenderFactory {
         if (this.appenderNames.contains(name.toAsciiLower())) {
             var index: Int64 = 0
             while (index < appenderNames.size) {
-                if (appenderNames.get(index).getOrThrow().contains(name.toAsciiLower().replace("\"", ""))) {
+                if (appenderNames.get(index).getOrThrow() == (name.toAsciiLower().replace("\"", ""))) {
                     return appenderValues.get(index).getOrThrow()
                 }
                 index++

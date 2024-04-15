@@ -178,12 +178,16 @@ public class FileLoggerAppender <: LoggerAppender {
         var paths: HashSet<String> = HashSet<String>()
         for (file in Directory(fileDir.path).fileList()) {
             var num = file.path.toString().count(".log")
-            if (file.isFile() && num == 2) {
+            var fileList: Array<String> = this.fileName.split("/")
+            var fileName: String = fileList[fileList.size-1]
+            if (file.isFile() && num >= 2 && file.path.toString().contains(fileName)) {
                 var name: String = file.path.fileNameWithoutExtension.getOrThrow()
                 var names: Array<String> = name.split("_")
-                var zip = ZipFile(fileDir.path.toString() + "/log_" + names.get(1).getOrThrow() + ".zip")
+                var zip = ZipFile(fileDir.path.toString() + "/log_" + fileName + "_" + names.get(1).getOrThrow() + ".zip")
                 zip.addFile(file.path)
-                File.delete(file.path)
+                if(File.exists(file.path)){
+                    File.delete(file.path)
+                }
             }
         }
     }

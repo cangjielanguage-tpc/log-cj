@@ -52,17 +52,14 @@ public class Logger {
      */
     private func doLog(level: LogLevel, rec: LogRecord): Unit {
         // If there are logs other than root in the configuration, to Print.
-        if (manager.getLoggerNameArr().size > 0 && manager.getLoggerAttrArr().size > 0) {
+        if (manager.getLoggerNameArr().size > 0 && manager.getLoggerArr().size > 0) {
             var i: Int64 = 0
             while (i < manager.getLoggerNameArr().size) {
-                var mapString: String = manager.getLoggerNameArr().toArray().toString()
-                if (mapString.contains(this.name)) {
-                    var j: Int64 = 0
-                    var values: Array<LoggerAppenderReference> = manager.getLoggerAttrArr().toArray()
-                    while (j < values.size) {
-                        appendLog(level, rec, values.get(j).getOrThrow())
-                        j++
-                    }
+                var mapString: Array<String> = manager.getLoggerNameArr().toArray()
+                if (mapString[i] == this.name) {
+                    
+                    var values: HashMap<String, LoggerAppenderReference> = manager.getLoggerArr()
+                    appendLog(level, rec, values[this.name])
                 }
                 i++
             }
