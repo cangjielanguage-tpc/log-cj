@@ -7,7 +7,7 @@
  * This file defines LogLevel enumeration class.
  */
 
-package utils
+package logcj.utils
 
 public let DEFAULT_LOG_LEVEL = LogLevel.INFO
 

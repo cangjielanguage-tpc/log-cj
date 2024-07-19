@@ -93,10 +93,10 @@ module-resolve.json里存放的是项目中模块之间的依赖关系
 
 在需要引入的仓颉（.cj）文件中，引入log4j相关依赖，写法如下
 ```
-from logcj import appender.*
-from logcj import config.*
-from logcj import logger.*
-from logcj import utils.*
+import logcj.appender.*
+import logcj.config.*
+import logcj.logger.*
+import logcj.utils.*
 
 let logger = Logger_Manager.getLogger("com.test")
 

@@ -2,9 +2,9 @@
 // EXEC: ./main
 package test
 
-from logcj import utils.*
-from logcj import config.*
-from std import collection.*
+import logcj.utils.*
+import logcj.config.*
+import std.collection.*
 
 main(): Int64 {
     println("测试开始")

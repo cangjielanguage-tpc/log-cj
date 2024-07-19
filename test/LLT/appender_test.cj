@@ -2,14 +2,15 @@
 // EXEC: ./main
 package test
 
-from logcj import utils.*
-from logcj import config.*
-from logcj import appender.*
-from std import collection.*
-from std import io.*
-from std import fs.*
-from std import time.*
-from std import sync.*
+import logcj.utils.*
+import logcj.config.*
+import logcj.appender.*
+
+import std.collection.*
+import std.io.*
+import std.fs.*
+import std.time.*
+import std.sync.*
 
 main(): Int64 {
     println("测试开始")

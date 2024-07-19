@@ -7,7 +7,7 @@
  * This file defines AppenderRef class.
  */
 
-package config
+package logcj.config
 
 /**
  * Appender reference model class of log file.

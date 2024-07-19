@@ -7,7 +7,7 @@
  * This file defines LoggerConfig class.
  */
 
-package config
+package logcj.config
 
 /**
  * Logger configuration model class of log file,

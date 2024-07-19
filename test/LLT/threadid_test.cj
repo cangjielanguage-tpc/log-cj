@@ -1,10 +1,10 @@
 // EXEC: cjc %import-path %L %l %f
 // EXEC: ./main
 // DEPENDENCE: ./src/resources/logcj.json
-from logcj import appender.*
-from logcj import config.*
-from logcj import logger.*
-from logcj import utils.*
+import logcj.appender.*
+import logcj.config.*
+import logcj.logger.*
+import logcj.utils.*
 
 main(): Int64 {
     // Create a logger.

@@ -7,7 +7,7 @@
  * This file defines AppenderProperty class.
  */
 
-package config
+package logcj.config
 
 /**
  * Appender property model class of log file.

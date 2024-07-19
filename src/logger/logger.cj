@@ -7,9 +7,7 @@
  * This file defines Logger class.
  */
 
-package logger
-
-from std import time.*
+package logcj.logger
 
 /**
  * Logger class, recording and outputting logs.

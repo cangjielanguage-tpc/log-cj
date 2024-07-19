@@ -1048,7 +1048,7 @@ public func getNumByString(str: String, defaultValue: Int64): Int64
     "loggers":[
         {
             "name":"Demo",
-            "level":"info",
+            "level":"warn",
             "appender-refs": [
                 {
                     "ref": "console"
@@ -1076,11 +1076,14 @@ public func getNumByString(str: String, defaultValue: Int64): Int64
 ### 4.1示例代码
 
 ```cangjie
-import logger.*
+import logcj.appender.*
+import logcj.config.*
+import logcj.logger.*
+import logcj.utils.*
 
 main(): Int64 {
     // Create a logger.
-    let logger = Logger_Manager.getLogger("com.hello")
+    let logger = LoggerManager.createManager("./logcj.json").getLogger("aaa")
 
     // Print logs.
     logger.all("1")
@@ -1088,11 +1091,19 @@ main(): Int64 {
     logger.debug("3")
     logger.info("4")
     logger.warn("5")
+    logger.error("6")
+    logger.off("7")
 
     // Create another logger.
-    let logger1 = Logger_Manager.getLogger("com.test1")
+    let logger1 = LoggerManager.createManager("./logcj.json").getLogger("Demo")
+    logger1.all("1")
+    logger1.trace("2")
+    logger1.debug("3")
+    logger1.info("4")
+    logger1.warn("5")
     logger1.error("6")
-    logger1.off("7")
+    logger1.off("789")
+
     return 0
 }
 ```
@@ -1101,17 +1112,31 @@ main(): Int64 {
 #### 4.2.1控制台输出
 
 ```cangjie
-[2023/01/13 10:11:27 CST 929] [INFO] [com.hello] () 4
-[2023/01/13 10:11:27 CST 930] [WARN] [com.hello] () 5
-[2023/01/13 10:11:27 CST 930] [ERROR] [com.test1] () 6
-[2023/01/13 10:11:27 CST 930] [OFF] [com.test1] () 7
+[2024/07/19 11:43:23 CST 928] [INFO] [1] [root] <> 4
+[2024/07/19 11:43:23 CST 928] [WARN] [1] [root] <> 5
+[2024/07/19 11:43:23 CST 928] [ERROR] [1] [root] <> 6
+[2024/07/19 11:43:23 CST 928] [OFF] [1] [root] <> 7
+[2024/07/19 11:43:23 CST 928] [INFO] [1] [root] <> 4
+[2024/07/19 11:43:23 CST 928] [WARN] [1] [root] <> 5
+[2024/07/19 11:43:23 CST 928] [WARN] [1] [Demo] <> 5
+[2024/07/19 11:43:23 CST 928] [ERROR] [1] [root] <> 6
+[2024/07/19 11:43:23 CST 929] [ERROR] [1] [Demo] <> 6
+[2024/07/19 11:43:23 CST 929] [OFF] [1] [root] <> 789
+[2024/07/19 11:43:23 CST 929] [OFF] [1] [Demo] <> 789
 ```
 
 #### 4.2.2日志文件输出
 
 ```cangjie
-[2023/01/13 10:11:27 CST 929] [INFO] [com.hello] () 4
-[2023/01/13 10:11:27 CST 930] [WARN] [com.hello] () 5
-[2023/01/13 10:11:27 CST 930] [ERROR] [com.test1] () 6
-[2023/01/13 10:11:27 CST 930] [OFF] [com.test1] () 7
+[2024/07/19 11:43:23 CST 928] [INFO] [1] [root] <> 4
+[2024/07/19 11:43:23 CST 928] [WARN] [1] [root] <> 5
+[2024/07/19 11:43:23 CST 928] [ERROR] [1] [root] <> 6
+[2024/07/19 11:43:23 CST 928] [OFF] [1] [root] <> 7
+[2024/07/19 11:43:23 CST 928] [INFO] [1] [root] <> 4
+[2024/07/19 11:43:23 CST 928] [WARN] [1] [root] <> 5
+[2024/07/19 11:43:23 CST 928] [WARN] [1] [Demo] <> 5
+[2024/07/19 11:43:23 CST 928] [ERROR] [1] [root] <> 6
+[2024/07/19 11:43:23 CST 929] [ERROR] [1] [Demo] <> 6
+[2024/07/19 11:43:23 CST 929] [OFF] [1] [root] <> 789
+[2024/07/19 11:43:23 CST 929] [OFF] [1] [Demo] <> 789
 ```

@@ -7,10 +7,7 @@
  * This file defines LoggerAppenderFactory class.
  */
 
-package appender
-
-from std import collection.*
-from std import sync.*
+package logcj.appender
 
 /**
  * LoggerAppender factory class, mainly used to register or get the specific implementation object of LoggerAppender according to name or type.

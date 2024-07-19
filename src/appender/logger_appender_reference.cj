@@ -7,7 +7,7 @@
  * This file defines LoggerAppenderReference class.
  */
 
-package appender
+package logcj.appender
 
 /**
  * LoggerAppender reference model class.

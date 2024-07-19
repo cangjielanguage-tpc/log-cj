@@ -2,8 +2,8 @@
 // EXEC: ./main
 package test
 
-from logcj import utils.*
-from std import time.*
+import logcj.utils.*
+import std.time.*
 
 main(): Int64 {
     println("测试开始")

@@ -7,7 +7,7 @@
  * This file defines ConsoleLoggerAppender class.
  */
 
-package appender
+package logcj.appender
 
 /**
  * The specific implementation class of LoggerAppender, which enables the console to print logs.

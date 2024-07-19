@@ -7,9 +7,7 @@
  * This file defines PatternConverter interface and DefaultPatternConverter class.
  */
 
-package utils
-
-from std import collection.*
+package logcj.utils
 
 public interface PatternConverter {
     func formatLogRecord(pattern: String, logRecord: LogRecord): String

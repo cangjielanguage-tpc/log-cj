@@ -7,9 +7,7 @@
  * This file defines the functions used for outputting logs.
  */
 
-package utils
-
-from std import convert.*
+package logcj.utils
 
 /**
  * Align the character string to the right and supplement the specified character in the remaining bits.

@@ -4,17 +4,17 @@
 //dependence:./query.cj
 package test
 
-from std import unittest.*
-from std import unittest.testmacro.*
-from logcj import appender.*
-from logcj import config.*
-from logcj import logger.*
-from logcj import utils.*
-from std import time.*
-from std import collection.*
-from std import fs.*
-from std import io.*
-from std import sync.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import logcj.appender.*
+import logcj.config.*
+import logcj.logger.*
+import logcj.utils.*
+import std.time.*
+import std.collection.*
+import std.fs.*
+import std.io.*
+import std.sync.*
 
 @Test
 public class LogTestF {

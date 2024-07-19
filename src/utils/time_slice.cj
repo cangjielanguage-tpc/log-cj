@@ -7,10 +7,7 @@
  * This file defines TimeSlice class and setCachedTimeSlice function.
  */
 
-package utils
-
-from std import sync.*
-from std import format.*
+package logcj.utils
 
 public var timeSliceCache = TimeSlice()
 

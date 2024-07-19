@@ -49,10 +49,10 @@
         "level": "info",
         "appender-refs": [
             {
-                "ref": ""
+                "ref": "console"
             },
             {
-                "ref": "file1"
+                "ref": "file"
             }
         ]
     }
