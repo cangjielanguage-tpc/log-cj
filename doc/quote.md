@@ -50,7 +50,7 @@ python3 ci_test/main.py build
 在需要引用的仓颉文件中引用log-cj，代码片段如下：<br/>
 
 ```
-from logcj import logger.*
+import logcj.logger.*
 ...
 let logger = Logger_Manager.getLogger("com.test")
 logger.info("test info")
@@ -65,7 +65,7 @@ logcj.xml文件路径：xxx/workspace/A/logcj/src/resources/logcj.xml<br/>
 注意：logger的另外一种引用方法如下，可自定义logcj.xml位置，确保可以找到就行<br/>
 
 ```
-from logcj import logger.*
+import logcj.logger.*
 ...
 let logger = LoggerManager("xxx/logcj.xml").getLogger("com.test")
 logger.info("test info")

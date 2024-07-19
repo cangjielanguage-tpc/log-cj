@@ -3,17 +3,17 @@
 //3rd_party_lib:log-cj/build/charset
 package test
 
-from std import unittest.*
-from std import unittest.testmacro.*
-from logcj import appender.*
-from logcj import config.*
-from logcj import logger.*
-from logcj import utils.*
-from std import time.*
-from std import io.*
-from std import fs.*
-from std import sync.*
-from std import collection.*
+import std.unittest.*
+import std.unittest.testmacro.*
+import logcj.appender.*
+import logcj.config.*
+import logcj.logger.*
+import logcj.utils.*
+import std.time.*
+import std.io.*
+import std.fs.*
+import std.sync.*
+import std.collection.*
 
 /**
  * appender类的验证

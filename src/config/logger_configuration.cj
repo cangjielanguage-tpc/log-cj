@@ -7,9 +7,7 @@
  * This file defines LoggerConfig class.
  */
 
-package config
-
-import utils.*
+package logcj.config
 
 /**
  * Model class corresponding to the log configuration file.

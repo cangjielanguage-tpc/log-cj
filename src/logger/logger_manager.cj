@@ -7,16 +7,7 @@
  * This file defines LoggerManager class.
  */
 
-package logger
-
-from encoding import json.*
-from std import collection.*
-from std import fs.*
-from std import os.posix.*
-from std import sync.*
-import appender.*
-import config.*
-import utils.*
+package logcj.logger
 
 public var Logger_Appender_Factory = LoggerAppenderFactory()
 public var Logger_Manager = LoggerManager("")

@@ -3,28 +3,31 @@
 </div>
 
 <p align="center">
-<img alt="" src="https://img.shields.io/badge/release-v0.0.2-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/release-v0.0.1-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/build-pass-brightgreen" style="display: inline-block;" />
-<img alt="" src="https://img.shields.io/badge/cjc-v0.51.4-brightgreen" style="display: inline-block;" />
+<img alt="" src="https://img.shields.io/badge/cjc-v0.53.4-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/cjcov-89.8%25-brightgreen" style="display: inline-block;" />
 <img alt="" src="https://img.shields.io/badge/project-open-brightgreen" style="display: inline-block;" />
 </p>
 
-#### 介绍
+## 介绍
 
 仓颉语言实现日志打印功能，类似 log4j 三方件。
 
 代码参考: https://github.com/gohutool/log4go
 
-#### 路线
+### 特性
 
-![](./doc/images/milestone.PNG)
+- 💡 支持控制台日志输出和文件日志输出
 
-#### 软件架构
+- 🚀 支持使用Json进行自定义配置
+
+
+## 软件架构
 
 参见[log-cj 设计文档](./doc/log-cj_design.md)
 
-源码目录
+### 源码目录
 
 ```shell
 ├── doc
@@ -59,93 +62,167 @@
 │   ├── HLT
 ```
 
-- `doc` 库的设计文档、提案、库的使用文档、LLT 覆盖率报告
+- `doc` 库的设计文档、提案、库的使用文档等
 - `src` 库源码目录
-- `resources` 资源文件目录
+- `resources` 资源文件模板目录
 - `test` 测试用例目录
 
-#### 接口说明
-参见[主要类和函数说明](./doc/feature_api.md)
+### 接口说明
 
-#### 支持XML&JSON配置
-master支持JSON配置[JSON](./doc/logcj_json_detail_desc.md)<br/>
-0.38.2分支支持XML配置[XML](./doc/logcj_xml_detail_desc.md)
+主要类和函数接口说明详见 [feature_api](./doc/feature_api.md)
 
-#### 使用编译&&压缩机制
 
-参见[项目引用](./doc/quote.md)
+## 使用说明
 
-#### 如何运行测试用例
+### 编译构建
+```shell
+cjpm update
+cjpm build
+```
 
-LLT参见[LLT运行说明](./doc/LLT_running.md)<br/>
-HLT参见[HLT运行说明](./doc/HLT_running.md)
+### 执行用例
 
-#### zip4cj适配(适用于0.38.2分支XML配置)
+#### 1. 用例编译
+```shell
+# 编译
+cjc  --import-path xxx/log-cj/target/release -L xxx/log-cj/zip4cj/crypto4cj/lib/ -l crypto   -L xxxx/log-cj/target/release/logcj -L xxx/log-cj/target/release/charset -L xxx/log-cj/target/release/zip4cj -L xxx/log-cj/target/release/crypto4cj -l crypto4cj.sha1cj -l crypto4cj.symmetrycj -l charset.unicode -l crypto4cj.sha384cj -l zip4cj.util -l crypto4cj.rc4cj -l zip4cj -l crypto4cj.sha256cj -l charset.singlebyte -l logcj.config -l charset.simplechinese -l crypto4cj.md5cj -l logcj.utils -l crypto4cj.dsacj -l zip4cj.io -l crypto4cj.sha512cj -l charset.exception -l zip4cj.progress -l charset.traditionchinese -l crypto4cj.eccj -l crypto4cj.dhcj -l zip4cj.headers -l charset.korean -l logcj.logger -l logcj.appender -l charset.japanese -l zip4cj.io.outputstream -l zip4cj.crypto -l zip4cj.io.inputstream -l crypto4cj.sha224cj -l crypto4cj.rsacj -l zip4cj.model -l charset.encoding -l crypto4cj.rc2cj -l charset -l crypto4cj.digestcj -l crypto4cj.hmaccj -l crypto4cj.utils -l crypto4cj.aescj -l zip4cj.util.internals -l logcj -l zip4cj.crypto.engine -l crypto4cj.pbkdf2cj -l crypto4cj.bignumcj -l zip4cj.crypto.PBKDF2 -l zip4cj.tasks -l zip4cj.model.enums -l crypto4cj -l zip4cj.exception  xxx/xxx/用例文件名.cj 
+```
 
-仓颉0.38.2和0.39.4版本时间API存在不兼容问题。<br/>
-log-cj项目0.38.2分支，利用python3 ci_test/main.py build拉取zip4cj之后需要变动的文件如下：<br/>
-zip4cj/src/zip4cj/zip/HeaderParser.cj<br/>
-zip4cj/src/zip4cj/zip/MsDosUtils.cj<br/>
-变动点：<br/>
-DateTime->Time<br/>
-DateTime.now()->Time.now()<br/>
-time.year->time.year()<br/>
-time.month.value()->time.month()<br/>
-time.dayOfMonth->time.day()<br/>
-time.hour->time.hour()<br/>
-time.minute->time.minute()<br/>
-time.second->time.second()
+注意，用例编译生成文件默认保存在当前目录，生成的可执行文件默认为 main
 
-#### 使用说明
+#### 2. 库文件复制
+- 把编译好的文件复制到 main 文件同级目录下，target/release/zip4cj、target/release/crypto4cj、target/release/charset、target/release/logcj 文件夹下的 cjo 和 so 文件
+- 把 zip4cj/crypto4cj/lib/ 下的 libcrypto.so 文件也复制到 main 文件同级目录下
 
-1. 打印日志
-   
-   代码示例：
+#### 3. 执行用例
+```shell
+./main
+```
 
-```go
+
+### 功能示例
+
+示例代码：
+
+```cangjie
+import logcj.appender.*
+import logcj.config.*
+import logcj.logger.*
+import logcj.utils.*
+
 main(): Int64 {
-    // 创建一个 Logger
-    let logger = Logger_Manager.getLogger("com.hello")
+    // Create a logger.
+    let logger = LoggerManager.createManager("./logcj.json").getLogger("aaa")
 
-    // 打印日志
-    logger.info("hello")
-    logger.info("hello")
-    logger.error("hello")
+    // Print logs.
+    logger.all("1")
+    logger.trace("2")
+    logger.debug("3")
+    logger.info("4")
+    logger.warn("5")
+    logger.error("6")
+    logger.off("7")
 
-    // 创建另一个 Logger
-    let logger1 = Logger_Manager.getLogger("com.test1")
-    logger1.warn("test1 waring")
+    // Create another logger.
+    let logger1 = LoggerManager.createManager("./logcj.json").getLogger("Demo")
+    logger1.all("1")
+    logger1.trace("2")
+    logger1.debug("3")
+    logger1.info("4")
+    logger1.warn("5")
+    logger1.error("6")
+    logger1.off("789")
+
     return 0
 }
 ```
 
-   打印结果：
+配置文件：
 
-```textile
-[2022/10/22 23:38:08 CST 460] [INFO][com.hello] () hello
-[2022/10/22 23:38:08 CST 460] [INFO][com.hello] () hello
-[2022/10/22 23:38:08 CST 460] [ERROR][com.hello] () hello
-[2022/10/22 23:38:08 CST 460] [WARN][com.test1] () test1 waring
+```json
+{"appenders": [
+        {
+            "enabled": "true",
+            "name": "console",
+            "type": "console",
+            "pattern": "[%D %T %m] [%L] [%I] [%l] <%S> %M"
+        },
+        {
+            "enabled": "true",
+            "name": "file",
+            "type": "file",
+            "pattern": "[%D %T %m] [%L] [%I] [%l] <%S> %M",
+            "properties": [
+                {
+                    "name": "filename",
+                    "value": "root.log"
+                },
+                {
+                    "name": "rotate",
+                    "value": "true"
+                },
+                {
+                    "name": "maxsize",
+                    "value": "20M"
+                },
+                {
+                    "name": "daily",
+                    "value": "false"
+                }
+            ]
+        }
+    ],
+    "loggers":[
+        {
+            "name":"Demo",
+            "level":"warn",
+            "appender-refs": [
+                {
+                    "ref": "console"
+                },
+                {
+                    "ref": "file"
+                }
+            ]
+        }
+    ],
+    "root": {
+        "level": "info",
+        "appender-refs": [
+            {
+                "ref": "console"
+            },
+            {
+                "ref": "file"
+            }
+        ]
+    }
+}
 ```
 
-   ()中为待实现的打印日志的具体文件执行代码行（仓颉暂未开放该api接口）
+执行结果如下：
 
-#### 待办事务
+```shell
+[2024/07/19 11:43:23 CST 928] [INFO] [1] [root] <> 4
+[2024/07/19 11:43:23 CST 928] [WARN] [1] [root] <> 5
+[2024/07/19 11:43:23 CST 928] [ERROR] [1] [root] <> 6
+[2024/07/19 11:43:23 CST 928] [OFF] [1] [root] <> 7
+[2024/07/19 11:43:23 CST 928] [INFO] [1] [root] <> 4
+[2024/07/19 11:43:23 CST 928] [WARN] [1] [root] <> 5
+[2024/07/19 11:43:23 CST 928] [WARN] [1] [Demo] <> 5
+[2024/07/19 11:43:23 CST 928] [ERROR] [1] [root] <> 6
+[2024/07/19 11:43:23 CST 929] [ERROR] [1] [Demo] <> 6
+[2024/07/19 11:43:23 CST 929] [OFF] [1] [root] <> 789
+[2024/07/19 11:43:23 CST 929] [OFF] [1] [Demo] <> 789
+```
 
-1. 代码健壮性处理
 
-2. 多线程处理(目前采用spawn..getResult..方式)
 
-3. 日志打包后压缩文件(引用三方库zip4cj)
 
-4. 安全加固（文件权限，命令注入等）
+## 开源协议
 
-5. 代码打包
+本项目基于 [Apache License 2.0](./LICENSE) ，请自由的享受和参与开源。
 
-6. UT补充(目前LLT89.8%)
+## 参与贡献
 
-#### 参与贡献
-
-[@zhangxyjlu](https://gitee.com/zhangxyjlu)
-
-[@helongfei](https://gitee.com/helongfei_it)
+欢迎给我们提交PR，欢迎给我们提交Issue，欢迎参与任何形式的贡献

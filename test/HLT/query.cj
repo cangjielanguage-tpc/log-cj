@@ -1,5 +1,13 @@
 package test
 
+import std.fs.*
+import std.collection.*
+
+import logcj.appender.*
+import logcj.config.*
+import logcj.logger.*
+import logcj.utils.*
+
 func getQueryResult(pattern: String, rec: LogRecord, fileName: String, tag!: String = ""): Bool {
     var curDir: Directory = Directory(".")
     var fileList: ArrayList<FileInfo> = curDir.fileList()

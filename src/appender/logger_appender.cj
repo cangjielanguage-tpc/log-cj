@@ -7,9 +7,7 @@
  * This file defines LoggerAppender interface.
  */
 
-package appender
-
-import config.*
+package logcj.appender
 
 /**
  * The main interfaces of the log component.

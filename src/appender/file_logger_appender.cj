@@ -7,13 +7,7 @@
  * This file defines FileLoggerAppender class.
  */
 
-package appender
-
-from std import fs.*
-from std import format.*
-from std import time.*
-from zip4cj import zip4cj.*
-import utils.*
+package logcj.appender
 
 /**
    The specific implementation class of LoggerAppender, which enables the file can be logged.
@@ -29,7 +23,7 @@ public class FileLoggerAppender <: LoggerAppender {
     private var fileName: String = ""
 
     // Log file pointer.
-    private var file: fs.File
+    private var file: File
 
     // Maximum limit of a single log. The value 0 indicates no limit.
     private var maxSize: Int64 = 0

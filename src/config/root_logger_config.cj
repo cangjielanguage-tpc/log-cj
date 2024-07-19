@@ -7,9 +7,7 @@
  * This file defines RootLoggerConfig class.
  */
 
-package config
-
-from std import collection.ArrayList
+package logcj.config
 
 /**
  * Root configuration model class of log file,

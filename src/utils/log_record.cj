@@ -7,9 +7,7 @@
  * This file defines LogRecord class.
  */
 
-package utils
-
-from std import time.*
+package logcj.utils
 
 /**
  * Log recording model class.

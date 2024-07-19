@@ -178,7 +178,7 @@
 
 ```python
 # 引用组件
-from logcj import *   
+import logcj.*   
 
 # Logger_Manager 加载时已经根据日志配置文件做好初始化操作，
 # "com.hello" 即为日志记录器的名称，可以是类名或自定义方便识别的字符串
