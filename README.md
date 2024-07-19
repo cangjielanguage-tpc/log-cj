@@ -12,9 +12,7 @@
 
 ## 介绍
 
-仓颉语言实现日志打印功能，类似 log4j 三方件。
-
-代码参考: https://github.com/gohutool/log4go
+仓颉语言实现日志打印功能
 
 ### 特性
 
@@ -37,7 +35,7 @@
 │   │   ├── file_logger_appender.cj
 │   │   ├── logger_appender.cj
 │   │   ├── logger_appender_factory.cj
-│   │   └──logger_appender_reference.cj
+│   │   └── logger_appender_reference.cj
 │   ├── config
 │   │   ├── appender_config.cj
 │   │   ├── appender_property.cj
@@ -55,11 +53,10 @@
 │       ├── time_slice.cj
 │       └── util.cj
 ├── resources
-│   ├── logcj.json
+│   └── logcj.json
 ├── test
 │   ├── LLT
-│   ├── UT
-│   ├── HLT
+│   └── HLT
 ```
 
 - `doc` 库的设计文档、提案、库的使用文档等
