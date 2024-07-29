@@ -89,7 +89,7 @@ public class FileLoggerAppender <: LoggerAppender {
         //Parse properties.
         var i: Int64 = 0
         while (i < properties.size) {
-            var value = properties.get(i).getOrThrow().getValue().toAsciiLower().trimLeft(" \r\n").trimRight(" \r\n")
+            var value = properties.get(i).getOrThrow().getValue().trimLeft(" \r\n").trimRight(" \r\n")
             var name = properties.get(i).getOrThrow().getName().toAsciiLower()
 
             if (name.contains("filename")) {
@@ -125,6 +125,11 @@ public class FileLoggerAppender <: LoggerAppender {
      * Process default file, and assigns values to file-related variables.
      */
     public func start(): Unit {
+        if (let Some(dir) <- Path(this.fileName).directoryName) {
+            if (!Directory.exists(dir)) {
+                Directory.create(dir, recursive: true)
+            }
+        }
         this.file = File(this.fileName, OpenOption.CreateOrAppend)
         this.curSize = this.file.info.length
         this.opendate = this.file.info.creationTime.dayOfMonth
