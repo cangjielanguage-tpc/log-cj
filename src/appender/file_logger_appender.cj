@@ -89,7 +89,7 @@ public class FileLoggerAppender <: LoggerAppender {
         //Parse properties.
         var i: Int64 = 0
         while (i < properties.size) {
-            var value = properties.get(i).getOrThrow().getValue().trimLeft(" \r\n").trimRight(" \r\n")
+            var value = properties.get(i).getOrThrow().getValue().trimStart(" \r\n").trimEnd(" \r\n")
             var name = properties.get(i).getOrThrow().getName().toAsciiLower()
 
             if (name.contains("filename")) {
