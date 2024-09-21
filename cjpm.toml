@@ -1,8 +1,8 @@
 [dependencies]
-  zip4cj = {branch = "develop", git = "https://gitcode.com/Cangjie-TPC/zip4cj.git", version = "0.0.1"}
+  zip4cj = {branch = "v0.0.1.B001", git = "https://gitcode.com/Cangjie-TPC/zip4cj.git", version = "0.0.1"}
 
 [package]
-  cjc-version = "0.54.3"
+  cjc-version = "0.55.3"
   compile-option = "-O2 -Woff unused"
   description = "nothing here"
   link-option = ""
