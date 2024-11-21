@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Huawei Technologies Co., Ltd. 2022-2024. All rights resveved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2024. All rights reserved.
  */
 
 /**
@@ -208,12 +208,12 @@ public class LoggerManager {
      * @return logger configuration object.
      */
     private func parseJson(jsonPath: String): LoggerConfiguration {
-        var filePath: Path = Path(jsonPath)
-        var isFileExist: Bool = File.exists(filePath)
-
-        if (jsonPath.size == 0) {
+        if (jsonPath == "") {
             return loadDefaultConfiguration()
         }
+
+        var filePath: Path = Path(jsonPath)
+        var isFileExist: Bool = exists(filePath)
 
         if (!isFileExist) {
             println("can not find config file, use default config")

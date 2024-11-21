@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Huawei Technologies Co., Ltd. 2022-2024. All rights resveved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2022-2024. All rights reserved.
  */
 
 /**
@@ -51,8 +51,8 @@ public class FileLoggerAppender <: LoggerAppender {
      */
     public init() {
         this.file = File(DEFAULT_OUTPUT_FILE_NAME, OpenOption.CreateOrAppend)
-        if (File.exists(this.file.info.path)) {
-            File.delete(this.file.info.path)
+        if (exists(this.file.info.path)) {
+            remove(this.file.info.path)
         }
     }
 
@@ -125,21 +125,26 @@ public class FileLoggerAppender <: LoggerAppender {
      * Process default file, and assigns values to file-related variables.
      */
     public func start(): Unit {
-        if (let Some(dir) <- Path(this.fileName).directoryName) {
-            if (!Directory.exists(dir)) {
-                Directory.create(dir, recursive: true)
-            }
+        // // if (let Some(dir) <- Path(this.fileName).directoryName) {
+        //     if (!Directory.exists(dir)) {
+        //         Directory.create(dir, recursive: true)
+        //     }
+        // }
+        var dir = Path(this.fileName).parent
+        if (dir.toString() != "" && !exists(dir)) {
+            Directory.create(dir, recursive: true)
         }
+
         this.file = File(this.fileName, OpenOption.CreateOrAppend)
-        this.curSize = this.file.info.length
+        this.curSize = this.file.info.size
         this.opendate = this.file.info.creationTime.dayOfMonth
         let fut = spawn {
             while (true) {
                 lock.lock()
-                if (let Some(rec) <- contentList.get(0)) {
+                if (let Some(rec) <- (contentList.get(0))) {
                     if (this.file.isClosed()) {
                         this.file = File(this.fileName, OpenOption.CreateOrAppend)
-                        this.curSize = this.file.info.length
+                        this.curSize = this.file.info.size
                         this.opendate = this.file.info.creationTime.dayOfMonth
                     }
                     let now = DateTime.now()
@@ -179,13 +184,13 @@ public class FileLoggerAppender <: LoggerAppender {
             var num = file.path.toString().count(".log")
             var fileList: Array<String> = this.fileName.split("/")
             var fileName: String = fileList[fileList.size-1]
-            if (file.isFile() && num >= 2 && file.path.toString().contains(fileName)) {
-                var name: String = file.path.fileNameWithoutExtension.getOrThrow()
+            if (file.isRegular() && num >= 2 && file.path.toString().contains(fileName)) {
+                var name: String = file.path.fileNameWithoutExtension
                 var names: Array<String> = name.split("_")
                 var zip = ZipFile(fileDir.path.toString() + "/log_" + fileName + "_" + names.get(1).getOrThrow() + ".zip")
-                zip.addFile(file.path)
-                if(File.exists(file.path)){
-                    File.delete(file.path)
+                zip.addFile(file.path.toString())
+                if(exists(file.path)){
+                    remove(file.path)
                 }
             }
         }
@@ -239,7 +244,7 @@ public class FileLoggerAppender <: LoggerAppender {
         }
         try {
             //An error message is returned when the current file is named fname.
-            File.move(this.fileName, fname, true)
+            rename(this.fileName, to: fname, overwrite: true)
 
             //Open a new file.
             this.file = File(this.fileName, OpenOption.CreateOrAppend)
@@ -267,7 +272,7 @@ public class FileLoggerAppender <: LoggerAppender {
             for (file in Directory(fileDir.path).fileList()) {
                 if (file.path.toString().contains(".log") && file.lastModificationTime.addDays(this.retentionDays) <
                     DateTime.now()) {
-                    File.delete(file.path)
+                    remove(file.path)
                 }
             }
         } catch (e: NoneValueException) {
