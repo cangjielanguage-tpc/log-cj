@@ -16,7 +16,7 @@ import std.collection.*
 import std.fs.*
 import std.io.*
 import std.sync.*
-import std.os.posix.*
+import std.posix.*
 
 @Test
 public class LogTestD {

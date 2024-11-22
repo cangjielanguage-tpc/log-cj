@@ -8,7 +8,6 @@ import logcj.logger.*
 import logcj.utils.*
 import std.time.*
 import std.fs.*
-import std.os.posix.*
 import std.collection.*
 import std.sync.*
 
@@ -206,7 +205,7 @@ func getQueryResult(name: String, msg: String): Bool {
     var curDir: Directory = Directory(".")
     var fileList: ArrayList<FileInfo> = curDir.fileList()
     for (f in fileList) {
-        if (f.isFile() && f.path.toString().contains("root.log")) {
+        if (f.isRegular() && f.path.toString().contains("root.log")) {
             var allBytes: Array<Byte> = File.readFrom(f.path.toString())
             var content: String = String.fromUtf8(allBytes)
             var time: String = DateTime.now().toString()[11..19]

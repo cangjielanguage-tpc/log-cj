@@ -452,7 +452,7 @@ func getQueryResult(pattern: String, rec: LogRecord, fileName: String): Bool {
     var curDir: Directory = Directory(".")
     var fileList: ArrayList<FileInfo> = curDir.fileList()
     for (f in fileList) {
-        if (f.isFile() && f.path.fileName.getOrThrow() == fileName) {
+        if (f.isRegular() && f.path.fileName == fileName) {
             sleep(Duration.second * 3)
             var allBytes: Array<Byte> = File.readFrom(f.path.toString())
             var content: String = String.fromUtf8(allBytes)
@@ -480,7 +480,7 @@ func getQueryFileRollingRes(fileName: String): Bool {
     var fileList: ArrayList<FileInfo> = curDir.fileList()
     for (f in fileList) {
         // println(f.path.toString())
-        if (f.isFile() && f.path.toString().contains(fileName)) {
+        if (f.isRegular() && f.path.toString().contains(fileName)) {
             return true
         }
     }
