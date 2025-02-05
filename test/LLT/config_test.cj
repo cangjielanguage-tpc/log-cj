@@ -91,7 +91,7 @@ func testLoggerConfigWithAttrs(): Bool {
     logger.setLevel("info")
     var list = ArrayList<AppenderRef>()
     var ref = AppenderRef("file")
-    list.append(ref)
+    list.add(ref)
     logger.setAppenderRefList(list)
     var name: String = logger.getName()
     var level: String = logger.getLevel()
@@ -105,7 +105,7 @@ func testLoggerConfigWithAttrs(): Bool {
 func testLoggerConfigWithInitParams(): Bool {
     var list = ArrayList<AppenderRef>()
     var ref = AppenderRef("file")
-    list.append(ref)
+    list.add(ref)
     var logger: LoggerConfig = LoggerConfig("name", "info", list)
     var name: String = logger.getName()
     var level: String = logger.getLevel()
@@ -137,7 +137,7 @@ func testAppenderConfigWithAttrs(): Bool {
     appenderConfig.setPattern("pattern")
     var properties: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
     var pro1: AppenderProperty = AppenderProperty("name1", "value1")
-    properties.append(pro1)
+    properties.add(pro1)
     appenderConfig.setProperties(properties)
     var enabled: String = appenderConfig.getEnabled()
     var name: String = appenderConfig.getName()
@@ -154,7 +154,7 @@ func testAppenderConfigWithAttrs(): Bool {
 func testAppenderConfigWithInitParams(): Bool {
     var properties: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
     var pro1: AppenderProperty = AppenderProperty("name1", "value1")
-    properties.append(pro1)
+    properties.add(pro1)
     var appenderConfig: AppenderConfig = AppenderConfig("true", "config", "file", "pattern", properties)
     var enabled: String = appenderConfig.getEnabled()
     var name: String = appenderConfig.getName()
@@ -224,18 +224,18 @@ func testLoggerConfiguartionWithInitParams(): Bool {
     var appenders = ArrayList<AppenderConfig>()
     var properties: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
     var pro1: AppenderProperty = AppenderProperty("name1", "value1")
-    properties.append(pro1)
+    properties.add(pro1)
     var appenderConfig: AppenderConfig = AppenderConfig("true", "config", "file", "pattern", properties)
-    appenders.append(appenderConfig)
+    appenders.add(appenderConfig)
 
     var refList: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
     var ref: AppenderRef = AppenderRef("file")
-    refList.append(ref)
+    refList.add(ref)
     var root: RootLoggerConfig = RootLoggerConfig("INFO", refList)
 
     var logger: LoggerConfig = LoggerConfig("name", "info", refList)
     var loggerList = ArrayList<LoggerConfig>()
-    loggerList.append(logger)
+    loggerList.add(logger)
 
     var config: LoggerConfiguration = LoggerConfiguration(appenders, root, loggerList)
     var size: Int64 = config.getAppenders().size
@@ -262,7 +262,7 @@ func testRootLoggerConfigWithAttrs(): Bool {
     root.setLevel("info")
     var list = ArrayList<AppenderRef>()
     var ref = AppenderRef("file")
-    list.append(ref)
+    list.add(ref)
     root.setAppenderRefList(list)
     var level: String = root.getLevel()
     var size: Int64 = root.getAppenderRefList().size
@@ -275,7 +275,7 @@ func testRootLoggerConfigWithAttrs(): Bool {
 func testRootLoggerConfigWithInitParams(): Bool {
     var list = ArrayList<AppenderRef>()
     var ref = AppenderRef("file")
-    list.append(ref)
+    list.add(ref)
     var root: RootLoggerConfig = RootLoggerConfig("info", list)
     var level: String = root.getLevel()
     var size: Int64 = root.getAppenderRefList().size

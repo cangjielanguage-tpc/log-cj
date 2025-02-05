@@ -106,7 +106,7 @@ public class LoggerManager {
             loggerFactory.registryType("console", ConsoleLoggerAppender())
             loggerFactory.registryType("file", FileLoggerAppender())
             var name: String = configuration.getLogger().get(i).getOrThrow().getName()
-            LoggerAppenderFactoryHashMap.put(name, loggerFactory)
+            LoggerAppenderFactoryHashMap.add(name, loggerFactory)
         }
 
         this.loggerNameArr = ArrayList<String>()
@@ -121,8 +121,8 @@ public class LoggerManager {
             var i: Int64 = 0
             var appenders: ArrayList<AppenderConfig> = configuration.getAppenders()
             while (i < appenders.size) {
-                nameArr.append(appenders.get(i).getOrThrow().getName().toAsciiLower())
-                enabledArr.append(appenders.get(i).getOrThrow().getEnabled().toAsciiLower().trimAscii())
+                nameArr.add(appenders.get(i).getOrThrow().getName().toAsciiLower())
+                enabledArr.add(appenders.get(i).getOrThrow().getEnabled().toAsciiLower().trimAscii())
                 i++
             }
         }
@@ -149,7 +149,7 @@ public class LoggerManager {
                             appenders.get(index).getOrThrow().getProperties()
                         )
                         let ap = this.loggerAppenderFactory.getAppenderByName(appenderRef.getRef().toAsciiLower())
-                        this.rootLogger.getAppenderList().append(ap)
+                        this.rootLogger.getAppenderList().add(ap)
                     }
                     index++
                 }
@@ -185,16 +185,16 @@ public class LoggerManager {
                             let oneAppender = this.loggerAppenderFactory.getAppenderByName(
                                 appenderRef.getRef().toAsciiLower()
                             )
-                            oneLogger.getAppenderList().append(oneAppender)
+                            oneLogger.getAppenderList().add(oneAppender)
                         }
                         index++
                     }
                     m++
                 }
                 if (oneLogger.getAppenderList().size > 0) {
-                    this.loggerNameArr.append(logger.getName())
-                    this.loggerAttrArr.append(oneLogger)
-                    this.loggerArr.put(logger.getName(), oneLogger)
+                    this.loggerNameArr.add(logger.getName())
+                    this.loggerAttrArr.add(oneLogger)
+                    this.loggerArr.add(logger.getName(), oneLogger)
                 }
                 k++
             }
@@ -301,11 +301,11 @@ public class LoggerManager {
                     var property: AppenderProperty = AppenderProperty()
                     property.setName(proArr.get(i).getOrThrow().asObject().get("name").getOrThrow().asString().getValue())
                     property.setValue(proArr.get(i).getOrThrow().asObject().get("value").getOrThrow().asString().getValue())
-                    propertyList.append(property)
+                    propertyList.add(property)
                 }
                 appender.setProperties(propertyList)
             }
-            configList.append(appender)
+            configList.add(appender)
         }
         return configList
     }
@@ -336,11 +336,11 @@ public class LoggerManager {
                     var ref: AppenderRef = AppenderRef(
                         refArr.get(i).getOrThrow().asObject().get("ref").getOrThrow().asString().getValue()
                     )
-                    refList.append(ref)
+                    refList.add(ref)
                 }
                 logger.setAppenderRefList(refList)
             }
-            loggerList.append(logger)
+            loggerList.add(logger)
         }
         return loggerList
     }
@@ -366,7 +366,7 @@ public class LoggerManager {
                 var ref: AppenderRef = AppenderRef(
                     jsArr.get(j).getOrThrow().asObject().get("ref").getOrThrow().asString().getValue()
                 )
-                refList.append(ref)
+                refList.add(ref)
             }
             root.setAppenderRefList(refList)
         }

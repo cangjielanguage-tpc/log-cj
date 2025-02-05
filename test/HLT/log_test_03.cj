@@ -39,7 +39,7 @@ public class LogTestC {
         logger_02.setLevel("info_02")
         var list_02 = ArrayList<AppenderRef>()
         var ref_02 = AppenderRef("file")
-        list_02.append(ref_02)
+        list_02.add(ref_02)
         logger_02.setAppenderRefList(list_02)
         @Expect(logger_02.getName(),"name_02")
         @Expect(logger_02.getLevel(),"info_02")
@@ -52,7 +52,7 @@ public class LogTestC {
     public func log_test_027():Unit{
         var list_03 = ArrayList<AppenderRef>()
         var ref_03 = AppenderRef("file")
-        list_03.append(ref_03)
+        list_03.add(ref_03)
         var logger_03: LoggerConfig = LoggerConfig("name_03", "info_03", list_03)
         @Expect(logger_03.getName(),"name_03")
         @Expect(logger_03.getLevel(),"info_03")
@@ -76,7 +76,7 @@ public class LogTestC {
     public func log_test_029():Unit{
         var list_05 = ArrayList<AppenderRef>()
         var ref_05 = AppenderRef("file")
-        list_05.append(ref_05)
+        list_05.add(ref_05)
         var logger_05: LoggerConfig = LoggerConfig("中文中文", "中文中文", list_05)
         @Expect(logger_05.getName(),"中文中文")
         @Expect(logger_05.getLevel(),"中文中文")
@@ -89,7 +89,7 @@ public class LogTestC {
     public func log_test_030():Unit{
         var list_06 = ArrayList<AppenderRef>()
         var ref_06 = AppenderRef("file")
-        list_06.append(ref_06)
+        list_06.add(ref_06)
         var logger_06: LoggerConfig = LoggerConfig(":<'{}{:", "<%$^(()", list_06)
         @Expect(logger_06.getName(),":<'{}{:")
         @Expect(logger_06.getLevel(),"<%$^(()")
@@ -121,19 +121,19 @@ public class LogTestC {
     public func log_test_033():Unit{
         var properties_02: ArrayList<AppenderProperty> = ArrayList<AppenderProperty>()
         var property_02: AppenderProperty = AppenderProperty("name_02", "value_02")
-        properties_02.append(property_02)
+        properties_02.add(property_02)
         var appenders_02 = ArrayList<AppenderConfig>()
         var appenderConfig_02: AppenderConfig = AppenderConfig("true", "config", "file", "pattern", properties_02)
-        appenders_02.append(appenderConfig_02)
+        appenders_02.add(appenderConfig_02)
 
         var refList_02: ArrayList<AppenderRef> = ArrayList<AppenderRef>()
         var ref_02: AppenderRef = AppenderRef("file")
-        refList_02.append(ref_02)
+        refList_02.add(ref_02)
         var root_02: RootLoggerConfig = RootLoggerConfig("INFO", refList_02)
 
         var logger_02: LoggerConfig = LoggerConfig("name", "info", refList_02)
         var loggerList_02 = ArrayList<LoggerConfig>()
-        loggerList_02.append(logger_02)
+        loggerList_02.add(logger_02)
 
         var config_02: LoggerConfiguration = LoggerConfiguration(appenders_02, root_02, loggerList_02)
         @Expect(config_02.getAppenders().size,1)
@@ -169,7 +169,7 @@ public class LogTestC {
         root_02.setLevel("info")
         var list_02 = ArrayList<AppenderRef>()
         var ref_02 = AppenderRef("file")
-        list_02.append(ref_02)
+        list_02.add(ref_02)
         root_02.setAppenderRefList(list_02)
         @Expect(root_02.getLevel(),"info")
         @Expect(root_02.getAppenderRefList().size,1)
@@ -180,7 +180,7 @@ public class LogTestC {
     public func log_test_037():Unit{
         var list_03 = ArrayList<AppenderRef>()
         var ref_03 = AppenderRef("file")
-        list_03.append(ref_03)
+        list_03.add(ref_03)
         var root_03: RootLoggerConfig = RootLoggerConfig("info", list_03)
         @Expect(root_03.getLevel(),"info")
         @Expect(root_03.getAppenderRefList().size,1)       
@@ -200,7 +200,7 @@ public class LogTestC {
     public func log_test_039():Unit{
         var list_05 = ArrayList<AppenderRef>()
         var ref_05 = AppenderRef("file")
-        list_05.append(ref_05)
+        list_05.add(ref_05)
         var root_05: RootLoggerConfig = RootLoggerConfig("", list_05)
         @Expect(root_05.getLevel(),"")
         @Expect(root_05.getAppenderRefList().size,1)
@@ -211,7 +211,7 @@ public class LogTestC {
     public func log_test_040():Unit{
         var list_06 = ArrayList<AppenderRef>()
         var ref_06 = AppenderRef("file")
-        list_06.append(ref_06)
+        list_06.add(ref_06)
         var root_06: RootLoggerConfig = RootLoggerConfig("中文", list_06)
         @Expect(root_06.getLevel(),"中文")
         @Expect(root_06.getAppenderRefList().size,1)
@@ -222,7 +222,7 @@ public class LogTestC {
     public func log_test_041():Unit{
         var list_07 = ArrayList<AppenderRef>()
         var ref_07 = AppenderRef("file")
-        list_07.append(ref_07)
+        list_07.add(ref_07)
         var root_07: RootLoggerConfig = RootLoggerConfig("?><}{*&^&$", list_07)
         @Expect(root_07.getLevel(),"?><}{*&^&$")
         @Expect(root_07.getAppenderRefList().size,1)

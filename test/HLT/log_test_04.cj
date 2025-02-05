@@ -58,14 +58,14 @@ public class LogTestD {
     public func log_test_044():Unit{
         // testAppenderFactorWithInitParams
         var appenderNames_03 = ArrayList<String>()
-        appenderNames_03.append("file")
+        appenderNames_03.add("file")
         var appenderValues_03 = ArrayList<LoggerAppender>()
-        appenderValues_03.append(FileLoggerAppender())
+        appenderValues_03.add(FileLoggerAppender())
 
         var typeNames_03 = ArrayList<String>()
-        typeNames_03.append("file")
+        typeNames_03.add("file")
         var typeValues_03 = ArrayList<LoggerAppender>()
-        typeValues_03.append(FileLoggerAppender())
+        typeValues_03.add(FileLoggerAppender())
 
         var factory_03: LoggerAppenderFactory = LoggerAppenderFactory(appenderNames_03, appenderValues_03, typeNames_03, typeValues_03, ReentrantMutex())
         var instance_03: LoggerAppenderFactory = factory_03.new()
@@ -88,9 +88,9 @@ public class LogTestD {
     public func log_test_045():Unit{
         
         var appenderNames_04 = ArrayList<String>()
-        appenderNames_04.append("file")
+        appenderNames_04.add("file")
         var appenderValues_04 = ArrayList<LoggerAppender>()
-        appenderValues_04.append(FileLoggerAppender())
+        appenderValues_04.add(FileLoggerAppender())
 
         var factory_04: LoggerAppenderFactory = LoggerAppenderFactory(
             appenderNames_04, appenderValues_04, ArrayList<String>(), ArrayList<LoggerAppender>(), ReentrantMutex()
@@ -140,7 +140,7 @@ public class LogTestD {
     @TestCase
     public func log_test_049():Unit{
         var appenderList_02 = ArrayList<LoggerAppender>()
-        appenderList_02.append(FileLoggerAppender())
+        appenderList_02.add(FileLoggerAppender())
         //appenderList_02.append(ConsoleLoggerAppender())
         var appenderRef_02 = LoggerAppenderReference(LogLevel.ALL, appenderList_02)
         @Expect(appenderRef_02.getLevel().levelName(),"ALL")
@@ -151,7 +151,7 @@ public class LogTestD {
     @TestCase
     public func log_test_050():Unit{
         var appenderList_03 = ArrayList<LoggerAppender>()
-        appenderList_03.append(FileLoggerAppender())
+        appenderList_03.add(FileLoggerAppender())
        // appenderList_03.append(ConsoleLoggerAppender())
         var appenderRef_03 = LoggerAppenderReference()
         appenderRef_03.setLevel(LogLevel.ERROR)
