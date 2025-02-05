@@ -9,8 +9,7 @@ import logcj.logger.*
 import logcj.utils.*
 
 func getQueryResult(pattern: String, rec: LogRecord, fileName: String, tag!: String = ""): Bool {
-    var curDir: Directory = Directory(".")
-    var fileList: ArrayList<FileInfo> = curDir.fileList()
+    var fileList: Array<FileInfo> = Directory.readFrom(".")
     for (f in fileList) {
         if (f.isRegular() && f.path.toString().contains(fileName)) {
             var allBytes: Array<Byte> = File.readFrom(f.path.toString())

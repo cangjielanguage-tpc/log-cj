@@ -71,8 +71,8 @@ public class LoggerAppenderFactory {
     public func registryType(typeName: String, typeClz: LoggerAppender): LoggerAppenderFactory {
         this.typeLock.lock()
         if (typeClz is LoggerAppender) {
-            typeNames.append(typeName.toAsciiLower())
-            typeValues.append(typeClz)
+            typeNames.add(typeName.toAsciiLower())
+            typeValues.add(typeClz)
         }
         this.typeLock.unlock()
         return this
@@ -144,8 +144,8 @@ public class LoggerAppenderFactory {
         var newObj = getAppenderByType(typename)
         newObj.initAppender(pattern, properties)
         newObj.start()
-        this.appenderNames.append(appenderName)
-        this.appenderValues.append(newObj)
+        this.appenderNames.add(appenderName)
+        this.appenderValues.add(newObj)
         this.typeLock.unlock()
         return this
     }

@@ -50,7 +50,7 @@ public class FileLoggerAppender <: LoggerAppender {
      * Constructor, initialize variable file.
      */
     public init() {
-        this.file = File(DEFAULT_OUTPUT_FILE_NAME, OpenOption.CreateOrAppend)
+        this.file = File(DEFAULT_OUTPUT_FILE_NAME, OpenMode.Append)
         if (exists(this.file.info.path)) {
             remove(this.file.info.path)
         }
@@ -135,7 +135,7 @@ public class FileLoggerAppender <: LoggerAppender {
             Directory.create(dir, recursive: true)
         }
 
-        this.file = File(this.fileName, OpenOption.CreateOrAppend)
+        this.file = File(this.fileName, OpenMode.Append)
         this.curSize = this.file.info.size
         this.opendate = this.file.info.creationTime.dayOfMonth
         let fut = spawn {
@@ -143,7 +143,7 @@ public class FileLoggerAppender <: LoggerAppender {
                 lock.lock()
                 if (let Some(rec) <- (contentList.get(0))) {
                     if (this.file.isClosed()) {
-                        this.file = File(this.fileName, OpenOption.CreateOrAppend)
+                        this.file = File(this.fileName, OpenMode.Append)
                         this.curSize = this.file.info.size
                         this.opendate = this.file.info.creationTime.dayOfMonth
                     }
@@ -166,7 +166,7 @@ public class FileLoggerAppender <: LoggerAppender {
 
                     // Update the size.
                     this.curSize += n
-                    contentList.remove(0)
+                    contentList.remove(at: 0)
                     compressRollingFile()
                 }else {
                     lock.wait()
@@ -180,7 +180,7 @@ public class FileLoggerAppender <: LoggerAppender {
     private func compressRollingFile(): Unit {
         var fileDir = this.file.info.parentDirectory.getOrThrow()
         var paths: HashSet<String> = HashSet<String>()
-        for (file in Directory(fileDir.path).fileList()) {
+        for (file in Directory.readFrom(fileDir.path)) {
             var num = file.path.toString().count(".log")
             var fileList: Array<String> = this.fileName.split("/")
             var fileName: String = fileList[fileList.size-1]
@@ -203,7 +203,7 @@ public class FileLoggerAppender <: LoggerAppender {
      */
     public func logWrite(rec: LogRecord): Unit {
         lock.lock()
-        contentList.append(rec)
+        contentList.add(rec)
         lock.notifyAll()
         lock.unlock()
     }
@@ -237,17 +237,17 @@ public class FileLoggerAppender <: LoggerAppender {
         // If daily in the configuration is true (archived by day), the opening date is not the same as the current day.
         if (this.daily && DateTime.now().dayOfMonth != this.opendate) {
             // Get yesterday's time, format to day.
-            let yesterday = DateTime.now().addDays(-1).toString("YYYYMMddhhmmss-SS")
+            let yesterday = DateTime.now().addDays(-1).toString(DateTimeFormat.of("YYYYMMddhhmmss-SS"))
             fname = this.fileName + "_" + yesterday + ".log"
         } else {
-            fname = this.fileName + "_" + DateTime.now().toString("YYYYMMddhhmmss-SS") + ".log"
+            fname = this.fileName + "_" + DateTime.now().toString(DateTimeFormat.of("YYYYMMddhhmmss-SS")) + ".log"
         }
         try {
             //An error message is returned when the current file is named fname.
             rename(this.fileName, to: fname, overwrite: true)
 
             //Open a new file.
-            this.file = File(this.fileName, OpenOption.CreateOrAppend)
+            this.file = File(this.fileName, OpenMode.Append)
         } catch (e: IllegalArgumentException | FSException) {
             lock.unlock()
             println("rolling file occur exception: ${e.message}")
@@ -269,7 +269,7 @@ public class FileLoggerAppender <: LoggerAppender {
     private func deleterollingFile(): Unit {
         try {
             let fileDir = this.file.info.parentDirectory.getOrThrow()
-            for (file in Directory(fileDir.path).fileList()) {
+            for (file in Directory.readFrom(fileDir.path)) {
                 if (file.path.toString().contains(".log") && file.lastModificationTime.addDays(this.retentionDays) <
                     DateTime.now()) {
                     remove(file.path)

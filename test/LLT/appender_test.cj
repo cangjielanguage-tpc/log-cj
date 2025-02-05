@@ -160,11 +160,11 @@ func testFileLoggerAppenderWithOtherPattern(): Bool {
     var daily = AppenderProperty("daily", "false")
     var rotate = AppenderProperty("rotate", "true")
     var retentionDays = AppenderProperty("retentiondays", "3")
-    proList.append(fileName)
-    proList.append(maxSize)
-    proList.append(daily)
-    proList.append(rotate)
-    proList.append(retentionDays)
+    proList.add(fileName)
+    proList.add(maxSize)
+    proList.add(daily)
+    proList.add(rotate)
+    proList.add(retentionDays)
     file.initAppender("[%D %T] [%L] (%S) %M", proList)
     file.start()
     var logRecord = LogRecord("com.test.file", LogLevel.INFO, DateTime.now(), "source", "message", Thread.currentThread.id)
@@ -182,8 +182,8 @@ func testFileLoggerAppenderWithErrorRolling(): Bool {
         var proList = ArrayList<AppenderProperty>()
         var maxSize = AppenderProperty("maxsize", "1")
         var fileName = AppenderProperty("filename", "test-error.log")
-        proList.append(maxSize)
-        proList.append(fileName)
+        proList.add(maxSize)
+        proList.add(fileName)
         file.initAppender("", proList)
         file.start()
         var logRecord = LogRecord("com.error.file", LogLevel.INFO, DateTime.now(), "source", "message", Thread.currentThread.id)
@@ -203,9 +203,9 @@ func testFileLoggerAppenderWithRightRolling(): Bool {
         var maxSize = AppenderProperty("maxsize", "1")
         var fileName = AppenderProperty("filename", "test-right.log")
         var rotate = AppenderProperty("rotate", "true")
-        proList.append(maxSize)
-        proList.append(fileName)
-        proList.append(rotate)
+        proList.add(maxSize)
+        proList.add(fileName)
+        proList.add(rotate)
         file.initAppender("", proList)
         file.start()
         var logRecord = LogRecord("com.right.file", LogLevel.INFO, DateTime.now(), "source", "message", Thread.currentThread.id)
@@ -260,14 +260,14 @@ func testAppenderFactorWithConsoleType(): Bool {
 func testAppenderFactorWithInitParams(): Bool {
     var appenderList = ArrayList<String>()
     var appenderValueList = ArrayList<LoggerAppender>()
-    appenderList.append("file")
-    appenderValueList.append(FileLoggerAppender())
+    appenderList.add("file")
+    appenderValueList.add(FileLoggerAppender())
     var appenderTypeList = ArrayList<String>()
     var appenderTypeValueList = ArrayList<LoggerAppender>()
-    appenderTypeList.append("console")
-    appenderTypeValueList.append(ConsoleLoggerAppender())
-    appenderTypeList.append("file")
-    appenderTypeValueList.append(FileLoggerAppender())
+    appenderTypeList.add("console")
+    appenderTypeValueList.add(ConsoleLoggerAppender())
+    appenderTypeList.add("file")
+    appenderTypeValueList.add(FileLoggerAppender())
 
     var factory: LoggerAppenderFactory = LoggerAppenderFactory(
         appenderList,
@@ -301,8 +301,8 @@ func testAppenderFactorWithInitParams(): Bool {
 func testAppenderFactorNoNew(): Bool {
     var appenderList = ArrayList<String>()
     var appenderValueList = ArrayList<LoggerAppender>()
-    appenderList.append("file")
-    appenderValueList.append(FileLoggerAppender())
+    appenderList.add("file")
+    appenderValueList.add(FileLoggerAppender())
     var factory: LoggerAppenderFactory = LoggerAppenderFactory(
         appenderList,
         appenderValueList,
@@ -330,8 +330,8 @@ func testAppenderReference(): Bool {
 
 func testAppenderReferenceWithInitParams(): Bool {
     var appenderList = ArrayList<LoggerAppender>()
-    appenderList.append(FileLoggerAppender())
-    appenderList.append(ConsoleLoggerAppender())
+    appenderList.add(FileLoggerAppender())
+    appenderList.add(ConsoleLoggerAppender())
     var appenderRef = LoggerAppenderReference(LogLevel.INFO, appenderList)
     var levelName: String = appenderRef.getLevel().levelName()
     var size: Int64 = appenderRef.getAppenderList().size
@@ -343,8 +343,8 @@ func testAppenderReferenceWithInitParams(): Bool {
 
 func testAppenderReferenceWithSetter(): Bool {
     var appenderList = ArrayList<LoggerAppender>()
-    appenderList.append(FileLoggerAppender())
-    appenderList.append(ConsoleLoggerAppender())
+    appenderList.add(FileLoggerAppender())
+    appenderList.add(ConsoleLoggerAppender())
     var appenderRef = LoggerAppenderReference()
     appenderRef.setLevel(LogLevel.INFO)
     appenderRef.setAppenderList(appenderList)
@@ -449,8 +449,7 @@ func testErrorEnabled(): Bool {
 }
 
 func getQueryResult(pattern: String, rec: LogRecord, fileName: String): Bool {
-    var curDir: Directory = Directory(".")
-    var fileList: ArrayList<FileInfo> = curDir.fileList()
+    var fileList: Array<FileInfo> = Directory.readFrom(".")
     for (f in fileList) {
         if (f.isRegular() && f.path.fileName == fileName) {
             sleep(Duration.second * 3)
@@ -476,8 +475,7 @@ func getQueryResult(pattern: String, rec: LogRecord, fileName: String): Bool {
 }
 
 func getQueryFileRollingRes(fileName: String): Bool {
-    var curDir: Directory = Directory(".")
-    var fileList: ArrayList<FileInfo> = curDir.fileList()
+    var fileList: Array<FileInfo> = Directory.readFrom(".")
     for (f in fileList) {
         // println(f.path.toString())
         if (f.isRegular() && f.path.toString().contains(fileName)) {

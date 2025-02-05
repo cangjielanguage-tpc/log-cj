@@ -202,8 +202,7 @@ func testInitLogggerManagerWithEmptyPath(): Bool {
     return true
 }
 func getQueryResult(name: String, msg: String): Bool {
-    var curDir: Directory = Directory(".")
-    var fileList: ArrayList<FileInfo> = curDir.fileList()
+    var fileList: Array<FileInfo> = Directory.readFrom(".")
     for (f in fileList) {
         if (f.isRegular() && f.path.toString().contains("root.log")) {
             var allBytes: Array<Byte> = File.readFrom(f.path.toString())
