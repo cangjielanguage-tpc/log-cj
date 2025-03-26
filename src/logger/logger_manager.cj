@@ -9,8 +9,8 @@
 
 package logcj.logger
 
-public var Logger_Appender_Factory = LoggerAppenderFactory()
-public var Logger_Manager = LoggerManager("")
+// public var Logger_Appender_Factory = LoggerAppenderFactory()
+// public var Logger_Manager = LoggerManager("")
 
 /**
  * Log management class, load and parse log file to get a specific configuration item.
@@ -36,8 +36,7 @@ public class LoggerManager {
      * @param jsonPath log file path.
      */
     public static func createManager(jsonPath: String): LoggerManager {
-        Logger_Manager = LoggerManager(jsonPath)
-        return Logger_Manager
+        return LoggerManager(jsonPath)
     }
     
     init(jsonPath: String) {
@@ -71,7 +70,7 @@ public class LoggerManager {
      * @return logger object.
      */
     public func getLogger(name: String): Logger {
-        var logger = Logger(name)
+        var logger = Logger(name, this)
         return logger
     }
 
@@ -82,8 +81,8 @@ public class LoggerManager {
      */
     private func initWithDefaultConfig(jsonPath: String): Unit {
         // Register the LoggerAppender provided by the system.
-        Logger_Appender_Factory.registryType("console", ConsoleLoggerAppender())
-        Logger_Appender_Factory.registryType("file", FileLoggerAppender())
+        loggerAppenderFactory.registryType("console", ConsoleLoggerAppender())
+        loggerAppenderFactory.registryType("file", FileLoggerAppender())
 
         var loggerConfiguration: LoggerConfiguration = parseJson(jsonPath)
         if (loggerConfiguration.getAppenders().size == 0) {
@@ -99,7 +98,7 @@ public class LoggerManager {
      * @param configuration log configuration obtained by loading the xml file.
      */
     private func initWithConfig(configuration: LoggerConfiguration): Unit {
-        this.loggerAppenderFactory = Logger_Appender_Factory.new()
+        this.loggerAppenderFactory = loggerAppenderFactory.new()
 
         for( i in 0..configuration.getLogger().size){
             var loggerFactory = LoggerAppenderFactory().new()
@@ -320,7 +319,6 @@ public class LoggerManager {
         var loggerList: ArrayList<LoggerConfig> = ArrayList<LoggerConfig>()
         let loggers = jsonValue.asObject().get("loggers").getOrThrow()
         var jsArr: JsonArray = JsonValue.fromStr(loggers.toJsonString()).asArray()
-
         for (o in 0..jsArr.size()) {
             var logger: LoggerConfig = LoggerConfig()
             if (jsArr.get(o).getOrThrow().asObject().containsKey("name")) {

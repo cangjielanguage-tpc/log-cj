@@ -65,7 +65,7 @@ main(): Int64 {
 }
 
 func testLoadDefaultConfig(): Bool {
-    var config: LoggerConfiguration = Logger_Manager.loadDefaultConfiguration()
+    var config: LoggerConfiguration = LoggerManager.createManager("").loadDefaultConfiguration()
     var rootLevel: String = config.getRoot().getLevel()
     if (rootLevel != "info") {
         return false
@@ -74,7 +74,7 @@ func testLoadDefaultConfig(): Bool {
 }
 
 func testGetLogger(): Bool {
-    var log = Logger_Manager.getLogger("test")
+    var log = LoggerManager.createManager("").getLogger("test")
     if (log.getName() != "test") {
         return false
     }
@@ -82,7 +82,7 @@ func testGetLogger(): Bool {
 }
 
 func testInitLogggerManager(): Bool {
-    var size: Int64 = Logger_Manager.getRootLogger().getAppenderList().size
+    var size: Int64 = LoggerManager.createManager("").getRootLogger().getAppenderList().size
     if (size != 2) {
         return false
     }
@@ -90,7 +90,7 @@ func testInitLogggerManager(): Bool {
 }
 
 func testPrintInfoLog(): Bool {
-    let log = Logger_Manager.getLogger("test")
+    let log = LoggerManager.createManager("").getLogger("test")
     log.info("info")
     sleep(Duration.microsecond * 500)
     var res1 = getQueryResult("root", "info")
@@ -102,7 +102,7 @@ func testPrintInfoLog(): Bool {
     return false
 }
 func testPrintErrorLog(): Bool {
-    let log = Logger_Manager.getLogger("test")
+    let log = LoggerManager.createManager("").getLogger("test")
     log.error("error")
     sleep(Duration.microsecond * 500) 
     var res1 = getQueryResult("root", "error")
@@ -114,7 +114,7 @@ func testPrintErrorLog(): Bool {
     return false
 }
 func testPrintWarnLog(): Bool {
-    let log = Logger_Manager.getLogger("test")
+    let log = LoggerManager.createManager("").getLogger("test")
     log.warn("warn")
     sleep(Duration.microsecond * 500) 
     var res1 = getQueryResult("root", "warn")
@@ -127,7 +127,7 @@ func testPrintWarnLog(): Bool {
 }
 
 func testPrintFatalLog(): Bool {
-    let log = Logger_Manager.getLogger("test")
+    let log = LoggerManager.createManager("").getLogger("test")
     log.fatal("fatal")
     sleep(Duration.microsecond * 500) 
     var res1 = getQueryResult("root", "fatal")
@@ -140,7 +140,7 @@ func testPrintFatalLog(): Bool {
 }
 
 func testPrintOffLog(): Bool {
-    let log = Logger_Manager.getLogger("test")
+    let log = LoggerManager.createManager("").getLogger("test")
     log.off("off")
     sleep(Duration.microsecond * 500) 
     var res1 = getQueryResult("root", "off")
@@ -153,7 +153,7 @@ func testPrintOffLog(): Bool {
 }
 
 func testPrintDebugLog(): Bool {
-    let log = Logger_Manager.getLogger("test")
+    let log = LoggerManager.createManager("").getLogger("test")
     log.debug("debug")
     sleep(Duration.microsecond * 500) 
     var res1 = getQueryResult("root", "debug")
@@ -164,7 +164,7 @@ func testPrintDebugLog(): Bool {
 }
 
 func testPrintTraceLog(): Bool {
-    let log = Logger_Manager.getLogger("test")
+    let log = LoggerManager.createManager("").getLogger("test")
     log.trace("trace")
     sleep(Duration.microsecond * 500) 
     var res1 = getQueryResult("root", "trace")
@@ -174,7 +174,7 @@ func testPrintTraceLog(): Bool {
     return false
 }
 func testPrintAllLog(): Bool {
-    let log = Logger_Manager.getLogger("test")
+    let log = LoggerManager.createManager("").getLogger("test")
     log.all("all msg")
     sleep(Duration.microsecond * 500) 
     var res1 = getQueryResult("root", "all msg")
@@ -194,8 +194,7 @@ func testGetAppenderFactory(): Bool {
 }
 
 func testInitLogggerManagerWithEmptyPath(): Bool {
-    let Logger_Manager = LoggerManager.createManager("")
-    var size: Int64 = Logger_Manager.getRootLogger().getAppenderList().size
+    var size: Int64 = LoggerManager.createManager("").getRootLogger().getAppenderList().size
     if (size != 2) {
         return false
     }
