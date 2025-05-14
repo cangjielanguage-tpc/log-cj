@@ -40,9 +40,11 @@ public class FileLoggerAppender <: LoggerAppender {
     // Indicates whether to pack logs.
     private var rotate: Bool = false
 
+    private var writeCompleted: Bool = true
+
     private var retentionDays: Int64 = 7
 
-    private var contentList: ArrayList<LogRecord> = ArrayList<LogRecord>()
+    private var contentList: LinkedList<LogRecord> = LinkedList<LogRecord>()
 
     private let lock = Monitor()
 
@@ -125,11 +127,6 @@ public class FileLoggerAppender <: LoggerAppender {
      * Process default file, and assigns values to file-related variables.
      */
     public func start(): Unit {
-        // // if (let Some(dir) <- Path(this.fileName).directoryName) {
-        //     if (!Directory.exists(dir)) {
-        //         Directory.create(dir, recursive: true)
-        //     }
-        // }
         var dir = Path(this.fileName).parent
         if (dir.toString() != "" && !exists(dir)) {
             Directory.create(dir, recursive: true)
@@ -138,43 +135,8 @@ public class FileLoggerAppender <: LoggerAppender {
         this.file = File(this.fileName, OpenMode.Append)
         this.curSize = this.file.info.size
         this.opendate = this.file.info.creationTime.dayOfMonth
-        let fut = spawn {
-            while (true) {
-                lock.lock()
-                if (let Some(rec) <- (contentList.get(0))) {
-                    if (this.file.isClosed()) {
-                        this.file = File(this.fileName, OpenMode.Append)
-                        this.curSize = this.file.info.size
-                        this.opendate = this.file.info.creationTime.dayOfMonth
-                    }
-                    let now = DateTime.now()
-                    if ((this.maxSize > 0 && this.curSize >= this.maxSize) ||
-                        (this.daily && now.dayOfMonth != this.opendate)) {
-                        rollingFile()
-                    }
 
-                    // Formatting logging.
-                    var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).replace("\"", "").toArray()
-                    
-                    try {
-                        this.file.write(mess)
-                    } catch (e: FSException) {
-                        println("write file occur exception: ${e.message}")
-                        return
-                    }
-                    let n = mess.size
-
-                    // Update the size.
-                    this.curSize += n
-                    contentList.remove(at: 0)
-                    compressRollingFile()
-                }else {
-                    lock.wait()
-                }
-
-                lock.unlock()
-            }
-        }
+        logWriteToFile()
     }
 
     private func compressRollingFile(): Unit {
@@ -197,24 +159,79 @@ public class FileLoggerAppender <: LoggerAppender {
     }
 
     /**
-     * Write log to file.
+     * Close file.
+     */
+    public func close(): Unit {
+        let fut: Future<Unit> = spawn {
+            while (true) {
+                if (writeCompleted) {
+                    if (!this.file.isClosed()) {
+                        this.file.flush()
+                        this.file.close()
+                    }
+                    return
+                }
+                sleep(5 * Duration.millisecond)
+            }
+        }
+        
+        fut.get()
+        return
+    }
+
+    /**
+     * Write log to file. 可以使用异步，但必须要有个写完的返回值，
      *
      * @param rec log recording.
      */
     public func logWrite(rec: LogRecord): Unit {
         lock.lock()
-        contentList.add(rec)
+        contentList.addLast(rec)
         lock.notifyAll()
         lock.unlock()
     }
 
-    /**
-     * Close file.
-     */
-    public func close(): Unit {
-        if (!this.file.isClosed()) {
-            this.file.flush()
-            this.file.close()
+    private func logWriteToFile(): Unit {
+        let fut: Future<Unit> = spawn {
+            while (true) {
+                lock.lock()
+                if (let Some(rec) <- (contentList.removeFirst())) {
+                    writeCompleted = false
+                    if (this.file.isClosed()) {
+                        this.file = File(this.fileName, OpenMode.Append)
+                        this.curSize = this.file.info.size
+                        this.opendate = this.file.info.creationTime.dayOfMonth
+                    }
+                
+                    // Formatting logging.
+                    var mess = getDefaultPatternConvert().formatLogRecord(this.pattern, rec).replace("\"", "").toArray()
+                    
+                    try {
+                        this.file.write(mess)
+                    } catch (e: FSException) {
+                        println("write file occur exception: ${e.message}")
+                        return
+                    }
+                    let n = mess.size
+
+                    // Update the size.
+                    this.curSize += n
+
+                    let now = DateTime.now()
+                    if ((this.maxSize > 0 && this.curSize >= this.maxSize) || (this.daily && now.dayOfMonth != this.opendate)) {
+                        // lock.unlock()    
+                        writeCompleted = true
+                        rollingFile()
+                        // lock.lock()
+                    }
+
+                    compressRollingFile()
+                    lock.unlock()
+                } else {
+                    writeCompleted = true
+                    lock.wait()
+                }
+            }
         }
     }
 
@@ -227,10 +244,7 @@ public class FileLoggerAppender <: LoggerAppender {
         lock.lock()
 
         // Close current file.
-        if (!this.file.isClosed()) {
-            this.file.flush()
-            this.file.close()
-        }
+        close()
 
         var fname = ""
 
@@ -244,8 +258,7 @@ public class FileLoggerAppender <: LoggerAppender {
         }
         try {
             //An error message is returned when the current file is named fname.
-            rename(this.fileName, to: fname, overwrite: true)
-
+            rename(this.fileName, to: fname, overwrite: false)
             //Open a new file.
             this.file = File(this.fileName, OpenMode.Append)
         } catch (e: IllegalArgumentException | FSException) {

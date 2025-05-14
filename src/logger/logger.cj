@@ -15,10 +15,11 @@ package logcj.logger
 public class Logger {
     // Logger name.
     private var name: String
-    private var manager: LoggerManager = Logger_Manager
+    private var manager: LoggerManager
 
-    public init(name: String) {
+    public init(name: String, manager: LoggerManager) {
         this.name = name
+        this.manager = manager
     }
 
     public func getName(): String {
@@ -34,12 +35,14 @@ public class Logger {
     public func log(level: LogLevel, msg: String): Unit {
         // Currently, the method of obtaining the file name and line number is not available. Wait for the SDK to provide the method.
         let src = ""
-        var rootRecord = LogRecord("root", level, DateTime.now(), src, msg, Thread.currentThread.id)
-        appendLog(level, rootRecord, manager.getRootLogger())
-
-        var rec = LogRecord(this.name, level, DateTime.now(), src, msg, Thread.currentThread.id)
-        // Consider whether thread processing needs to be started.
-        doLog(level, rec)
+        if(manager.getLoggerNameArr().contains(this.name)) {
+            var rec = LogRecord(this.name, level, DateTime.now(), src, msg, Thread.currentThread.id)
+            // Consider whether thread processing needs to be started.
+            doLog(level, rec)
+        } else {
+            var rootRecord = LogRecord("root", level, DateTime.now(), src, msg, Thread.currentThread.id)
+            appendLog(level, rootRecord, manager.getRootLogger())
+        }
     }
 
     /**
@@ -50,18 +53,8 @@ public class Logger {
      */
     private func doLog(level: LogLevel, rec: LogRecord): Unit {
         // If there are logs other than root in the configuration, to Print.
-        if (manager.getLoggerNameArr().size > 0 && manager.getLoggerArr().size > 0) {
-            var i: Int64 = 0
-            while (i < manager.getLoggerNameArr().size) {
-                var mapString: Array<String> = manager.getLoggerNameArr().toArray()
-                if (mapString[i] == this.name) {
-                    
-                    var values: HashMap<String, LoggerAppenderReference> = manager.getLoggerArr()
-                    appendLog(level, rec, values[this.name])
-                }
-                i++
-            }
-        }
+        var values: HashMap<String, LoggerAppenderReference> = manager.getLoggerArr()
+        appendLog(level, rec, values[this.name])
     }
 
     /**
@@ -83,6 +76,22 @@ public class Logger {
                 appender.logWrite(rec)
                 i++
             }
+        }
+    }
+
+    // 在所有日志写完后结束文件写入
+    public func closeWriteFile(): Unit {
+        var values: HashMap<String, LoggerAppenderReference> = manager.getLoggerArr()
+        var appenderRef = values[this.name]
+        if (appenderRef.getAppenderList().size == 0) {
+            return
+        }
+
+        var i: Int64 = 0
+        while (i < appenderRef.getAppenderList().size) {
+            var appender: LoggerAppender = appenderRef.getAppenderList().get(i).getOrThrow()
+            appender.close()
+            i++
         }
     }
 

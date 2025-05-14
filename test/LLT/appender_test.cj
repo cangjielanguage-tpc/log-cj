@@ -228,10 +228,7 @@ func testAppenderFactoryNoType(): Bool {
         ArrayList<AppenderProperty>()
     )
     var res: Bool = console.getAppenderByName("console") is ConsoleLoggerAppender
-    if (!res) {
-        return true
-    }
-    return false
+    return res
 }
 
 func testAppenderFactorWithConsoleType(): Bool {
@@ -241,7 +238,7 @@ func testAppenderFactorWithConsoleType(): Bool {
     var res1: Bool = fileAppender.getAppenderByName("file") is ConsoleLoggerAppender
     var res2: Bool = fileAppender.getAppenderByType("file") is FileLoggerAppender
 
-    if (res1 || !res2) {
+    if (!res1 || !res2) {
         return false
     }
     var console = instance.registerLoggerAppender(
@@ -251,10 +248,7 @@ func testAppenderFactorWithConsoleType(): Bool {
         ArrayList<AppenderProperty>()
     )
     var res: Bool = console.getAppenderByName("console") is ConsoleLoggerAppender
-    if (res) {
-        return false
-    }
-    return true
+    return res
 }
 
 func testAppenderFactorWithInitParams(): Bool {

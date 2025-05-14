@@ -106,7 +106,7 @@ public class LogTestD {
         var size: Int64 = loggerManager.getRootLogger().getAppenderList().size
         @Expect(size, 2)
 
-        var defaultCdonfig: LoggerConfiguration = Logger_Manager.loadDefaultConfiguration()
+        var defaultCdonfig: LoggerConfiguration = LoggerManager.createManager("").loadDefaultConfiguration()
         var level = defaultCdonfig.getRoot().getLevel().replace("\"","")
         @Expect(level, "info")
     }
@@ -121,10 +121,10 @@ public class LogTestD {
         var log = loggerManager.getLogger("test")
         @Expect(log.getName(), "test")
 
-        var logNameArr:ArrayList<String> = Logger_Manager.getLoggerNameArr()
+        var logNameArr:ArrayList<String> = LoggerManager.createManager("").getLoggerNameArr()
         @Expect(logNameArr.size, 1)
 
-        var getLoggerAttrArr:ArrayList<LoggerAppenderReference> = Logger_Manager.getLoggerAttrArr()
+        var getLoggerAttrArr:ArrayList<LoggerAppenderReference> = LoggerManager.createManager("").getLoggerAttrArr()
         @Expect(getLoggerAttrArr.size, 1)
     }
 

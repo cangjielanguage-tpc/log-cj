@@ -1,0 +1,83 @@
+{"appenders": [
+    {
+        "enabled": "true",
+        "name": "console",
+        "type": "console",
+        "pattern": "[%D %T %m] [%L] [%I] [%l] <%S>: %M"
+    },
+    {
+        "enabled": "true",
+        "name": "file",
+        "type": "file",
+        "pattern": "[%D %T %m] [%L] [%I] [%l] <%S> => %M",
+        "properties": [
+            {
+                "name": "filename",
+                "value": "root.log"
+            },
+            {
+                "name": "rotate",
+                "value": "true"
+            },
+            {
+                "name": "maxsize",
+                "value": "20M"
+            },
+            {
+                "name": "daily",
+                "value": "false"
+            }
+        ]
+    },
+    {
+        "enabled": "true",
+        "name": "file_1",
+        "type": "file",
+        "pattern": "[%D %T %m] [%L] [%I] [%l] <%S> -> %M",
+        "properties": [
+            {
+                "name": "filename",
+                "value": "demo.log"
+            },
+            {
+                "name": "rotate",
+                "value": "true"
+            },
+            {
+                "name": "maxsize",
+                "value": "20M"
+            },
+            {
+                "name": "daily",
+                "value": "false"
+            }
+        ]
+    }
+],
+"loggers":[
+    {
+        "name":"Demo",
+        "level":"debug",
+        "appender-refs": [
+            {
+                "ref": "console"
+            },
+            {
+                "ref": "file_1"
+            }
+            
+        ]
+    }
+],
+"root": {
+    "level": "info",
+    "appender-refs": [
+        {
+            "ref": "console"
+        },
+        {
+            "ref": "file"
+        }
+    ]
+}
+}

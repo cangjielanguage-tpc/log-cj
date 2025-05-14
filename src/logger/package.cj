@@ -1,6 +1,6 @@
 package logcj.logger
 
-internal import encoding.json.*
+internal import stdx.encoding.json.*
 
 internal import std.fs.*
 internal import std.time.*
