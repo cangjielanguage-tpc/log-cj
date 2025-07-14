@@ -8,12 +8,19 @@ bin-release/
 .settings/
 .cache/
 .vscode/
+.target/
+.test/log/
+.test/report/
+.test/tmp/
+.test_temp/
+.ci_test/
 
 # Executables
 *.swf
 *.air
 *.ipa
 *.apk
+*.lock
 
 # Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
 # should NOT be excluded as they contain compiler settings and other important

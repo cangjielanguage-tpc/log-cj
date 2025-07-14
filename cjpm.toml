@@ -16,12 +16,12 @@
   [target.x86_64-w64-mingw32]
     [target.x86_64-w64-mingw32.bin-dependencies]
       path-option = [ "${CANGJIE_STDX_PATH}/windows_x86_64_llvm/dynamic/stdx" ]
-
+      
 [dependencies]
-  zip4cj = {branch = "0.60.5", git = "https://gitcode.com/Cangjie-TPC/zip4cj.git"}
+  zip4cj = {tag = "1.0.5", git = "https://gitcode.com/Cangjie-TPC/zip4cj.git"}
 
 [package]
-  cjc-version = "0.60.5"
+  cjc-version = "1.0.0"
   compile-option = "-O2 -Woff unused -Woff deprecated"
   description = "nothing here"
   link-option = ""
