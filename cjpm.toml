@@ -18,7 +18,7 @@
       path-option = [ "${CANGJIE_STDX_PATH}/windows_x86_64_llvm/dynamic/stdx" ]
       
 [dependencies]
-  zip4cj = {tag = "1.2.0", git = "https://gitcode.com/Cangjie-TPC/zip4cj.git"}
+  zip4cj = {tag = "v1.0.9", git = "https://gitcode.com/Cangjie-TPC/zip4cj.git"}
 
 [package]
   cjc-version = "1.2.0"
